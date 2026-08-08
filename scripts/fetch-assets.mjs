@@ -10,13 +10,13 @@ const habitatsDir = path.join(root, 'public/habitats')
 const headers = { 'User-Agent': 'AnimalWorldEducationalApp/1.0 (learning@local.dev)' }
 
 const habitats = [
-  { id: 'home', wiki: 'Pet' },
-  { id: 'farm', wiki: 'Farm' },
+  { id: 'home', wiki: 'Puppy' },
+  { id: 'farm', wiki: 'Pasture' },
   { id: 'forest', wiki: 'Forest' },
-  { id: 'ocean', wiki: 'Ocean' },
+  { id: 'ocean', wiki: 'Coral reef' },
   { id: 'desert', wiki: 'Desert' },
   { id: 'jungle', wiki: 'Rainforest' },
-  { id: 'polar', wiki: 'Arctic' },
+  { id: 'polar', wiki: 'Sea ice' },
   { id: 'savannah', wiki: 'Savanna' },
 ]
 

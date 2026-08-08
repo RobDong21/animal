@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import AnimalDisplay from '@/components/AnimalDisplay'
+import HabitatHelpPanel from '@/components/HabitatHelpPanel'
 import HabitatIcon from '@/components/HabitatIcon'
 import {
   animals,
@@ -35,30 +36,46 @@ function ProgressBar({ current, total }) {
   )
 }
 
-function HabitatButton({ habitat, disabled, onClick, pulse, highlight }) {
+function HabitatButton({ habitat, disabled, eliminated, onClick, onPreview, pulse, highlight }) {
   return (
-    <Button
-      variant={highlight ? 'default' : 'outline'}
-      size="lg"
-      disabled={disabled}
-      aria-label={habitat.name}
-      className={cn(
-        'surface-interactive-lg h-auto min-h-20 flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
-        pulse && 'animate-pulse border-amber-400 bg-amber-50',
-        highlight && 'scale-105 ring-4 ring-primary/40',
-        !highlight && !pulse && 'hover:scale-[1.02] active:scale-95'
-      )}
-      onClick={onClick}
-    >
-      <HabitatIcon
-        habitatId={habitat.id}
+    <div className="relative">
+      <Button
+        variant={highlight ? 'default' : 'outline'}
+        size="lg"
+        disabled={disabled}
+        aria-label={habitat.name}
         className={cn(
-          'h-14 w-14 lg:h-16 lg:w-16',
-          highlight ? 'text-primary-foreground' : 'text-primary'
+          'surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
+          pulse && !eliminated && 'animate-pulse border-amber-400 bg-amber-50',
+          highlight && 'scale-105 ring-4 ring-primary/40',
+          eliminated && 'border-rose-200 bg-rose-50 opacity-60',
+          !highlight && !pulse && !eliminated && 'hover:scale-[1.02] active:scale-95'
         )}
-      />
-      <span className="text-base font-bold lg:text-lg">{habitat.name}</span>
-    </Button>
+        onClick={onClick}
+      >
+        <HabitatIcon
+          habitatId={habitat.id}
+          className={cn(
+            'h-14 w-14 lg:h-16 lg:w-16',
+            highlight ? 'text-primary-foreground' : 'text-primary'
+          )}
+        />
+        <span className="text-base font-bold lg:text-lg">{habitat.name}</span>
+      </Button>
+      <Button
+        type="button"
+        variant="secondary"
+        size="icon"
+        aria-label={`See what ${habitat.name} looks like`}
+        className="absolute top-1.5 right-1.5 h-8 w-8 rounded-full border-normal bg-white/95 text-base shadow-md md:h-9 md:w-9"
+        onClick={(event) => {
+          event.stopPropagation()
+          onPreview()
+        }}
+      >
+        👀
+      </Button>
+    </div>
   )
 }
 
@@ -72,12 +89,21 @@ export default function Game({ onBack, roundSize }) {
   const [isAdvancing, setIsAdvancing] = useState(false)
   const [highlightHabitat, setHighlightHabitat] = useState(null)
   const [wrongPulse, setWrongPulse] = useState(false)
+  const [wrongHabitats, setWrongHabitats] = useState([])
+  const [helpOpen, setHelpOpen] = useState(false)
+  const [helpInitialIndex, setHelpInitialIndex] = useState(0)
 
   const current = shuffled[index]
   const total = shuffled.length
 
+  function openHabitatHelp(habitatId) {
+    const habitatIndex = habitats.findIndex((habitat) => habitat.id === habitatId)
+    setHelpInitialIndex(habitatIndex >= 0 ? habitatIndex : 0)
+    setHelpOpen(true)
+  }
+
   function handleGuess(habitatId) {
-    if (isAdvancing || finished) return
+    if (isAdvancing || finished || wrongHabitats.includes(habitatId)) return
 
     const habitat = getHabitatById(habitatId)
     if (habitat) {
@@ -109,6 +135,7 @@ export default function Game({ onBack, roundSize }) {
       setTimeout(() => {
         setHighlightHabitat(null)
         setIsAdvancing(false)
+        setWrongHabitats([])
         if (index + 1 >= total) {
           setFinished(true)
         } else {
@@ -116,6 +143,7 @@ export default function Game({ onBack, roundSize }) {
         }
       }, 600)
     } else {
+      setWrongHabitats((prev) => [...prev, habitatId])
       playWrongSound()
       setWrongPulse(true)
 
@@ -137,6 +165,7 @@ export default function Game({ onBack, roundSize }) {
     setIsAdvancing(false)
     setHighlightHabitat(null)
     setWrongPulse(false)
+    setWrongHabitats([])
     setFinished(false)
   }
 
@@ -174,8 +203,23 @@ export default function Game({ onBack, roundSize }) {
 
   return (
     <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col overflow-hidden px-4 pb-3 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-5 md:pb-4 lg:px-8 lg:pb-6">
-      <div className="mb-3 shrink-0 md:mb-4">
-        <ProgressBar current={index + 1} total={total} />
+      <div className="mb-3 shrink-0 space-y-3 md:mb-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <ProgressBar current={index + 1} total={total} />
+          </div>
+          <Button
+            variant="outline"
+            size="lg"
+            className="shrink-0 text-base md:text-lg"
+            onClick={() => {
+              setHelpInitialIndex(0)
+              setHelpOpen(true)
+            }}
+          >
+            ❓ Habitats
+          </Button>
+        </div>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto lg:flex-row lg:items-start lg:gap-6 lg:overflow-hidden">
@@ -190,16 +234,22 @@ export default function Game({ onBack, roundSize }) {
           <Card>
             <CardContent className="p-3 md:p-4 lg:p-6">
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:gap-2.5 lg:grid-cols-2 lg:gap-3">
-                {habitats.map((habitat) => (
-                  <HabitatButton
-                    key={habitat.id}
-                    habitat={habitat}
-                    disabled={isAdvancing}
-                    pulse={wrongPulse}
-                    highlight={highlightHabitat === habitat.id}
-                    onClick={() => handleGuess(habitat.id)}
-                  />
-                ))}
+                {habitats.map((habitat) => {
+                  const eliminated = wrongHabitats.includes(habitat.id)
+
+                  return (
+                    <HabitatButton
+                      key={habitat.id}
+                      habitat={habitat}
+                      disabled={isAdvancing || eliminated}
+                      eliminated={eliminated}
+                      pulse={wrongPulse && !eliminated}
+                      highlight={highlightHabitat === habitat.id}
+                      onPreview={() => openHabitatHelp(habitat.id)}
+                      onClick={() => handleGuess(habitat.id)}
+                    />
+                  )
+                })}
               </div>
             </CardContent>
           </Card>
@@ -213,6 +263,14 @@ export default function Game({ onBack, roundSize }) {
           </Button>
         </div>
       </div>
+
+      {helpOpen && (
+        <HabitatHelpPanel
+          habitats={habitats}
+          initialIndex={helpInitialIndex}
+          onClose={() => setHelpOpen(false)}
+        />
+      )}
     </div>
   )
 }
