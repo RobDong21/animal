@@ -16,6 +16,11 @@ export const animals = [
   { id: 'goldfish', name: 'Goldfish', habitats: ['home'], image: '/animals/goldfish.jpg' },
   { id: 'hamster', name: 'Hamster', habitats: ['home'], image: '/animals/hamster.jpg' },
   { id: 'parrot', name: 'Parrot', habitats: ['home', 'jungle'], image: '/animals/parrot.jpg' },
+  { id: 'rabbit', name: 'Rabbit', habitats: ['home', 'farm', 'forest'], image: '/animals/rabbit.jpg' },
+  { id: 'mouse', name: 'Mouse', habitats: ['home', 'farm'], image: '/animals/mouse.jpg' },
+  { id: 'butterfly', name: 'Butterfly', habitats: ['home', 'farm', 'forest'], image: '/animals/butterfly.jpg' },
+  { id: 'ladybug', name: 'Ladybug', habitats: ['home', 'farm', 'forest'], image: '/animals/ladybug.jpg' },
+  { id: 'snail', name: 'Snail', habitats: ['home', 'farm', 'forest'], image: '/animals/snail.jpg' },
 
   // Farm (10)
   { id: 'cow', name: 'Cow', habitats: ['farm'], image: '/animals/cow.jpg' },
@@ -28,6 +33,9 @@ export const animals = [
   { id: 'donkey', name: 'Donkey', habitats: ['farm'], image: '/animals/donkey.jpg' },
   { id: 'rooster', name: 'Rooster', habitats: ['farm'], image: '/animals/rooster.jpg' },
   { id: 'turkey', name: 'Turkey', habitats: ['farm', 'forest'], image: '/animals/turkey.jpg' },
+  { id: 'frog', name: 'Frog', habitats: ['farm', 'forest'], image: '/animals/frog.jpg' },
+  { id: 'bee', name: 'Bee', habitats: ['farm', 'forest'], image: '/animals/bee.jpg' },
+  { id: 'peacock', name: 'Peacock', habitats: ['farm', 'jungle'], image: '/animals/peacock.jpg' },
 
   // Forest (10)
   { id: 'bear', name: 'Bear', habitats: ['forest'], image: '/animals/bear.jpg' },
@@ -40,6 +48,9 @@ export const animals = [
   { id: 'woodpecker', name: 'Woodpecker', habitats: ['forest'], image: '/animals/woodpecker.jpg' },
   { id: 'hedgehog', name: 'Hedgehog', habitats: ['forest'], image: '/animals/hedgehog.jpg' },
   { id: 'badger', name: 'Badger', habitats: ['forest'], image: '/animals/badger.jpg' },
+  { id: 'panda', name: 'Panda', habitats: ['forest', 'jungle'], image: '/animals/panda.jpg' },
+  { id: 'koala', name: 'Koala', habitats: ['forest', 'jungle'], image: '/animals/koala.jpg' },
+  { id: 'turtle', name: 'Turtle', habitats: ['forest', 'ocean'], image: '/animals/turtle.jpg' },
 
   // Ocean (10)
   { id: 'dolphin', name: 'Dolphin', habitats: ['ocean'], image: '/animals/dolphin.jpg' },
@@ -52,20 +63,17 @@ export const animals = [
   { id: 'seahorse', name: 'Seahorse', habitats: ['ocean'], image: '/animals/seahorse.jpg' },
   { id: 'starfish', name: 'Starfish', habitats: ['ocean'], image: '/animals/starfish.jpg' },
   { id: 'crab', name: 'Crab', habitats: ['ocean'], image: '/animals/crab.jpg' },
+  { id: 'crocodile', name: 'Crocodile', habitats: ['jungle', 'ocean'], image: '/animals/crocodile.jpg' },
+  { id: 'flamingo', name: 'Flamingo', habitats: ['savannah', 'ocean'], image: '/animals/flamingo.jpg' },
 
-  // Desert (10)
+  // Desert (5)
   { id: 'camel', name: 'Camel', habitats: ['desert'], image: '/animals/camel.jpg' },
   { id: 'scorpion', name: 'Scorpion', habitats: ['desert'], image: '/animals/scorpion.jpg' },
-  { id: 'rattlesnake', name: 'Rattlesnake', habitats: ['desert'], image: '/animals/rattlesnake.jpg' },
-  { id: 'horned-lizard', name: 'Horned Lizard', habitats: ['desert'], image: '/animals/horned-lizard.jpg' },
-  { id: 'roadrunner', name: 'Roadrunner', habitats: ['desert'], image: '/animals/roadrunner.jpg' },
   { id: 'tortoise', name: 'Tortoise', habitats: ['desert'], image: '/animals/tortoise.jpg' },
-  { id: 'coyote', name: 'Coyote', habitats: ['desert', 'forest'], image: '/animals/coyote.jpg' },
   { id: 'lizard', name: 'Lizard', habitats: ['desert', 'jungle'], image: '/animals/lizard.jpg' },
   { id: 'vulture', name: 'Vulture', habitats: ['desert', 'savannah'], image: '/animals/vulture.jpg' },
-  { id: 'jerboa', name: 'Jerboa', habitats: ['desert'], image: '/animals/jerboa.jpg' },
 
-  // Jungle (10)
+  // Jungle (8)
   { id: 'monkey', name: 'Monkey', habitats: ['jungle'], image: '/animals/monkey.jpg' },
   { id: 'tiger', name: 'Tiger', habitats: ['jungle', 'forest'], image: '/animals/tiger.jpg' },
   { id: 'gorilla', name: 'Gorilla', habitats: ['jungle'], image: '/animals/gorilla.jpg' },
@@ -74,10 +82,8 @@ export const animals = [
   { id: 'toucan', name: 'Toucan', habitats: ['jungle'], image: '/animals/toucan.jpg' },
   { id: 'chameleon', name: 'Chameleon', habitats: ['jungle'], image: '/animals/chameleon.jpg' },
   { id: 'orangutan', name: 'Orangutan', habitats: ['jungle'], image: '/animals/orangutan.jpg' },
-  { id: 'tree-frog', name: 'Tree Frog', habitats: ['jungle'], image: '/animals/tree-frog.jpg' },
-  { id: 'anaconda', name: 'Anaconda', habitats: ['jungle'], image: '/animals/anaconda.jpg' },
 
-  // Polar (10)
+  // Polar (8)
   { id: 'polar-bear', name: 'Polar Bear', habitats: ['polar'], image: '/animals/polar-bear.jpg' },
   { id: 'penguin', name: 'Penguin', habitats: ['polar', 'ocean'], image: '/animals/penguin.jpg' },
   { id: 'walrus', name: 'Walrus', habitats: ['polar', 'ocean'], image: '/animals/walrus.jpg' },
@@ -85,11 +91,9 @@ export const animals = [
   { id: 'arctic-fox', name: 'Arctic Fox', habitats: ['polar'], image: '/animals/arctic-fox.jpg' },
   { id: 'arctic-hare', name: 'Arctic Hare', habitats: ['polar'], image: '/animals/arctic-hare.jpg' },
   { id: 'narwhal', name: 'Narwhal', habitats: ['polar', 'ocean'], image: '/animals/narwhal.jpg' },
-  { id: 'puffin', name: 'Puffin', habitats: ['polar', 'ocean'], image: '/animals/puffin.jpg' },
   { id: 'musk-ox', name: 'Musk Ox', habitats: ['polar'], image: '/animals/musk-ox.jpg' },
-  { id: 'lemming', name: 'Lemming', habitats: ['polar'], image: '/animals/lemming.jpg' },
 
-  // Savannah (10)
+  // Savannah (9)
   { id: 'lion', name: 'Lion', habitats: ['savannah'], image: '/animals/lion.jpg' },
   { id: 'elephant', name: 'Elephant', habitats: ['savannah', 'jungle'], image: '/animals/elephant.jpg' },
   { id: 'giraffe', name: 'Giraffe', habitats: ['savannah'], image: '/animals/giraffe.jpg' },
@@ -99,7 +103,7 @@ export const animals = [
   { id: 'rhinoceros', name: 'Rhinoceros', habitats: ['savannah'], image: '/animals/rhinoceros.jpg' },
   { id: 'hyena', name: 'Hyena', habitats: ['savannah', 'desert'], image: '/animals/hyena.jpg' },
   { id: 'meerkat', name: 'Meerkat', habitats: ['savannah', 'desert'], image: '/animals/meerkat.jpg' },
-  { id: 'wildebeest', name: 'Wildebeest', habitats: ['savannah'], image: '/animals/wildebeest.jpg' },
+  { id: 'kangaroo', name: 'Kangaroo', habitats: ['savannah'], image: '/animals/kangaroo.jpg' },
 ]
 
 export function shuffleAnimals(list) {
