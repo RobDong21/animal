@@ -43,7 +43,7 @@ function HabitatButton({ habitat, disabled, onClick, pulse, highlight }) {
       disabled={disabled}
       aria-label={habitat.name}
       className={cn(
-        'surface-interactive-lg h-auto min-h-24 flex-col gap-2 py-4 transition-transform lg:min-h-26 lg:py-4',
+        'surface-interactive-lg h-auto min-h-20 flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
         pulse && 'animate-pulse border-amber-400 bg-amber-50',
         highlight && 'scale-105 ring-4 ring-primary/40',
         !highlight && !pulse && 'hover:scale-[1.02] active:scale-95'
@@ -145,7 +145,7 @@ export default function Game({ onBack, roundSize }) {
     const stars = pct >= 80 ? 3 : pct >= 50 ? 2 : 1
 
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center p-6 md:p-10">
+      <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-3 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6 md:py-4">
         <Card className="w-full max-w-lg text-center md:max-w-xl">
           <CardHeader className="space-y-4 pb-2">
             <div className="text-5xl md:text-6xl">{'⭐'.repeat(stars)}</div>
@@ -173,23 +173,23 @@ export default function Game({ onBack, roundSize }) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col p-4 md:p-8 lg:p-10">
-      <div className="mb-5 md:mb-6">
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col overflow-hidden px-4 pb-3 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-5 md:pb-4 lg:px-8 lg:pb-6">
+      <div className="mb-3 shrink-0 md:mb-4">
         <ProgressBar current={index + 1} total={total} />
       </div>
 
-      <div className="flex flex-1 flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-        <Card className="lg:sticky lg:top-8 lg:w-[58%] lg:shrink-0">
-          <CardHeader className="items-center gap-5 pb-4 text-center md:gap-6 lg:px-8 lg:py-8">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto lg:flex-row lg:items-start lg:gap-6 lg:overflow-hidden">
+        <Card className="lg:sticky lg:top-4 lg:w-[58%] lg:shrink-0">
+          <CardHeader className="items-center gap-3 pb-3 pt-4 text-center md:gap-4 md:px-4 md:py-4 lg:gap-6 lg:px-8 lg:py-6">
             <AnimalDisplay animal={current} />
-            <p className="text-2xl font-semibold md:text-3xl">Where does this animal live?</p>
+            <p className="text-xl font-semibold md:text-2xl lg:text-3xl">Where does this animal live?</p>
           </CardHeader>
         </Card>
 
-        <div className="flex flex-col gap-4 lg:w-[42%] lg:shrink-0">
+        <div className="flex shrink-0 flex-col gap-3 pb-1 lg:w-[42%] lg:shrink-0 lg:overflow-y-auto">
           <Card>
-            <CardContent className="p-4 md:p-5 lg:p-6">
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 md:gap-3 lg:grid-cols-2 lg:gap-3">
+            <CardContent className="p-3 md:p-4 lg:p-6">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:gap-2.5 lg:grid-cols-2 lg:gap-3">
                 {habitats.map((habitat) => (
                   <HabitatButton
                     key={habitat.id}

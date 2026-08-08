@@ -5,13 +5,13 @@ import { assetUrl } from '@/lib/assets'
 
 export default function Home({ onPlay }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-6 md:p-10">
+    <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-3 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6 md:py-4">
       <Card className="w-full max-w-2xl text-center">
-        <CardHeader className="space-y-5 pb-2">
+        <CardHeader className="space-y-4 pb-2 md:space-y-5">
           <img
             src={assetUrl('/habitats/forest.jpg')}
             alt="Animals in nature"
-            className="surface-frame mx-auto h-48 w-full object-cover shadow-md md:h-64"
+            className="surface-frame mx-auto h-40 w-full object-cover shadow-md md:h-48 lg:h-64"
           />
           <h1 className="text-4xl font-bold md:text-5xl">Animal World</h1>
           <p className="text-xl text-muted-foreground md:text-2xl">

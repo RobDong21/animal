@@ -6,8 +6,8 @@ export default function AnimalDisplay({ animal, className }) {
   const [imageError, setImageError] = useState(false)
 
   return (
-    <div className={cn('flex w-full flex-col items-center gap-5 md:gap-6', className)}>
-      <div className="surface-frame relative flex w-full items-center justify-center overflow-hidden bg-muted/40 shadow-lg">
+    <div className={cn('flex w-full flex-col items-center gap-3 md:gap-4 lg:gap-6', className)}>
+      <div className="surface-frame relative flex w-full max-h-[34dvh] items-center justify-center overflow-hidden bg-muted/40 shadow-lg md:max-h-[36dvh] lg:max-h-none">
         {imageError ? (
           <div className="flex aspect-[4/3] w-full items-center justify-center bg-muted">
             <span className="text-7xl font-bold text-muted-foreground md:text-8xl">
@@ -25,7 +25,7 @@ export default function AnimalDisplay({ animal, className }) {
         )}
       </div>
 
-      <h2 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">{animal.name}</h2>
+      <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-6xl">{animal.name}</h2>
     </div>
   )
 }
