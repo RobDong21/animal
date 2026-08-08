@@ -13,6 +13,7 @@ import {
   prepareRound,
 } from '@/data/animals'
 import { playCorrectSound, speakHabitatName, playWrongSound } from '@/lib/sounds'
+import { assetUrl } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 
 function ProgressBar({ current, total }) {
@@ -149,7 +150,7 @@ export default function Game({ onBack, roundSize }) {
           <CardHeader className="space-y-4 pb-2">
             <div className="text-5xl md:text-6xl">{'⭐'.repeat(stars)}</div>
             <img
-              src="/animals/lion.jpg"
+              src={assetUrl('/animals/lion.jpg')}
               alt=""
               className="surface-frame mx-auto h-40 w-40 object-cover shadow-md md:h-52 md:w-52"
             />

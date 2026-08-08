@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { SHORT_ROUND_SIZE } from '@/data/animals'
+import { assetUrl } from '@/lib/assets'
 
 export default function Home({ onPlay }) {
   return (
@@ -8,7 +9,7 @@ export default function Home({ onPlay }) {
       <Card className="w-full max-w-2xl text-center">
         <CardHeader className="space-y-5 pb-2">
           <img
-            src="/habitats/forest.jpg"
+            src={assetUrl('/habitats/forest.jpg')}
             alt="Animals in nature"
             className="surface-frame mx-auto h-48 w-full object-cover shadow-md md:h-64"
           />

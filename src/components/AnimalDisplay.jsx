@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { assetUrl } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 
 export default function AnimalDisplay({ animal, className }) {
@@ -15,7 +16,7 @@ export default function AnimalDisplay({ animal, className }) {
           </div>
         ) : (
           <img
-            src={animal.image}
+            src={assetUrl(animal.image)}
             alt={animal.name}
             className="aspect-[4/3] w-full object-contain p-2 md:p-3"
             loading="lazy"
