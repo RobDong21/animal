@@ -91,20 +91,20 @@ export default function Game({ onBack, roundSize }) {
           ? `Also found in: ${formatHabitatNames(current.habitats)}`
           : undefined
 
+      const successDescription = alsoFound
+        ? `${current.name} can live in the ${habitatName}! ${alsoFound}`
+        : `${current.name} can live in the ${habitatName}!`
+
       setScore((s) => s + 1)
       setIsAdvancing(true)
       setHighlightHabitat(habitatId)
       playCorrectSound()
 
       toast.success('🎉 Yay! Great job!', {
-        description: `${current.name} can live in the ${habitatName}!`,
+        description: successDescription,
         duration: 6000,
-        id: `correct-${index}`,
+        id: 'game-toast',
       })
-
-      if (alsoFound) {
-        toast.info(`💡 ${alsoFound}`, { duration: 6000, id: `also-${index}` })
-      }
 
       setTimeout(() => {
         setHighlightHabitat(null)
@@ -122,7 +122,7 @@ export default function Game({ onBack, roundSize }) {
       toast.error('🤔 Oops! Try again!', {
         description: `Keep looking for the best home for ${current.name}!`,
         duration: 5000,
-        id: `wrong-${index}-${Date.now()}`,
+        id: 'game-toast',
       })
 
       setTimeout(() => setWrongPulse(false), 1200)

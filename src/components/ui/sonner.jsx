@@ -4,9 +4,7 @@ export function Toaster() {
   return (
     <Sonner
       position="top-center"
-      expand
-      visibleToasts={3}
-      gap={12}
+      visibleToasts={1}
       closeButton
       toastOptions={{
         duration: 5000,
@@ -16,9 +14,9 @@ export function Toaster() {
           description: 'text-lg font-medium leading-snug',
           icon: 'hidden',
           closeButton: 'rounded-full border-normal bg-white/80 text-foreground hover:bg-white',
-          success: 'kid-toast-success !border-emerald-400 bg-emerald-50 text-emerald-950',
-          error: 'kid-toast-error !border-amber-400 bg-amber-50 text-amber-950',
-          info: 'kid-toast-info !border-sky-400 bg-sky-50 text-sky-950',
+          success: 'kid-toast-success !border-emerald-500 !bg-emerald-100 text-emerald-950',
+          error: 'kid-toast-error !border-rose-500 !bg-rose-100 text-rose-950',
+          info: 'kid-toast-info !border-sky-400 !bg-sky-100 text-sky-950',
         },
       }}
     />
