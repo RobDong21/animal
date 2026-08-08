@@ -7,6 +7,7 @@ import { defineConfig } from 'vite'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
+  base: process.env.GITHUB_PAGES === 'true' ? '/animal/' : '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
