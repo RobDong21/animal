@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  --radius: 1rem;
+  --radius-normal: 1rem;
+  --radius-large: 2rem;
+  --border-normal: 2px;
+  --border-thick: 4px;
+  --background: oklch(0.99 0.02 95);
+  --foreground: oklch(0.3 0.04 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.3 0.04 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.3 0.04 260);
+  --primary: oklch(0.62 0.19 145);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0.04 95);
+  --secondary-foreground: oklch(0.35 0.04 260);
+  --muted: oklch(0.96 0.02 95);
+  --muted-foreground: oklch(0.45 0.03 260);
+  --accent: oklch(0.93 0.06 85);
+  --accent-foreground: oklch(0.35 0.04 260);
+  --destructive: oklch(0.65 0.18 45);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.92 0.02 95);
+  --input: oklch(0.92 0.02 95);
+  --ring: oklch(0.62 0.19 145);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-size: 18px;
+  }
+}
+
+@layer components {
+  .radius-normal {
+    border-radius: var(--radius-normal);
+  }
+
+  .radius-large {
+    border-radius: var(--radius-large);
+  }
+
+  .border-normal {
+    border-width: var(--border-normal);
+  }
+
+  .border-thick {
+    border-width: var(--border-thick);
+  }
+
+  .surface-card {
+    border-radius: var(--radius-large);
+    border-width: var(--border-normal);
+    @apply border-border bg-card shadow-lg;
+  }
+
+  .surface-frame {
+    border-radius: var(--radius-large);
+    border-width: var(--border-thick);
+    @apply border-primary/20;
+  }
+
+  .surface-interactive {
+    border-radius: var(--radius-normal);
+    border-width: var(--border-normal);
+  }
+
+  .surface-interactive-lg {
+    border-radius: var(--radius-large);
+    border-width: var(--border-normal);
+  }
+}
+
+/* Kid-friendly toast animations */
+[data-sonner-toaster] {
+  --width: 26rem;
+}
+
+[data-sonner-toast].kid-toast {
+  animation: kid-toast-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: var(--radius-large);
+  border-width: var(--border-thick);
+}
+
+[data-sonner-toast].kid-toast [data-icon] {
+  display: none;
+}
+
+[data-sonner-toast].kid-toast-success {
+  box-shadow: 0 10px 30px -8px rgb(16 185 129 / 0.35);
+}
+
+[data-sonner-toast].kid-toast-error {
+  box-shadow: 0 10px 30px -8px rgb(245 158 11 / 0.35);
+}
+
+[data-sonner-toast].kid-toast-info {
+  box-shadow: 0 10px 30px -8px rgb(14 165 233 / 0.35);
+}
+
+@keyframes kid-toast-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

@@ -1,0 +1,155 @@
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = path.join(__dirname, '..')
+const animalsDir = path.join(root, 'public/animals')
+const habitatsDir = path.join(root, 'public/habitats')
+
+const headers = { 'User-Agent': 'AnimalWorldEducationalApp/1.0 (learning@local.dev)' }
+
+const habitats = [
+  { id: 'home', wiki: 'Pet' },
+  { id: 'farm', wiki: 'Farm' },
+  { id: 'forest', wiki: 'Forest' },
+  { id: 'ocean', wiki: 'Ocean' },
+  { id: 'desert', wiki: 'Desert' },
+  { id: 'jungle', wiki: 'Rainforest' },
+  { id: 'polar', wiki: 'Arctic' },
+  { id: 'savannah', wiki: 'Savanna' },
+]
+
+const animals = [
+  { id: 'dog', wiki: 'Dog' },
+  { id: 'cat', wiki: 'Cat' },
+  { id: 'goldfish', wiki: 'Goldfish' },
+  { id: 'hamster', wiki: 'Hamster' },
+  { id: 'cow', wiki: 'Cattle' },
+  { id: 'pig', wiki: 'Pig' },
+  { id: 'chicken', wiki: 'Chicken' },
+  { id: 'horse', wiki: 'Horse' },
+  { id: 'sheep', wiki: 'Sheep' },
+  { id: 'goat', wiki: 'Goat' },
+  { id: 'duck', wiki: 'Duck' },
+  { id: 'donkey', wiki: 'Donkey' },
+  { id: 'rooster', wiki: 'Rooster' },
+  { id: 'turkey', wiki: 'Wild turkey' },
+  { id: 'bear', wiki: 'American black bear' },
+  { id: 'deer', wiki: 'Deer' },
+  { id: 'fox', wiki: 'Red fox' },
+  { id: 'owl', wiki: 'Owl' },
+  { id: 'squirrel', wiki: 'Squirrel' },
+  { id: 'wolf', wiki: 'Wolf' },
+  { id: 'raccoon', wiki: 'Raccoon' },
+  { id: 'woodpecker', wiki: 'Woodpecker' },
+  { id: 'hedgehog', wiki: 'Hedgehog' },
+  { id: 'badger', wiki: 'Badger' },
+  { id: 'dolphin', wiki: 'Dolphin' },
+  { id: 'whale', wiki: 'Blue whale' },
+  { id: 'shark', wiki: 'Shark' },
+  { id: 'octopus', wiki: 'Octopus' },
+  { id: 'sea-turtle', wiki: 'Sea turtle' },
+  { id: 'jellyfish', wiki: 'Jellyfish' },
+  { id: 'clownfish', wiki: 'Clownfish' },
+  { id: 'seahorse', wiki: 'Seahorse' },
+  { id: 'starfish', wiki: 'Starfish' },
+  { id: 'crab', wiki: 'Crab' },
+  { id: 'camel', wiki: 'Camel' },
+  { id: 'scorpion', wiki: 'Scorpion' },
+  { id: 'rattlesnake', wiki: 'Rattlesnake' },
+  { id: 'horned-lizard', wiki: 'Horned lizard' },
+  { id: 'roadrunner', wiki: 'Greater roadrunner' },
+  { id: 'tortoise', wiki: 'Tortoise' },
+  { id: 'coyote', wiki: 'Coyote' },
+  { id: 'lizard', wiki: 'Lizard' },
+  { id: 'vulture', wiki: 'Vulture' },
+  { id: 'jerboa', wiki: 'Jerboa' },
+  { id: 'monkey', wiki: 'Monkey' },
+  { id: 'tiger', wiki: 'Tiger' },
+  { id: 'gorilla', wiki: 'Gorilla' },
+  { id: 'sloth', wiki: 'Sloth' },
+  { id: 'jaguar', wiki: 'Jaguar' },
+  { id: 'toucan', wiki: 'Toucan' },
+  { id: 'chameleon', wiki: 'Chameleon' },
+  { id: 'orangutan', wiki: 'Orangutan' },
+  { id: 'tree-frog', wiki: 'Tree frog' },
+  { id: 'anaconda', wiki: 'Green anaconda' },
+  { id: 'parrot', wiki: 'Parrot' },
+  { id: 'polar-bear', wiki: 'Polar bear' },
+  { id: 'penguin', wiki: 'Penguin' },
+  { id: 'walrus', wiki: 'Walrus' },
+  { id: 'seal', wiki: 'Harbor seal' },
+  { id: 'arctic-fox', wiki: 'Arctic fox' },
+  { id: 'arctic-hare', wiki: 'Arctic hare' },
+  { id: 'narwhal', wiki: 'Narwhal' },
+  { id: 'puffin', wiki: 'Atlantic puffin' },
+  { id: 'musk-ox', wiki: 'Musk ox' },
+  { id: 'lemming', wiki: 'Lemming' },
+  { id: 'lion', wiki: 'Lion' },
+  { id: 'elephant', wiki: 'Elephant' },
+  { id: 'giraffe', wiki: 'Giraffe' },
+  { id: 'zebra', wiki: 'Zebra' },
+  { id: 'cheetah', wiki: 'Cheetah' },
+  { id: 'hippopotamus', wiki: 'Hippopotamus' },
+  { id: 'rhinoceros', wiki: 'Rhinoceros' },
+  { id: 'hyena', wiki: 'Hyena' },
+  { id: 'meerkat', wiki: 'Meerkat' },
+  { id: 'wildebeest', wiki: 'Wildebeest' },
+]
+
+fs.mkdirSync(animalsDir, { recursive: true })
+fs.mkdirSync(habitatsDir, { recursive: true })
+
+const delay = (ms) => new Promise((r) => setTimeout(r, ms))
+
+async function fetchJson(url, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    const res = await fetch(url, { headers })
+    if (res.ok) return res.json()
+    await delay(1000 * (i + 1))
+  }
+  return null
+}
+
+async function downloadFile(url, outPath) {
+  const res = await fetch(url, { headers })
+  if (!res.ok) return false
+  const buffer = Buffer.from(await res.arrayBuffer())
+  fs.writeFileSync(outPath, buffer)
+  return true
+}
+
+async function fetchWikiImage(wikiTitle, outPath) {
+  if (fs.existsSync(outPath)) {
+    console.log(`skip image ${path.basename(outPath)} (exists)`)
+    return true
+  }
+
+  const data = await fetchJson(
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiTitle)}`
+  )
+  const imageUrl = data?.thumbnail?.source
+  if (!imageUrl) {
+    console.warn(`no thumbnail for ${wikiTitle}`)
+    return false
+  }
+
+  const ok = await downloadFile(imageUrl, outPath)
+  if (ok) console.log(`saved image ${path.basename(outPath)}`)
+  return ok
+}
+
+console.log('Fetching habitat images...')
+for (const habitat of habitats) {
+  await fetchWikiImage(habitat.wiki, path.join(habitatsDir, `${habitat.id}.jpg`))
+  await delay(500)
+}
+
+console.log('\nFetching animal images...')
+for (const animal of animals) {
+  await fetchWikiImage(animal.wiki, path.join(animalsDir, `${animal.id}.jpg`))
+  await delay(500)
+}
+
+console.log('\ndone')
