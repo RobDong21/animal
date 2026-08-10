@@ -100,6 +100,97 @@ export function getHabitatVideoStart(habitatId) {
   return habitatVideoStartSeconds[habitatId] ?? 0
 }
 
+export const animalTypes = [
+  { id: 'mammal', name: 'Mammal' },
+  { id: 'bird', name: 'Bird' },
+  { id: 'fish', name: 'Fish' },
+  { id: 'bug', name: 'Bug' },
+  { id: 'reptile', name: 'Reptile' },
+  { id: 'sea-creature', name: 'Sea Creature' },
+]
+
+const animalTypeById = {
+  dog: 'mammal',
+  cat: 'mammal',
+  goldfish: 'fish',
+  hamster: 'mammal',
+  parrot: 'bird',
+  rabbit: 'mammal',
+  mouse: 'mammal',
+  butterfly: 'bug',
+  ladybug: 'bug',
+  snail: 'bug',
+  cow: 'mammal',
+  pig: 'mammal',
+  chicken: 'bird',
+  horse: 'mammal',
+  sheep: 'mammal',
+  goat: 'mammal',
+  duck: 'bird',
+  donkey: 'mammal',
+  rooster: 'bird',
+  turkey: 'bird',
+  frog: 'reptile',
+  bee: 'bug',
+  peacock: 'bird',
+  bear: 'mammal',
+  deer: 'mammal',
+  fox: 'mammal',
+  owl: 'bird',
+  squirrel: 'mammal',
+  wolf: 'mammal',
+  raccoon: 'mammal',
+  woodpecker: 'bird',
+  hedgehog: 'mammal',
+  badger: 'mammal',
+  panda: 'mammal',
+  koala: 'mammal',
+  turtle: 'reptile',
+  dolphin: 'mammal',
+  whale: 'mammal',
+  shark: 'fish',
+  octopus: 'sea-creature',
+  'sea-turtle': 'reptile',
+  jellyfish: 'sea-creature',
+  clownfish: 'fish',
+  seahorse: 'fish',
+  starfish: 'sea-creature',
+  crab: 'sea-creature',
+  crocodile: 'reptile',
+  flamingo: 'bird',
+  camel: 'mammal',
+  scorpion: 'bug',
+  tortoise: 'reptile',
+  lizard: 'reptile',
+  vulture: 'bird',
+  monkey: 'mammal',
+  tiger: 'mammal',
+  gorilla: 'mammal',
+  sloth: 'mammal',
+  jaguar: 'mammal',
+  toucan: 'bird',
+  chameleon: 'reptile',
+  orangutan: 'mammal',
+  'polar-bear': 'mammal',
+  penguin: 'bird',
+  walrus: 'mammal',
+  seal: 'mammal',
+  'arctic-fox': 'mammal',
+  'arctic-hare': 'mammal',
+  narwhal: 'mammal',
+  'musk-ox': 'mammal',
+  lion: 'mammal',
+  elephant: 'mammal',
+  giraffe: 'mammal',
+  zebra: 'mammal',
+  cheetah: 'mammal',
+  hippopotamus: 'mammal',
+  rhinoceros: 'mammal',
+  hyena: 'mammal',
+  meerkat: 'mammal',
+  kangaroo: 'mammal',
+}
+
 export function getHabitatImages(habitat) {
   return habitat?.images ?? []
 }
@@ -199,7 +290,10 @@ export const animals = [
   { id: 'hyena', name: 'Hyena', habitats: ['grassland', 'desert'], image: '/animals/hyena.jpg' },
   { id: 'meerkat', name: 'Meerkat', habitats: ['grassland', 'desert'], image: '/animals/meerkat.jpg' },
   { id: 'kangaroo', name: 'Kangaroo', habitats: ['grassland'], image: '/animals/kangaroo.jpg' },
-]
+].map((animal) => ({
+  ...animal,
+  type: animalTypeById[animal.id],
+}))
 
 export function shuffleAnimals(list) {
   const shuffled = [...list]
@@ -221,8 +315,16 @@ export function getHabitatById(id) {
   return habitats.find((h) => h.id === id)
 }
 
+export function getTypeById(id) {
+  return animalTypes.find((type) => type.id === id)
+}
+
 export function isCorrectHabitat(animal, habitatId) {
   return animal.habitats.includes(habitatId)
+}
+
+export function isCorrectType(animal, typeId) {
+  return animal.type === typeId
 }
 
 export function formatHabitatNames(habitatIds) {

@@ -15,7 +15,7 @@ export default function Home({ onPlay }) {
           />
           <h1 className="text-4xl font-bold md:text-5xl">Animal World</h1>
           <p className="text-xl text-muted-foreground md:text-2xl">
-            Learn where animals live! Pick the habitat for each animal.
+            Learn what animals are and where they live!
           </p>
         </CardHeader>
         <CardContent className="space-y-5 pb-8">

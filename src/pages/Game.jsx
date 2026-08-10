@@ -3,18 +3,23 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import AnimalDisplay from '@/components/AnimalDisplay'
+import AnimalTypeIcon from '@/components/AnimalTypeIcon'
+import ChoiceButton from '@/components/ChoiceButton'
 import HabitatHelpPanel from '@/components/HabitatHelpPanel'
 import HabitatIcon from '@/components/HabitatIcon'
 import {
   animals,
+  animalTypes,
   formatHabitatNames,
   getHabitatById,
+  getTypeById,
   habitats,
   hasHabitatVideo,
   isCorrectHabitat,
+  isCorrectType,
   prepareRound,
 } from '@/data/animals'
-import { playCorrectSound, speakHabitatName, playWrongSound } from '@/lib/sounds'
+import { playCorrectSound, playWrongSound, speakHabitatName, speakTypeName } from '@/lib/sounds'
 import { assetUrl } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 
@@ -37,69 +42,33 @@ function ProgressBar({ current, total }) {
   )
 }
 
-function HabitatButton({ habitat, disabled, eliminated, onClick, onPreview, showPreview, pulse, highlight }) {
-  return (
-    <div className="relative">
-      <div className="relative w-full">
-        <Button
-          variant={highlight ? 'default' : 'outline'}
-          size="lg"
-          disabled={disabled}
-          aria-label={habitat.name}
-          className={cn(
-            'surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
-            pulse && !eliminated && 'animate-pulse border-amber-400 bg-amber-50',
-            highlight && 'scale-105 ring-4 ring-primary/40',
-            eliminated && 'border-rose-200 bg-rose-50 opacity-60',
-            !highlight && !pulse && !eliminated && 'hover:scale-[1.02] active:scale-95'
-          )}
-          onClick={onClick}
-        >
-          <HabitatIcon
-            habitatId={habitat.id}
-            className={cn(
-              'h-14 w-14 lg:h-16 lg:w-16',
-              highlight ? 'text-primary-foreground' : 'text-primary'
-            )}
-          />
-          <span className="text-base font-bold lg:text-lg">{habitat.name}</span>
-        </Button>
-        {eliminated && (
-          <div
-            className="pointer-events-none absolute inset-1 z-10 flex items-center justify-center text-rose-500"
-            aria-hidden="true"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-full w-full"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </div>
-        )}
-      </div>
-      {showPreview && (
-        <Button
-          type="button"
-          variant="secondary"
-          size="icon"
-          aria-label={`Watch a video about ${habitat.name}`}
-          className="absolute top-1.5 right-1.5 h-8 w-8 rounded-full border-normal bg-white/95 text-base shadow-md md:h-9 md:w-9"
-          onClick={(event) => {
-            event.stopPropagation()
-            onPreview()
-          }}
-        >
-          👀
-        </Button>
-      )}
-    </div>
-  )
+function advanceRound({
+  index,
+  total,
+  setIndex,
+  setFinished,
+  setScore,
+  setIsAdvancing,
+  setCorrectHabitatId,
+  setCorrectTypeId,
+  setWrongHabitats,
+  setWrongTypes,
+  setWrongPulse,
+}) {
+  setTimeout(() => {
+    setCorrectHabitatId(null)
+    setCorrectTypeId(null)
+    setWrongHabitats([])
+    setWrongTypes([])
+    setWrongPulse(false)
+    setIsAdvancing(false)
+
+    if (index + 1 >= total) {
+      setFinished(true)
+    } else {
+      setIndex((i) => i + 1)
+    }
+  }, 600)
 }
 
 export default function Game({ onBack, roundSize }) {
@@ -110,14 +79,18 @@ export default function Game({ onBack, roundSize }) {
   const [score, setScore] = useState(0)
   const [finished, setFinished] = useState(false)
   const [isAdvancing, setIsAdvancing] = useState(false)
-  const [highlightHabitat, setHighlightHabitat] = useState(null)
   const [wrongPulse, setWrongPulse] = useState(false)
   const [wrongHabitats, setWrongHabitats] = useState([])
+  const [wrongTypes, setWrongTypes] = useState([])
+  const [correctHabitatId, setCorrectHabitatId] = useState(null)
+  const [correctTypeId, setCorrectTypeId] = useState(null)
   const [videoHabitatId, setVideoHabitatId] = useState(undefined)
 
   const current = shuffled[index]
   const total = shuffled.length
   const videoModalOpen = videoHabitatId !== undefined
+  const habitatComplete = correctHabitatId !== null
+  const typeComplete = correctTypeId !== null
 
   function openHabitatVideo(habitatId) {
     setVideoHabitatId(habitatId)
@@ -127,8 +100,51 @@ export default function Game({ onBack, roundSize }) {
     setVideoHabitatId(undefined)
   }
 
-  function handleGuess(habitatId) {
-    if (isAdvancing || finished || wrongHabitats.includes(habitatId)) return
+  function resetRoundChoices() {
+    setCorrectHabitatId(null)
+    setCorrectTypeId(null)
+    setWrongHabitats([])
+    setWrongTypes([])
+    setWrongPulse(false)
+  }
+
+  function completeAnimal(habitatId, typeId) {
+    const habitat = getHabitatById(habitatId)
+    const type = getTypeById(typeId)
+    const alsoFound =
+      current.habitats.length > 1 ? `Also lives in: ${formatHabitatNames(current.habitats)}` : undefined
+
+    const successDescription = alsoFound
+      ? `${current.name} is a ${type?.name.toLowerCase()} in the ${habitat?.name}! ${alsoFound}`
+      : `${current.name} is a ${type?.name.toLowerCase()} in the ${habitat?.name}!`
+
+    setScore((s) => s + 1)
+    setIsAdvancing(true)
+    playCorrectSound()
+
+    toast.success('🎉 Yay! Great job!', {
+      description: successDescription,
+      duration: 6000,
+      id: 'game-toast',
+    })
+
+    advanceRound({
+      index,
+      total,
+      setIndex,
+      setFinished,
+      setScore,
+      setIsAdvancing,
+      setCorrectHabitatId,
+      setCorrectTypeId,
+      setWrongHabitats,
+      setWrongTypes,
+      setWrongPulse,
+    })
+  }
+
+  function handleHabitatGuess(habitatId) {
+    if (isAdvancing || finished || habitatComplete || wrongHabitats.includes(habitatId)) return
 
     const habitat = getHabitatById(habitatId)
     if (habitat) {
@@ -136,48 +152,45 @@ export default function Game({ onBack, roundSize }) {
     }
 
     if (isCorrectHabitat(current, habitatId)) {
-      const habitatName = habitat?.name
-      const alsoFound =
-        current.habitats.length > 1
-          ? `Also found in: ${formatHabitatNames(current.habitats)}`
-          : undefined
-
-      const successDescription = alsoFound
-        ? `${current.name} can live in the ${habitatName}! ${alsoFound}`
-        : `${current.name} can live in the ${habitatName}!`
-
-      setScore((s) => s + 1)
-      setIsAdvancing(true)
-      setHighlightHabitat(habitatId)
-      playCorrectSound()
-
-      toast.success('🎉 Yay! Great job!', {
-        description: successDescription,
-        duration: 6000,
-        id: 'game-toast',
-      })
-
-      setTimeout(() => {
-        setHighlightHabitat(null)
-        setIsAdvancing(false)
-        setWrongHabitats([])
-        if (index + 1 >= total) {
-          setFinished(true)
-        } else {
-          setIndex((i) => i + 1)
-        }
-      }, 600)
+      setCorrectHabitatId(habitatId)
+      if (typeComplete) {
+        completeAnimal(habitatId, correctTypeId)
+      }
     } else {
       setWrongHabitats((prev) => [...prev, habitatId])
       playWrongSound()
       setWrongPulse(true)
-
       toast.error('🤔 Oops! Try again!', {
-        description: `Keep looking for the best home for ${current.name}!`,
+        description: `That is not the best home for ${current.name}!`,
         duration: 5000,
         id: 'game-toast',
       })
+      setTimeout(() => setWrongPulse(false), 1200)
+    }
+  }
 
+  function handleTypeGuess(typeId) {
+    if (isAdvancing || finished || typeComplete || wrongTypes.includes(typeId)) return
+
+    const type = getTypeById(typeId)
+    if (type) {
+      speakTypeName(type.name)
+    }
+
+    if (isCorrectType(current, typeId)) {
+      setCorrectTypeId(typeId)
+      if (habitatComplete) {
+        completeAnimal(correctHabitatId, typeId)
+      }
+    } else {
+      setWrongTypes((prev) => [...prev, typeId])
+      playWrongSound()
+      setWrongPulse(true)
+      toast.error('🤔 Oops! Try again!', {
+        description: `${current.name} is not a ${type?.name.toLowerCase()}!`,
+        duration: 5000,
+        id: 'game-toast',
+      })
       setTimeout(() => setWrongPulse(false), 1200)
     }
   }
@@ -188,9 +201,7 @@ export default function Game({ onBack, roundSize }) {
     setIndex(0)
     setScore(0)
     setIsAdvancing(false)
-    setHighlightHabitat(null)
-    setWrongPulse(false)
-    setWrongHabitats([])
+    resetRoundChoices()
     setFinished(false)
   }
 
@@ -248,31 +259,93 @@ export default function Game({ onBack, roundSize }) {
         <Card className="lg:sticky lg:top-4 lg:w-[58%] lg:shrink-0">
           <CardHeader className="items-center gap-3 pb-3 pt-4 text-center md:gap-4 md:px-4 md:py-4 lg:gap-6 lg:px-8 lg:py-6">
             <AnimalDisplay animal={current} />
-            <p className="text-xl font-semibold md:text-2xl lg:text-3xl">Where does this animal live?</p>
+            <div className="space-y-1">
+              <p className="text-xl font-semibold md:text-2xl lg:text-3xl">What kind of animal is it?</p>
+              <p className="text-xl font-semibold md:text-2xl lg:text-3xl">Where does it live?</p>
+            </div>
           </CardHeader>
         </Card>
 
         <div className="flex shrink-0 flex-col gap-3 pb-1 lg:w-[42%] lg:shrink-0 lg:overflow-y-auto">
           <Card>
-            <CardContent className="p-3 md:p-4 lg:p-6">
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:gap-2.5 lg:grid-cols-2 lg:gap-3">
-                {habitats.map((habitat) => {
-                  const eliminated = wrongHabitats.includes(habitat.id)
+            <CardContent className="space-y-4 p-3 md:p-4 lg:p-6">
+              <div className="space-y-2">
+                <p className="text-center text-sm font-semibold text-muted-foreground md:text-base">Type</p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-2.5">
+                  {animalTypes.map((type) => {
+                    const eliminated = wrongTypes.includes(type.id)
+                    const highlight = correctTypeId === type.id
 
-                  return (
-                    <HabitatButton
-                      key={habitat.id}
-                      habitat={habitat}
-                      disabled={isAdvancing || eliminated}
-                      eliminated={eliminated}
-                      pulse={wrongPulse && !eliminated}
-                      highlight={highlightHabitat === habitat.id}
-                      showPreview={hasHabitatVideo(habitat.id)}
-                      onPreview={() => openHabitatVideo(habitat.id)}
-                      onClick={() => handleGuess(habitat.id)}
-                    />
-                  )
-                })}
+                    return (
+                      <ChoiceButton
+                        key={type.id}
+                        label={type.name}
+                        disabled={isAdvancing || eliminated || typeComplete}
+                        eliminated={eliminated}
+                        pulse={wrongPulse && !eliminated}
+                        highlight={highlight}
+                        onClick={() => handleTypeGuess(type.id)}
+                        icon={
+                          <AnimalTypeIcon
+                            typeId={type.id}
+                            className={cn(
+                              'text-4xl lg:text-5xl',
+                              highlight && 'drop-shadow-sm'
+                            )}
+                          />
+                        }
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-center text-sm font-semibold text-muted-foreground md:text-base">Habitat</p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:gap-2.5 lg:grid-cols-2">
+                  {habitats.map((habitat) => {
+                    const eliminated = wrongHabitats.includes(habitat.id)
+                    const highlight = correctHabitatId === habitat.id
+
+                    return (
+                      <ChoiceButton
+                        key={habitat.id}
+                        label={habitat.name}
+                        disabled={isAdvancing || eliminated || habitatComplete}
+                        eliminated={eliminated}
+                        pulse={wrongPulse && !eliminated}
+                        highlight={highlight}
+                        onClick={() => handleHabitatGuess(habitat.id)}
+                        icon={
+                          <HabitatIcon
+                            habitatId={habitat.id}
+                            className={cn(
+                              'h-14 w-14 lg:h-16 lg:w-16',
+                              highlight ? 'text-primary-foreground' : 'text-primary'
+                            )}
+                          />
+                        }
+                        previewButton={
+                          hasHabitatVideo(habitat.id) ? (
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              size="icon"
+                              aria-label={`Watch a video about ${habitat.name}`}
+                              className="absolute top-1.5 right-1.5 h-8 w-8 rounded-full border-normal bg-white/95 text-base shadow-md md:h-9 md:w-9"
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                openHabitatVideo(habitat.id)
+                              }}
+                            >
+                              👀
+                            </Button>
+                          ) : null
+                        }
+                      />
+                    )
+                  })}
+                </div>
               </div>
             </CardContent>
           </Card>

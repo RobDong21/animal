@@ -49,3 +49,7 @@ export function speakText(text) {
 export function speakHabitatName(name) {
   speakText(name)
 }
+
+export function speakTypeName(name) {
+  speakText(name)
+}
