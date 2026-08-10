@@ -17,7 +17,7 @@ const habitats = [
   { id: 'desert', wiki: 'Desert' },
   { id: 'jungle', wiki: 'Rainforest' },
   { id: 'polar', wiki: 'Sea ice' },
-  { id: 'savannah', wiki: 'Savanna' },
+  { id: 'grassland', wiki: 'Savanna' },
 ]
 
 const animals = [

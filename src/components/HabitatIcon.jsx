@@ -18,7 +18,7 @@ const habitatIcons = {
   desert: Sun,
   jungle: TreePalm,
   polar: Snowflake,
-  savannah: Sunrise,
+  grassland: Sunrise,
 }
 
 export default function HabitatIcon({ habitatId, className }) {
