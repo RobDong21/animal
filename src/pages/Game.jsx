@@ -10,6 +10,7 @@ import {
   formatHabitatNames,
   getHabitatById,
   habitats,
+  hasHabitatVideo,
   isCorrectHabitat,
   prepareRound,
 } from '@/data/animals'
@@ -36,7 +37,7 @@ function ProgressBar({ current, total }) {
   )
 }
 
-function HabitatButton({ habitat, disabled, eliminated, onClick, onPreview, pulse, highlight }) {
+function HabitatButton({ habitat, disabled, eliminated, onClick, onPreview, showPreview, pulse, highlight }) {
   return (
     <div className="relative">
       <div className="relative w-full">
@@ -82,19 +83,21 @@ function HabitatButton({ habitat, disabled, eliminated, onClick, onPreview, puls
           </div>
         )}
       </div>
-      <Button
-        type="button"
-        variant="secondary"
-        size="icon"
-        aria-label={`See what ${habitat.name} looks like`}
-        className="absolute top-1.5 right-1.5 h-8 w-8 rounded-full border-normal bg-white/95 text-base shadow-md md:h-9 md:w-9"
-        onClick={(event) => {
-          event.stopPropagation()
-          onPreview()
-        }}
-      >
-        👀
-      </Button>
+      {showPreview && (
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon"
+          aria-label={`Watch a video about ${habitat.name}`}
+          className="absolute top-1.5 right-1.5 h-8 w-8 rounded-full border-normal bg-white/95 text-base shadow-md md:h-9 md:w-9"
+          onClick={(event) => {
+            event.stopPropagation()
+            onPreview()
+          }}
+        >
+          👀
+        </Button>
+      )}
     </div>
   )
 }
@@ -110,16 +113,18 @@ export default function Game({ onBack, roundSize }) {
   const [highlightHabitat, setHighlightHabitat] = useState(null)
   const [wrongPulse, setWrongPulse] = useState(false)
   const [wrongHabitats, setWrongHabitats] = useState([])
-  const [helpOpen, setHelpOpen] = useState(false)
-  const [helpInitialIndex, setHelpInitialIndex] = useState(0)
+  const [videoHabitatId, setVideoHabitatId] = useState(undefined)
 
   const current = shuffled[index]
   const total = shuffled.length
+  const videoModalOpen = videoHabitatId !== undefined
 
-  function openHabitatHelp(habitatId) {
-    const habitatIndex = habitats.findIndex((habitat) => habitat.id === habitatId)
-    setHelpInitialIndex(habitatIndex >= 0 ? habitatIndex : 0)
-    setHelpOpen(true)
+  function openHabitatVideo(habitatId) {
+    setVideoHabitatId(habitatId)
+  }
+
+  function closeHabitatVideo() {
+    setVideoHabitatId(undefined)
   }
 
   function handleGuess(habitatId) {
@@ -232,10 +237,7 @@ export default function Game({ onBack, roundSize }) {
             variant="outline"
             size="lg"
             className="shrink-0 text-base md:text-lg"
-            onClick={() => {
-              setHelpInitialIndex(0)
-              setHelpOpen(true)
-            }}
+            onClick={() => openHabitatVideo(null)}
           >
             ❓ Habitats
           </Button>
@@ -265,7 +267,8 @@ export default function Game({ onBack, roundSize }) {
                       eliminated={eliminated}
                       pulse={wrongPulse && !eliminated}
                       highlight={highlightHabitat === habitat.id}
-                      onPreview={() => openHabitatHelp(habitat.id)}
+                      showPreview={hasHabitatVideo(habitat.id)}
+                      onPreview={() => openHabitatVideo(habitat.id)}
                       onClick={() => handleGuess(habitat.id)}
                     />
                   )
@@ -284,12 +287,8 @@ export default function Game({ onBack, roundSize }) {
         </div>
       </div>
 
-      {helpOpen && (
-        <HabitatHelpPanel
-          habitats={habitats}
-          initialIndex={helpInitialIndex}
-          onClose={() => setHelpOpen(false)}
-        />
+      {videoModalOpen && (
+        <HabitatHelpPanel habitatId={videoHabitatId} onClose={closeHabitatVideo} />
       )}
     </div>
   )

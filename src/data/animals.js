@@ -81,6 +81,25 @@ export const habitats = [
   },
 ]
 
+export const HABITAT_HELP_VIDEO_ID = '6GtnSNSP8oE'
+
+export const habitatVideoStartSeconds = {
+  grassland: 34,
+  polar: 162,
+  desert: 380,
+  forest: 502,
+  ocean: 772,
+  jungle: 866,
+}
+
+export function hasHabitatVideo(habitatId) {
+  return habitatId in habitatVideoStartSeconds
+}
+
+export function getHabitatVideoStart(habitatId) {
+  return habitatVideoStartSeconds[habitatId] ?? 0
+}
+
 export function getHabitatImages(habitat) {
   return habitat?.images ?? []
 }
