@@ -121,6 +121,28 @@
   }
 }
 
+/* Keep the complete game board visible on an iPad in portrait. */
+@media (orientation: portrait) and (min-width: 700px) and (max-width: 1100px) {
+  .game-animal-image {
+    max-height: 24dvh !important;
+  }
+
+  .game-choice-button {
+    min-height: 4rem !important;
+    gap: 0.25rem !important;
+    padding-block: 0.5rem !important;
+  }
+
+  .game-type-icon {
+    font-size: 2rem !important;
+  }
+
+  .game-habitat-icon {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+}
+
 /* Kid-friendly toast animations */
 [data-sonner-toaster] {
   --width: 26rem;

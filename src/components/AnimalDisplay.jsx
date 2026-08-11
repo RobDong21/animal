@@ -7,7 +7,7 @@ export default function AnimalDisplay({ animal, className }) {
 
   return (
     <div className={cn('flex w-full flex-col items-center gap-3 md:gap-4 lg:gap-6', className)}>
-      <div className="surface-frame relative flex w-full max-h-[34dvh] items-center justify-center overflow-hidden bg-muted/40 shadow-lg md:max-h-[36dvh] lg:max-h-none">
+      <div className="game-animal-image surface-frame relative flex w-full max-h-[34dvh] items-center justify-center overflow-hidden bg-muted/40 shadow-lg md:max-h-[36dvh] lg:max-h-none">
         {imageError ? (
           <div className="flex aspect-[4/3] w-full items-center justify-center bg-muted">
             <span className="text-7xl font-bold text-muted-foreground md:text-8xl">

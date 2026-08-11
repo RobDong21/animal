@@ -43,7 +43,7 @@ export function Toaster() {
       visibleToasts={1}
       closeButton={false}
       toastOptions={{
-        duration: 5000,
+        duration: 3000,
         classNames: {
           toast:
             'group kid-toast flex cursor-pointer items-start gap-3 shadow-xl backdrop-blur-sm active:opacity-90',

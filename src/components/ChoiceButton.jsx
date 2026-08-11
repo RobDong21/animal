@@ -21,7 +21,7 @@ export default function ChoiceButton({
           disabled={disabled}
           aria-label={ariaLabel ?? label}
           className={cn(
-            'surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
+            'game-choice-button surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
             pulse && !eliminated && 'animate-pulse border-amber-400 bg-amber-50',
             highlight && 'scale-105 ring-4 ring-primary/40',
             eliminated && 'border-rose-200 bg-rose-50 opacity-60',

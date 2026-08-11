@@ -124,7 +124,7 @@ export default function Game({ onBack, roundSize }) {
 
     toast.success('🎉 Yay! Great job!', {
       description: successDescription,
-      duration: 6000,
+      duration: 4000,
       id: 'game-toast',
     })
 
@@ -162,7 +162,7 @@ export default function Game({ onBack, roundSize }) {
       setWrongPulse(true)
       toast.error('🤔 Oops! Try again!', {
         description: `That is not the best home for ${current.name}!`,
-        duration: 5000,
+        duration: 3000,
         id: 'game-toast',
       })
       setTimeout(() => setWrongPulse(false), 1200)
@@ -188,7 +188,7 @@ export default function Game({ onBack, roundSize }) {
       setWrongPulse(true)
       toast.error('🤔 Oops! Try again!', {
         description: `${current.name} is not a ${type?.name.toLowerCase()}!`,
-        duration: 5000,
+        duration: 3000,
         id: 'game-toast',
       })
       setTimeout(() => setWrongPulse(false), 1200)
@@ -255,8 +255,8 @@ export default function Game({ onBack, roundSize }) {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto lg:flex-row lg:items-start lg:gap-6 lg:overflow-hidden">
-        <Card className="lg:sticky lg:top-4 lg:w-[58%] lg:shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto lg:grid lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-6 lg:overflow-hidden">
+        <Card className="lg:min-w-0">
           <CardHeader className="items-center gap-3 pb-3 pt-4 text-center md:gap-4 md:px-4 md:py-4 lg:gap-6 lg:px-8 lg:py-6">
             <AnimalDisplay animal={current} />
             <div className="space-y-1">
@@ -266,7 +266,7 @@ export default function Game({ onBack, roundSize }) {
           </CardHeader>
         </Card>
 
-        <div className="flex shrink-0 flex-col gap-3 pb-1 lg:w-[42%] lg:shrink-0 lg:overflow-y-auto">
+        <div className="flex min-w-0 shrink-0 flex-col gap-3 pb-1 lg:shrink lg:overflow-y-auto">
           <Card>
             <CardContent className="space-y-4 p-3 md:p-4 lg:p-6">
               <div className="space-y-2">
@@ -289,7 +289,7 @@ export default function Game({ onBack, roundSize }) {
                           <AnimalTypeIcon
                             typeId={type.id}
                             className={cn(
-                              'text-4xl lg:text-5xl',
+                              'game-type-icon text-4xl lg:text-5xl',
                               highlight && 'drop-shadow-sm'
                             )}
                           />
@@ -302,7 +302,7 @@ export default function Game({ onBack, roundSize }) {
 
               <div className="space-y-2">
                 <p className="text-center text-sm font-semibold text-muted-foreground md:text-base">Habitat</p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:gap-2.5 lg:grid-cols-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:gap-2.5 lg:grid-cols-4">
                   {habitats.map((habitat) => {
                     const eliminated = wrongHabitats.includes(habitat.id)
                     const highlight = correctHabitatId === habitat.id
@@ -320,7 +320,7 @@ export default function Game({ onBack, roundSize }) {
                           <HabitatIcon
                             habitatId={habitat.id}
                             className={cn(
-                              'h-14 w-14 lg:h-16 lg:w-16',
+                              'game-habitat-icon h-14 w-14 lg:h-16 lg:w-16',
                               highlight ? 'text-primary-foreground' : 'text-primary'
                             )}
                           />
