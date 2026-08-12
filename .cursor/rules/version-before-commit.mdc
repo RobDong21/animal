@@ -1,0 +1,11 @@
+---
+description: Increment the app patch version before each commit and push
+alwaysApply: true
+---
+
+# App Versioning
+
+- `package.json` is the canonical app version shown in the UI.
+- Before creating any commit, increment the SemVer patch component exactly once for that commit (for example, `1.0.0` to `1.0.1`).
+- Keep the root version and `packages[""].version` in `package-lock.json` synchronized.
+- Include the version changes in the commit, then push that commit without incrementing again.
