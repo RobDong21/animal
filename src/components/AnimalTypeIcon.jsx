@@ -4,7 +4,7 @@ const typeEmojis = {
   mammal: '🐾',
   bird: '🐦',
   fish: '🐟',
-  bug: '🐛',
+  insect: '🐛',
   reptile: '🦎',
   'sea-creature': '🦀',
 }

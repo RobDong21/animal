@@ -22,15 +22,23 @@ export default function Home({ onPlay }) {
           <Button
             size="xl"
             className="h-16 w-full text-2xl shadow-md md:h-20 md:text-3xl"
-            onClick={() => onPlay({ roundSize: SHORT_ROUND_SIZE })}
+            onClick={() => onPlay({ mode: 'easy', roundSize: SHORT_ROUND_SIZE })}
           >
-            ⚡ Quick Play ({SHORT_ROUND_SIZE} animals)
+            🌱 Easy
+          </Button>
+          <Button
+            size="xl"
+            variant="outline"
+            className="h-16 w-full text-2xl md:h-20 md:text-3xl"
+            onClick={() => onPlay({ mode: 'normal', roundSize: SHORT_ROUND_SIZE })}
+          >
+            ⭐ Normal
           </Button>
           <Button
             size="lg"
             variant="outline"
             className="h-14 w-full text-xl md:h-16 md:text-2xl"
-            onClick={() => onPlay({ roundSize: null })}
+            onClick={() => onPlay({ mode: 'normal', roundSize: null })}
           >
             🌍 Full Adventure (all animals)
           </Button>

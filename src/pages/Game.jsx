@@ -8,12 +8,12 @@ import ChoiceButton from '@/components/ChoiceButton'
 import HabitatHelpPanel from '@/components/HabitatHelpPanel'
 import HabitatIcon from '@/components/HabitatIcon'
 import {
-  animals,
-  animalTypes,
   formatHabitatNames,
+  getAnimalsForMode,
   getHabitatById,
+  getHabitatsForMode,
   getTypeById,
-  habitats,
+  getTypesForMode,
   hasHabitatVideo,
   isCorrectHabitat,
   isCorrectType,
@@ -71,8 +71,12 @@ function advanceRound({
   }, 600)
 }
 
-export default function Game({ onBack, roundSize }) {
-  const initialRound = useMemo(() => prepareRound(animals, roundSize), [roundSize])
+export default function Game({ onBack, roundSize, mode = 'normal' }) {
+  const modeAnimals = useMemo(() => getAnimalsForMode(mode), [mode])
+  const modeHabitats = useMemo(() => getHabitatsForMode(mode), [mode])
+  const modeTypes = useMemo(() => getTypesForMode(mode), [mode])
+  const initialRound = useMemo(() => prepareRound(modeAnimals, roundSize), [modeAnimals, roundSize])
+  const isEasy = mode === 'easy'
 
   const [shuffled, setShuffled] = useState(initialRound)
   const [index, setIndex] = useState(0)
@@ -197,7 +201,7 @@ export default function Game({ onBack, roundSize }) {
 
   function handlePlayAgain() {
     toast.dismiss()
-    setShuffled(prepareRound(animals, roundSize))
+    setShuffled(prepareRound(modeAnimals, roundSize))
     setIndex(0)
     setScore(0)
     setIsAdvancing(false)
@@ -271,8 +275,8 @@ export default function Game({ onBack, roundSize }) {
             <CardContent className="space-y-4 p-3 md:p-4 lg:p-6">
               <div className="space-y-2">
                 <p className="text-center text-sm font-semibold text-muted-foreground md:text-base">Type</p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-2.5">
-                  {animalTypes.map((type) => {
+                <div className={cn('grid gap-2 md:gap-2.5', isEasy ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3')}>
+                  {modeTypes.map((type) => {
                     const eliminated = wrongTypes.includes(type.id)
                     const highlight = correctTypeId === type.id
 
@@ -302,8 +306,8 @@ export default function Game({ onBack, roundSize }) {
 
               <div className="space-y-2">
                 <p className="text-center text-sm font-semibold text-muted-foreground md:text-base">Habitat</p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:gap-2.5 lg:grid-cols-4">
-                  {habitats.map((habitat) => {
+                <div className={cn('grid gap-2 md:gap-2.5', isEasy ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-4')}>
+                  {modeHabitats.map((habitat) => {
                     const eliminated = wrongHabitats.includes(habitat.id)
                     const highlight = correctHabitatId === habitat.id
 

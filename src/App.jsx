@@ -10,6 +10,7 @@ export default function App() {
   const content =
     view === 'game' && gameConfig ? (
       <Game
+        mode={gameConfig.mode}
         roundSize={gameConfig.roundSize}
         onBack={() => {
           setView('home')

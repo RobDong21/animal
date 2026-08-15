@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 const habitatIcons = {
   home: Home,
   farm: Tractor,
+  wild: Trees,
   forest: Trees,
   ocean: Waves,
   desert: Sun,

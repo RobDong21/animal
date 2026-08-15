@@ -81,6 +81,17 @@ export const habitats = [
   },
 ]
 
+export const wildHabitat = {
+  id: 'wild',
+  name: 'Wild',
+  description: 'Animals that live outside in nature.',
+  images: [{ src: '/habitats/forest.jpg', caption: 'Animals living in the wild' }],
+}
+
+const habitatsById = Object.fromEntries(
+  [...habitats, wildHabitat].map((habitat) => [habitat.id, habitat])
+)
+
 export const HABITAT_HELP_VIDEO_ID = '6GtnSNSP8oE'
 
 export const habitatVideoStartSeconds = {
@@ -104,7 +115,7 @@ export const animalTypes = [
   { id: 'mammal', name: 'Mammal' },
   { id: 'bird', name: 'Bird' },
   { id: 'fish', name: 'Fish' },
-  { id: 'bug', name: 'Bug' },
+  { id: 'insect', name: 'Insect' },
   { id: 'reptile', name: 'Reptile' },
   { id: 'sea-creature', name: 'Sea Creature' },
 ]
@@ -116,9 +127,9 @@ const animalTypeById = {
   hamster: 'mammal',
   parrot: 'bird',
   rabbit: 'mammal',
-  butterfly: 'bug',
-  ladybug: 'bug',
-  snail: 'bug',
+  butterfly: 'insect',
+  ladybug: 'insect',
+  snail: 'insect',
   cow: 'mammal',
   pig: 'mammal',
   chicken: 'bird',
@@ -128,7 +139,7 @@ const animalTypeById = {
   rooster: 'bird',
   turkey: 'bird',
   frog: 'reptile',
-  bee: 'bug',
+  bee: 'insect',
   peacock: 'bird',
   bear: 'mammal',
   deer: 'mammal',
@@ -158,7 +169,7 @@ const animalTypeById = {
   crocodile: 'reptile',
   flamingo: 'bird',
   camel: 'mammal',
-  scorpion: 'bug',
+  scorpion: 'insect',
   tortoise: 'reptile',
   lizard: 'reptile',
   vulture: 'bird',
@@ -179,7 +190,7 @@ const animalTypeById = {
   snake: 'reptile',
   goose: 'bird',
   moose: 'mammal',
-  ant: 'bug',
+  ant: 'insect',
   swan: 'bird',
   eagle: 'bird',
   otter: 'mammal',
@@ -190,11 +201,11 @@ const animalTypeById = {
   alligator: 'reptile',
   newt: 'reptile',
   'bearded-dragon': 'reptile',
-  grasshopper: 'bug',
-  dragonfly: 'bug',
-  caterpillar: 'bug',
-  beetle: 'bug',
-  worm: 'bug',
+  grasshopper: 'insect',
+  dragonfly: 'insect',
+  caterpillar: 'insect',
+  beetle: 'insect',
+  worm: 'insect',
 }
 
 export function getHabitatImages(habitat) {
@@ -318,13 +329,60 @@ export function shuffleAnimals(list) {
 
 export const SHORT_ROUND_SIZE = 10
 
+export const EASY_TYPE_IDS = ['mammal', 'bird', 'fish', 'insect']
+
+export const EASY_EXCLUDED_ANIMAL_IDS = new Set([
+  'dolphin',
+  'whale',
+  'seal',
+  'otter',
+  'penguin',
+  'seahorse',
+  'hippopotamus',
+  'snail',
+  'worm',
+  'scorpion',
+])
+
+export function mapHabitatToEasy(habitatId) {
+  return habitatId === 'home' || habitatId === 'farm' ? habitatId : 'wild'
+}
+
+export function mapHabitatsToEasy(habitatIds) {
+  return [...new Set(habitatIds.map(mapHabitatToEasy))]
+}
+
+export function getHabitatsForMode(mode) {
+  if (mode === 'easy') {
+    return [habitatsById.home, habitatsById.farm, wildHabitat]
+  }
+  return habitats
+}
+
+export function getTypesForMode(mode) {
+  if (mode === 'easy') {
+    return animalTypes.filter((type) => EASY_TYPE_IDS.includes(type.id))
+  }
+  return animalTypes
+}
+
+export function getAnimalsForMode(mode) {
+  if (mode !== 'easy') return animals
+  return animals
+    .filter((animal) => EASY_TYPE_IDS.includes(animal.type) && !EASY_EXCLUDED_ANIMAL_IDS.has(animal.id))
+    .map((animal) => ({
+      ...animal,
+      habitats: mapHabitatsToEasy(animal.habitats),
+    }))
+}
+
 export function prepareRound(list, roundSize) {
   const shuffled = shuffleAnimals(list)
   return roundSize ? shuffled.slice(0, roundSize) : shuffled
 }
 
 export function getHabitatById(id) {
-  return habitats.find((h) => h.id === id)
+  return habitatsById[id]
 }
 
 export function getTypeById(id) {
