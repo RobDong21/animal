@@ -244,14 +244,22 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
   return (
     <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col overflow-hidden px-4 pb-3 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-5 md:pb-4 lg:px-8 lg:pb-6">
       <div className="mb-3 shrink-0 space-y-3 md:mb-4">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            className="shrink-0 text-sm md:text-base"
+            onClick={onBack}
+          >
+            ← Home
+          </Button>
           <div className="min-w-0 flex-1">
             <ProgressBar current={index + 1} total={total} />
           </div>
           <Button
             variant="outline"
-            size="lg"
-            className="shrink-0 text-base md:text-lg"
+            size="sm"
+            className="shrink-0 text-sm md:text-base"
             onClick={() => openHabitatVideo(null)}
           >
             ❓ Habitats
@@ -353,14 +361,6 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
               </div>
             </CardContent>
           </Card>
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-full text-base md:text-lg"
-            onClick={onBack}
-          >
-            ← Home
-          </Button>
         </div>
       </div>
 
