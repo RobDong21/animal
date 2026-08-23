@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { HelpCircle, Home } from 'lucide-react'
+import { useMemo, useRef, useState } from 'react'
+import { CheckCircle2, HelpCircle, Home } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -28,9 +28,8 @@ function ProgressBar({ current, total }) {
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between text-base font-medium md:text-lg">
+      <div className="text-component-title">
         <span>Animal {current} of {total}</span>
-        <span className="text-primary">{pct}%</span>
       </div>
       <div className="h-4 overflow-hidden rounded-full bg-muted md:h-5">
         <div
@@ -47,20 +46,21 @@ function advanceRound({
   total,
   setIndex,
   setFinished,
-  setScore,
   setIsAdvancing,
   setCorrectHabitatId,
   setCorrectTypeId,
   setWrongHabitats,
   setWrongTypes,
-  setWrongPulse,
+  setWrongHabitatPulseId,
+  setWrongTypePulseId,
 }) {
   setTimeout(() => {
     setCorrectHabitatId(null)
     setCorrectTypeId(null)
     setWrongHabitats([])
     setWrongTypes([])
-    setWrongPulse(false)
+    setWrongHabitatPulseId(null)
+    setWrongTypePulseId(null)
     setIsAdvancing(false)
 
     if (index + 1 >= total) {
@@ -83,12 +83,14 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
   const [score, setScore] = useState(0)
   const [finished, setFinished] = useState(false)
   const [isAdvancing, setIsAdvancing] = useState(false)
-  const [wrongPulse, setWrongPulse] = useState(false)
+  const [wrongHabitatPulseId, setWrongHabitatPulseId] = useState(null)
+  const [wrongTypePulseId, setWrongTypePulseId] = useState(null)
   const [wrongHabitats, setWrongHabitats] = useState([])
   const [wrongTypes, setWrongTypes] = useState([])
   const [correctHabitatId, setCorrectHabitatId] = useState(null)
   const [correctTypeId, setCorrectTypeId] = useState(null)
   const [helpOpen, setHelpOpen] = useState(false)
+  const helpButtonRef = useRef(null)
 
   const current = shuffled[index]
   const total = shuffled.length
@@ -101,6 +103,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
 
   function closeHabitatHelp() {
     setHelpOpen(false)
+    requestAnimationFrame(() => helpButtonRef.current?.focus())
   }
 
   function resetRoundChoices() {
@@ -108,7 +111,8 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
     setCorrectTypeId(null)
     setWrongHabitats([])
     setWrongTypes([])
-    setWrongPulse(false)
+    setWrongHabitatPulseId(null)
+    setWrongTypePulseId(null)
   }
 
   function completeAnimal(habitatId, typeId) {
@@ -136,13 +140,13 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
       total,
       setIndex,
       setFinished,
-      setScore,
       setIsAdvancing,
       setCorrectHabitatId,
       setCorrectTypeId,
       setWrongHabitats,
       setWrongTypes,
-      setWrongPulse,
+      setWrongHabitatPulseId,
+      setWrongTypePulseId,
     })
   }
 
@@ -162,13 +166,16 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
     } else {
       setWrongHabitats((prev) => [...prev, habitatId])
       playWrongSound()
-      setWrongPulse(true)
+      setWrongHabitatPulseId(habitatId)
       toast.error('🤔 Oops! Try again!', {
         description: `That is not the best home for ${current.name}!`,
         duration: 3000,
         id: 'game-toast',
       })
-      setTimeout(() => setWrongPulse(false), 1200)
+      setTimeout(
+        () => setWrongHabitatPulseId((activeId) => (activeId === habitatId ? null : activeId)),
+        700
+      )
     }
   }
 
@@ -188,13 +195,16 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
     } else {
       setWrongTypes((prev) => [...prev, typeId])
       playWrongSound()
-      setWrongPulse(true)
+      setWrongTypePulseId(typeId)
       toast.error('🤔 Oops! Try again!', {
         description: `${current.name} is not a ${type?.name.toLowerCase()}!`,
         duration: 3000,
         id: 'game-toast',
       })
-      setTimeout(() => setWrongPulse(false), 1200)
+      setTimeout(
+        () => setWrongTypePulseId((activeId) => (activeId === typeId ? null : activeId)),
+        700
+      )
     }
   }
 
@@ -213,25 +223,25 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
     const stars = pct >= 80 ? 3 : pct >= 50 ? 2 : 1
 
     return (
-      <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-3 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6 md:py-4">
+      <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
         <Card className="w-full max-w-lg text-center md:max-w-xl">
           <CardHeader className="space-y-4 pb-2">
             <div className="text-5xl md:text-6xl">{'⭐'.repeat(stars)}</div>
             <img
-              src={assetUrl('/animals/lion.jpg')}
-              alt=""
-              className="surface-frame mx-auto h-40 w-40 object-cover shadow-md md:h-52 md:w-52"
+              src={assetUrl(current.image)}
+              alt={current.name}
+              className="radius-large mx-auto h-40 w-40 object-cover md:h-52 md:w-52"
             />
-            <h2 className="text-3xl font-bold md:text-4xl">Amazing job!</h2>
-            <p className="text-xl text-muted-foreground md:text-2xl">
+            <h2 className="text-title">Amazing job!</h2>
+            <p className="text-supporting">
               You matched {score} out of {total} animals!
             </p>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 pb-8">
-            <Button size="xl" className="w-full text-xl md:text-2xl" onClick={handlePlayAgain}>
+            <Button size="xl" className="cta-primary" onClick={handlePlayAgain}>
               Play Again
             </Button>
-            <Button size="lg" variant="outline" className="w-full text-lg md:text-xl" onClick={onBack}>
+            <Button size="lg" variant="outline" className="cta-secondary" onClick={onBack}>
               Back to Home
             </Button>
           </CardContent>
@@ -241,9 +251,9 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
   }
 
   return (
-    <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col overflow-hidden px-4 pb-3 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-5 md:pb-4 lg:px-8 lg:pb-6">
-      <div className="mb-3 shrink-0 space-y-3 md:mb-4">
-        <div className="flex items-center justify-between gap-3">
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col overflow-hidden px-4 pb-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6 lg:px-8 lg:pb-6">
+      <div className="mb-4 shrink-0 space-y-2">
+        <div className="flex items-center justify-between gap-4">
           <Button
             variant="outline"
             className="toolbar-button-icon game-toolbar-icon surface-interactive-lg transition-transform hover:scale-[1.02] active:scale-95"
@@ -256,29 +266,36 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
             <ProgressBar current={index + 1} total={total} />
           </div>
           <Button
+            ref={helpButtonRef}
             variant="outline"
             className="toolbar-button-label game-toolbar-label surface-interactive-lg transition-transform hover:scale-[1.02] active:scale-95"
             onClick={openHabitatHelp}
           >
             <HelpCircle className="shrink-0" />
-            Where animals live
+            Habitat Help
           </Button>
         </div>
+        <p className="text-center text-base font-semibold text-muted-foreground md:text-lg">
+          Pick what it is and where it lives
+        </p>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto lg:grid lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-6 lg:overflow-hidden">
         <Card className="lg:min-w-0">
-          <CardHeader className="items-center gap-3 pb-3 pt-4 text-center md:gap-4 md:px-4 md:py-4 lg:gap-6 lg:px-8 lg:py-6">
+          <CardHeader className="items-center gap-4 px-4 py-4 text-center lg:gap-6 lg:px-8 lg:py-6">
             <AnimalDisplay animal={current} />
           </CardHeader>
         </Card>
 
-        <div className="flex min-w-0 shrink-0 flex-col gap-3 pb-1 lg:shrink lg:overflow-y-auto">
+        <div className="flex min-w-0 shrink-0 flex-col gap-4 lg:shrink lg:overflow-y-auto">
           <Card>
-            <CardContent className="space-y-4 p-3 md:p-4 lg:p-6">
+            <CardContent className="space-y-4 p-4 lg:p-6">
               <div className="space-y-2">
-                <p className="text-center text-sm font-semibold text-muted-foreground md:text-base">Type</p>
-                <div className={cn('grid gap-2 md:gap-2.5', isEasy ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3')}>
+                <div className="flex items-center justify-center gap-2">
+                  <p className="text-component-title">1. What is it?</p>
+                  {typeComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
+                </div>
+                <div className={cn('grid gap-2', isEasy ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3')}>
                   {modeTypes.map((type) => {
                     const eliminated = wrongTypes.includes(type.id)
                     const highlight = correctTypeId === type.id
@@ -289,15 +306,15 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
                         label={type.name}
                         disabled={isAdvancing || eliminated || typeComplete}
                         eliminated={eliminated}
-                        pulse={wrongPulse && !eliminated}
+                        pulse={wrongTypePulseId === type.id}
                         highlight={highlight}
                         onClick={() => handleTypeGuess(type.id)}
                         icon={
                           <AnimalTypeIcon
                             typeId={type.id}
                             className={cn(
-                              'game-type-icon text-4xl lg:text-5xl',
-                              highlight && 'drop-shadow-sm'
+                              'game-type-icon h-12 w-12 lg:h-14 lg:w-14',
+                              highlight ? 'text-primary-foreground' : 'text-primary'
                             )}
                           />
                         }
@@ -308,8 +325,11 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
               </div>
 
               <div className="space-y-2">
-                <p className="text-center text-sm font-semibold text-muted-foreground md:text-base">Habitat</p>
-                <div className={cn('grid gap-2 md:gap-2.5', isEasy ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-4')}>
+                <div className="flex items-center justify-center gap-2">
+                  <p className="text-component-title">2. Where does it live?</p>
+                  {habitatComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
+                </div>
+                <div className={cn('grid gap-2', isEasy ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-4')}>
                   {modeHabitats.map((habitat) => {
                     const eliminated = wrongHabitats.includes(habitat.id)
                     const highlight = correctHabitatId === habitat.id
@@ -320,7 +340,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
                         label={habitat.name}
                         disabled={isAdvancing || eliminated || habitatComplete}
                         eliminated={eliminated}
-                        pulse={wrongPulse && !eliminated}
+                        pulse={wrongHabitatPulseId === habitat.id}
                         highlight={highlight}
                         onClick={() => handleHabitatGuess(habitat.id)}
                         icon={

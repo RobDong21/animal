@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import HabitatIcon from '@/components/HabitatIcon'
@@ -8,6 +8,8 @@ import { assetUrl } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 
 export default function HabitatHelpPanel({ habitats, onClose }) {
+  const dialogRef = useRef(null)
+  const closeButtonRef = useRef(null)
   const [selectedHabitatId, setSelectedHabitatId] = useState(habitats[0]?.id ?? null)
   const selectedHabitat = habitats.find((habitat) => habitat.id === selectedHabitatId) ?? null
   const slides = getHabitatHelpSlides(selectedHabitatId)
@@ -22,6 +24,44 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
     setSlideIndex(0)
   }, [selectedHabitatId])
 
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return undefined
+
+    closeButtonRef.current?.focus()
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        onClose()
+        return
+      }
+
+      if (event.key !== 'Tab') return
+
+      const focusable = Array.from(
+        dialog.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      )
+      if (!focusable.length) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
   const currentSlide = slides[slideIndex]
   const hasMultipleSlides = slides.length > 1
 
@@ -35,32 +75,34 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-3 md:items-center md:p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4"
       onClick={onClose}
       role="presentation"
     >
       <Card
-        className="relative flex w-full max-w-4xl flex-col shadow-2xl"
+        ref={dialogRef}
+        className="elevation-overlay relative flex max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-labelledby="habitat-help-title"
         aria-modal="true"
       >
         <Button
+          ref={closeButtonRef}
           type="button"
           variant="outline"
           size="icon"
-          className="toolbar-button-icon surface-interactive-lg absolute top-3 right-3 z-10 font-bold transition-transform hover:scale-[1.02] active:scale-95 md:top-4 md:right-4"
+          className="toolbar-button-icon surface-interactive-lg absolute top-4 right-4 z-10 font-bold transition-transform hover:scale-[1.02] active:scale-95"
           onClick={onClose}
           aria-label="Close"
         >
           <X />
         </Button>
-        <CardHeader className="shrink-0 space-y-3 pb-3 text-center">
+        <CardHeader className="shrink-0 space-y-4 px-16 pb-4 text-center">
           {selectedHabitat && (
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-2">
               <HabitatIcon habitatId={selectedHabitat.id} className="h-10 w-10 text-primary md:h-12 md:w-12" />
-              <h2 id="habitat-help-title" className="text-3xl font-bold md:text-4xl">
+              <h2 id="habitat-help-title" className="text-title">
                 {selectedHabitat.name}
               </h2>
             </div>
@@ -71,8 +113,7 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
                 key={habitat.id}
                 type="button"
                 variant={habitat.id === selectedHabitatId ? 'default' : 'outline'}
-                size="sm"
-                className="gap-1.5 text-sm md:text-base"
+                className="habitat-tab"
                 onClick={() => setSelectedHabitatId(habitat.id)}
               >
                 <HabitatIcon habitatId={habitat.id} className="h-4 w-4 md:h-5 md:w-5" />
@@ -81,9 +122,9 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
             ))}
           </div>
         </CardHeader>
-        <CardContent className="space-y-4 pb-4">
+        <CardContent className="min-h-0 space-y-4 overflow-y-auto pb-4">
           <div className="flex justify-center">
-            <div className="relative aspect-[4/3] w-[80%] overflow-hidden rounded-2xl border-normal border-border bg-muted shadow-md">
+            <div className="radius-large relative aspect-[4/3] w-[80%] overflow-hidden border-normal border-border bg-muted">
               {currentSlide && (
                 <img
                   src={assetUrl(currentSlide.src)}
@@ -95,23 +136,23 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
                 <>
                   <Button
                     type="button"
-                    variant="secondary"
+                    variant="outline"
                     size="icon"
                     aria-label="Previous picture"
-                    className="absolute top-1/2 left-2 h-12 w-12 -translate-y-1/2 rounded-full border-normal bg-white/95 text-2xl shadow-md md:left-3 md:h-14 md:w-14"
+                    className="carousel-control absolute top-1/2 left-2 -translate-y-1/2"
                     onClick={showPreviousSlide}
                   >
-                    ‹
+                    <ChevronLeft />
                   </Button>
                   <Button
                     type="button"
-                    variant="secondary"
+                    variant="outline"
                     size="icon"
                     aria-label="Next picture"
-                    className="absolute top-1/2 right-2 h-12 w-12 -translate-y-1/2 rounded-full border-normal bg-white/95 text-2xl shadow-md md:right-3 md:h-14 md:w-14"
+                    className="carousel-control absolute top-1/2 right-2 -translate-y-1/2"
                     onClick={showNextSlide}
                   >
-                    ›
+                    <ChevronRight />
                   </Button>
                 </>
               )}
@@ -119,7 +160,7 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
           </div>
 
           {currentSlide && (
-            <p className="text-center text-xl font-semibold leading-snug md:text-2xl">
+            <p className="text-component-title text-center">
               {currentSlide.caption}
             </p>
           )}
@@ -131,12 +172,17 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
                   key={slide.src}
                   type="button"
                   aria-label={`Show picture ${index + 1} of ${slides.length}`}
-                  className={cn(
-                    'h-3 w-3 rounded-full transition-colors',
-                    index === slideIndex ? 'bg-primary' : 'bg-muted-foreground/30'
-                  )}
+                  className="slide-dot-button"
                   onClick={() => setSlideIndex(index)}
-                />
+                >
+                  <span
+                    className={cn(
+                      'slide-dot',
+                      index === slideIndex ? 'bg-primary' : 'bg-muted-foreground/30'
+                    )}
+                    aria-hidden="true"
+                  />
+                </button>
               ))}
             </div>
           )}

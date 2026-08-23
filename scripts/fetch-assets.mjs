@@ -26,7 +26,7 @@ const wikiTitles = {
   bison: 'American bison',
   iguana: 'Green iguana',
   alligator: 'American alligator',
-  bearded-dragon: 'Bearded dragon',
+  'bearded-dragon': 'Bearded dragon',
   worm: 'Earthworm',
   cow: 'Cattle',
 }

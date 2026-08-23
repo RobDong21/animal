@@ -9,7 +9,6 @@ export default function ChoiceButton({
   onClick,
   pulse,
   highlight,
-  previewButton,
   ariaLabel,
 }) {
   return (
@@ -20,9 +19,10 @@ export default function ChoiceButton({
           size="lg"
           disabled={disabled}
           aria-label={ariaLabel ?? label}
+          aria-pressed={highlight}
           className={cn(
             'game-choice-button surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
-            pulse && !eliminated && 'animate-pulse border-warning-border bg-warning-muted',
+            pulse && 'animate-pulse border-error-border bg-error-muted',
             highlight && 'scale-105 ring-4 ring-primary/40',
             eliminated && 'border-error-border bg-error-muted opacity-60',
             !highlight && !pulse && !eliminated && 'hover:scale-[1.02] active:scale-95'
@@ -51,7 +51,6 @@ export default function ChoiceButton({
           </div>
         )}
       </div>
-      {previewButton}
     </div>
   )
 }

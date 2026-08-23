@@ -1,21 +1,18 @@
+import { Bird, Bug, Fish, PawPrint, Shell, Turtle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const typeEmojis = {
-  mammal: '🐾',
-  bird: '🐦',
-  fish: '🐟',
-  insect: '🐛',
-  reptile: '🦎',
-  'sea-creature': '🦀',
+const typeIcons = {
+  mammal: PawPrint,
+  bird: Bird,
+  fish: Fish,
+  insect: Bug,
+  reptile: Turtle,
+  'sea-creature': Shell,
 }
 
 export default function AnimalTypeIcon({ typeId, className }) {
-  const emoji = typeEmojis[typeId]
-  if (!emoji) return null
+  const Icon = typeIcons[typeId]
+  if (!Icon) return null
 
-  return (
-    <span className={cn('leading-none', className)} aria-hidden="true">
-      {emoji}
-    </span>
-  )
+  return <Icon className={cn('shrink-0', className)} strokeWidth={2.5} aria-hidden="true" />
 }

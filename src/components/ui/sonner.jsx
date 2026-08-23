@@ -46,7 +46,7 @@ export function Toaster() {
         duration: 3000,
         classNames: {
           toast:
-            'group kid-toast flex cursor-pointer items-start gap-3 shadow-xl backdrop-blur-sm active:opacity-90',
+            'group kid-toast flex cursor-pointer items-start gap-3 backdrop-blur-sm active:opacity-90',
           title: 'text-xl font-extrabold leading-tight',
           description: 'text-lg font-medium leading-snug',
           icon: 'hidden',
