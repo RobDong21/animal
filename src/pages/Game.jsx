@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { HelpCircle, Home } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -245,22 +246,22 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
         <div className="flex items-center justify-between gap-3">
           <Button
             variant="outline"
-            size="sm"
-            className="shrink-0 text-sm md:text-base"
+            className="toolbar-button-icon game-toolbar-icon surface-interactive-lg transition-transform hover:scale-[1.02] active:scale-95"
             onClick={onBack}
+            aria-label="Home"
           >
-            ← Home
+            <Home />
           </Button>
           <div className="min-w-0 flex-1">
             <ProgressBar current={index + 1} total={total} />
           </div>
           <Button
             variant="outline"
-            size="sm"
-            className="shrink-0 text-sm md:text-base"
+            className="toolbar-button-label game-toolbar-label surface-interactive-lg transition-transform hover:scale-[1.02] active:scale-95"
             onClick={openHabitatHelp}
           >
-            ❓ Habitats
+            <HelpCircle className="shrink-0" />
+            Where animals live
           </Button>
         </div>
       </div>
@@ -269,10 +270,6 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
         <Card className="lg:min-w-0">
           <CardHeader className="items-center gap-3 pb-3 pt-4 text-center md:gap-4 md:px-4 md:py-4 lg:gap-6 lg:px-8 lg:py-6">
             <AnimalDisplay animal={current} />
-            <div className="space-y-1">
-              <p className="text-xl font-semibold md:text-2xl lg:text-3xl">What kind of animal is it?</p>
-              <p className="text-xl font-semibold md:text-2xl lg:text-3xl">Where does it live?</p>
-            </div>
           </CardHeader>
         </Card>
 

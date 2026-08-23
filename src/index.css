@@ -159,6 +159,26 @@
     border-radius: var(--radius-large);
     border-width: var(--border-normal);
   }
+
+  .toolbar-button-icon {
+    @apply h-12 w-12 shrink-0 p-0 text-primary md:h-14 md:w-14 [&_svg]:!h-6 [&_svg]:!w-6 md:[&_svg]:!h-7 md:[&_svg]:!w-7;
+  }
+
+  .toolbar-button-label {
+    @apply h-12 shrink-0 gap-2 px-4 text-base md:h-14 md:px-5 md:text-lg [&_svg]:!h-5 [&_svg]:!w-5 md:[&_svg]:!h-6 md:[&_svg]:!w-6;
+  }
+
+  .toolbar-button-label svg {
+    @apply text-primary;
+  }
+
+  .game-toolbar-icon {
+    @apply h-auto min-h-14 min-w-14 px-4 py-3 md:min-h-16 md:min-w-16 md:px-5 md:py-4;
+  }
+
+  .game-toolbar-label {
+    @apply h-auto min-h-14 gap-2.5 px-6 py-3 text-lg font-bold leading-tight md:min-h-16 md:gap-3 md:px-8 md:py-4 md:text-xl [&_svg]:!h-6 [&_svg]:!w-6 md:[&_svg]:!h-7 md:[&_svg]:!w-7;
+  }
 }
 
 /* Keep the complete game board visible on an iPad in portrait. */
