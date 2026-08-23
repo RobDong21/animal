@@ -1,7 +1,7 @@
 {
   "name": "animal",
   "private": true,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "engines": {
     "node": "24.19.0"
@@ -15,6 +15,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "generate-icons": "node scripts/generate-pwa-icons.mjs",
+    "optimize-habitats": "node scripts/optimize-habitat-samples.mjs",
     "prebuild": "npm run generate-icons",
     "fetch-assets": "node scripts/fetch-assets.mjs",
     "validate-assets": "node scripts/validate-assets.mjs"

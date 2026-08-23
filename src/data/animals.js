@@ -5,11 +5,11 @@ export const habitats = [
     description: 'Where pets live with people in a house or city.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-home.jpg',
+        src: '/habitats/samples/habitat-sample-home.webp',
         caption: 'Pets live with people in a house or city.',
       },
       {
-        src: '/habitats/samples/habitat-sample-home-care.jpg',
+        src: '/habitats/samples/habitat-sample-home-care.webp',
         caption: 'People feed pets and keep them clean and safe.',
       },
     ],
@@ -20,11 +20,11 @@ export const habitats = [
     description: 'Barns and fields with animals like chickens and horses.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-farm.jpg',
+        src: '/habitats/samples/habitat-sample-farm.webp',
         caption: 'Farm animals live in barns and fields.',
       },
       {
-        src: '/habitats/samples/habitat-sample-farm-care.jpg',
+        src: '/habitats/samples/habitat-sample-farm-care.webp',
         caption: 'People feed farm animals and take care of them.',
       },
     ],
@@ -35,7 +35,7 @@ export const habitats = [
     description: 'Lots of trees and woods.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-forest.jpg',
+        src: '/habitats/samples/habitat-sample-forest.webp',
         caption: 'Forests have lots of trees and woodland animals.',
       },
     ],
@@ -46,7 +46,7 @@ export const habitats = [
     description: 'The big sea where fish and whales swim.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-ocean.jpg',
+        src: '/habitats/samples/habitat-sample-ocean.webp',
         caption: 'The ocean is the big sea where fish swim.',
       },
     ],
@@ -57,7 +57,7 @@ export const habitats = [
     description: 'Hot, dry, sandy places.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-desert.jpg',
+        src: '/habitats/samples/habitat-sample-desert.webp',
         caption: 'Deserts are hot, dry, sandy places.',
       },
     ],
@@ -68,7 +68,7 @@ export const habitats = [
     description: 'Rainy forests with thick green trees.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-jungle.jpg',
+        src: '/habitats/samples/habitat-sample-jungle.webp',
         caption: 'Jungles are rainy forests with thick green plants.',
       },
     ],
@@ -79,7 +79,7 @@ export const habitats = [
     description: 'Very cold, icy places near the North Pole.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-polar.jpg',
+        src: '/habitats/samples/habitat-sample-polar.webp',
         caption: 'Polar places are very cold with ice and snow.',
       },
     ],
@@ -90,7 +90,7 @@ export const habitats = [
     description: 'Open grassy places with lions and elephants.',
     images: [
       {
-        src: '/habitats/samples/habitat-sample-grassland.jpg',
+        src: '/habitats/samples/habitat-sample-grassland.webp',
         caption: 'Grasslands are wide open grassy places.',
       },
     ],
@@ -103,7 +103,7 @@ export const wildHabitat = {
   description: 'Animals that live outside in nature.',
   images: [
     {
-      src: '/habitats/samples/habitat-sample-wild-free.jpg',
+      src: '/habitats/samples/habitat-sample-wild-free.webp',
       caption: 'Wild animals live outside in nature on their own.',
     },
   ],
