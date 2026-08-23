@@ -22,9 +22,9 @@ export default function ChoiceButton({
           aria-label={ariaLabel ?? label}
           className={cn(
             'game-choice-button surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
-            pulse && !eliminated && 'animate-pulse border-amber-400 bg-amber-50',
+            pulse && !eliminated && 'animate-pulse border-warning-border bg-warning-muted',
             highlight && 'scale-105 ring-4 ring-primary/40',
-            eliminated && 'border-rose-200 bg-rose-50 opacity-60',
+            eliminated && 'border-error-border bg-error-muted opacity-60',
             !highlight && !pulse && !eliminated && 'hover:scale-[1.02] active:scale-95'
           )}
           onClick={onClick}
@@ -34,7 +34,7 @@ export default function ChoiceButton({
         </Button>
         {eliminated && (
           <div
-            className="pointer-events-none absolute inset-1 z-10 flex items-center justify-center text-rose-500"
+            className="pointer-events-none absolute inset-1 z-10 flex items-center justify-center text-error"
             aria-hidden="true"
           >
             <svg

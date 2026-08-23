@@ -50,9 +50,9 @@ export function Toaster() {
           title: 'text-xl font-extrabold leading-tight',
           description: 'text-lg font-medium leading-snug',
           icon: 'hidden',
-          success: 'kid-toast-success !border-emerald-500 !bg-emerald-100 text-emerald-950',
-          error: 'kid-toast-error !border-rose-500 !bg-rose-100 text-rose-950',
-          info: 'kid-toast-info !border-sky-400 !bg-sky-100 text-sky-950',
+          success: 'kid-toast-success !border-success-border !bg-success-muted text-success-content',
+          error: 'kid-toast-error !border-error-border !bg-error-muted text-error-content',
+          info: 'kid-toast-info !border-info-border !bg-info-muted text-info-content',
         },
       }}
     />

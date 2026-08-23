@@ -4,9 +4,14 @@ export const habitats = [
     name: 'Home/City',
     description: 'Where pets live with people in a house or city.',
     images: [
-      { src: '/habitats/home-living-room.jpg', caption: 'A cozy living room at home' },
-      { src: '/habitats/home-pet.jpg', caption: 'A happy pet indoors' },
-      { src: '/habitats/home-fish-tank.jpg', caption: 'A fish tank at home' },
+      {
+        src: '/habitats/samples/habitat-sample-home.jpg',
+        caption: 'Pets live with people in a house or city.',
+      },
+      {
+        src: '/habitats/samples/habitat-sample-home-care.jpg',
+        caption: 'People feed pets and keep them clean and safe.',
+      },
     ],
   },
   {
@@ -14,9 +19,14 @@ export const habitats = [
     name: 'Farm',
     description: 'Barns and fields with animals like chickens and horses.',
     images: [
-      { src: '/habitats/farm-barn.jpg', caption: 'A red barn on the farm' },
-      { src: '/habitats/farm-chicken.jpg', caption: 'Chickens on the farm' },
-      { src: '/habitats/farm-horse.jpg', caption: 'Horses by the stable' },
+      {
+        src: '/habitats/samples/habitat-sample-farm.jpg',
+        caption: 'Farm animals live in barns and fields.',
+      },
+      {
+        src: '/habitats/samples/habitat-sample-farm-care.jpg',
+        caption: 'People feed farm animals and take care of them.',
+      },
     ],
   },
   {
@@ -24,9 +34,10 @@ export const habitats = [
     name: 'Forest',
     description: 'Lots of trees and woods.',
     images: [
-      { src: '/habitats/forest.jpg', caption: 'A green forest full of trees' },
-      { src: '/habitats/forest-trees.jpg', caption: 'Tall trees in the woods' },
-      { src: '/habitats/forest-path.jpg', caption: 'A path through the forest' },
+      {
+        src: '/habitats/samples/habitat-sample-forest.jpg',
+        caption: 'Forests have lots of trees and woodland animals.',
+      },
     ],
   },
   {
@@ -34,9 +45,10 @@ export const habitats = [
     name: 'Ocean',
     description: 'The big sea where fish and whales swim.',
     images: [
-      { src: '/habitats/ocean.jpg', caption: 'Colorful coral under the sea' },
-      { src: '/habitats/ocean-waves.jpg', caption: 'Waves at the beach' },
-      { src: '/habitats/ocean-fish.jpg', caption: 'Fish swimming in the ocean' },
+      {
+        src: '/habitats/samples/habitat-sample-ocean.jpg',
+        caption: 'The ocean is the big sea where fish swim.',
+      },
     ],
   },
   {
@@ -44,9 +56,10 @@ export const habitats = [
     name: 'Desert',
     description: 'Hot, dry, sandy places.',
     images: [
-      { src: '/habitats/desert.jpg', caption: 'A hot sandy desert' },
-      { src: '/habitats/desert-dunes.jpg', caption: 'Rolling sand dunes' },
-      { src: '/habitats/desert-cactus.jpg', caption: 'Cacti in the desert' },
+      {
+        src: '/habitats/samples/habitat-sample-desert.jpg',
+        caption: 'Deserts are hot, dry, sandy places.',
+      },
     ],
   },
   {
@@ -54,9 +67,10 @@ export const habitats = [
     name: 'Jungle',
     description: 'Rainy forests with thick green trees.',
     images: [
-      { src: '/habitats/jungle.jpg', caption: 'A lush green jungle' },
-      { src: '/habitats/jungle-plants.jpg', caption: 'Thick tropical plants' },
-      { src: '/habitats/jungle-trees.jpg', caption: 'Animals in the jungle' },
+      {
+        src: '/habitats/samples/habitat-sample-jungle.jpg',
+        caption: 'Jungles are rainy forests with thick green plants.',
+      },
     ],
   },
   {
@@ -64,9 +78,10 @@ export const habitats = [
     name: 'Polar',
     description: 'Very cold, icy places near the North Pole.',
     images: [
-      { src: '/habitats/polar.jpg', caption: 'Frozen ice and snow' },
-      { src: '/habitats/polar-penguins.jpg', caption: 'Penguins on the ice' },
-      { src: '/habitats/polar-iceberg.jpg', caption: 'Big icy icebergs' },
+      {
+        src: '/habitats/samples/habitat-sample-polar.jpg',
+        caption: 'Polar places are very cold with ice and snow.',
+      },
     ],
   },
   {
@@ -74,9 +89,10 @@ export const habitats = [
     name: 'Grassland',
     description: 'Open grassy places with lions and elephants.',
     images: [
-      { src: '/habitats/grassland.jpg', caption: 'Wide open grassland' },
-      { src: '/habitats/grassland-grass.jpg', caption: 'Lions on the grassland' },
-      { src: '/habitats/grassland-elephants.jpg', caption: 'Elephants in the grassland' },
+      {
+        src: '/habitats/samples/habitat-sample-grassland.jpg',
+        caption: 'Grasslands are wide open grassy places.',
+      },
     ],
   },
 ]
@@ -85,30 +101,20 @@ export const wildHabitat = {
   id: 'wild',
   name: 'Wild',
   description: 'Animals that live outside in nature.',
-  images: [{ src: '/habitats/forest.jpg', caption: 'Animals living in the wild' }],
+  images: [
+    {
+      src: '/habitats/samples/habitat-sample-wild-free.jpg',
+      caption: 'Wild animals live outside in nature on their own.',
+    },
+  ],
 }
 
 const habitatsById = Object.fromEntries(
   [...habitats, wildHabitat].map((habitat) => [habitat.id, habitat])
 )
 
-export const HABITAT_HELP_VIDEO_ID = '6GtnSNSP8oE'
-
-export const habitatVideoStartSeconds = {
-  grassland: 34,
-  polar: 162,
-  desert: 380,
-  forest: 502,
-  ocean: 772,
-  jungle: 866,
-}
-
-export function hasHabitatVideo(habitatId) {
-  return habitatId in habitatVideoStartSeconds
-}
-
-export function getHabitatVideoStart(habitatId) {
-  return habitatVideoStartSeconds[habitatId] ?? 0
+export function getHabitatHelpSlides(habitatId) {
+  return getHabitatById(habitatId)?.images ?? []
 }
 
 export const animalTypes = [
@@ -206,10 +212,6 @@ const animalTypeById = {
   caterpillar: 'insect',
   beetle: 'insect',
   worm: 'insect',
-}
-
-export function getHabitatImages(habitat) {
-  return habitat?.images ?? []
 }
 
 export const animals = [

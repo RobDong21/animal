@@ -14,7 +14,6 @@ import {
   getHabitatsForMode,
   getTypeById,
   getTypesForMode,
-  hasHabitatVideo,
   isCorrectHabitat,
   isCorrectType,
   prepareRound,
@@ -88,20 +87,19 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
   const [wrongTypes, setWrongTypes] = useState([])
   const [correctHabitatId, setCorrectHabitatId] = useState(null)
   const [correctTypeId, setCorrectTypeId] = useState(null)
-  const [videoHabitatId, setVideoHabitatId] = useState(undefined)
+  const [helpOpen, setHelpOpen] = useState(false)
 
   const current = shuffled[index]
   const total = shuffled.length
-  const videoModalOpen = videoHabitatId !== undefined
   const habitatComplete = correctHabitatId !== null
   const typeComplete = correctTypeId !== null
 
-  function openHabitatVideo(habitatId) {
-    setVideoHabitatId(habitatId)
+  function openHabitatHelp() {
+    setHelpOpen(true)
   }
 
-  function closeHabitatVideo() {
-    setVideoHabitatId(undefined)
+  function closeHabitatHelp() {
+    setHelpOpen(false)
   }
 
   function resetRoundChoices() {
@@ -260,7 +258,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
             variant="outline"
             size="sm"
             className="shrink-0 text-sm md:text-base"
-            onClick={() => openHabitatVideo(null)}
+            onClick={openHabitatHelp}
           >
             ❓ Habitats
           </Button>
@@ -337,23 +335,6 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
                             )}
                           />
                         }
-                        previewButton={
-                          hasHabitatVideo(habitat.id) ? (
-                            <Button
-                              type="button"
-                              variant="secondary"
-                              size="icon"
-                              aria-label={`Watch a video about ${habitat.name}`}
-                              className="absolute top-1.5 right-1.5 h-8 w-8 rounded-full border-normal bg-white/95 text-base shadow-md md:h-9 md:w-9"
-                              onClick={(event) => {
-                                event.stopPropagation()
-                                openHabitatVideo(habitat.id)
-                              }}
-                            >
-                              👀
-                            </Button>
-                          ) : null
-                        }
                       />
                     )
                   })}
@@ -364,8 +345,8 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
         </div>
       </div>
 
-      {videoModalOpen && (
-        <HabitatHelpPanel habitatId={videoHabitatId} onClose={closeHabitatVideo} />
+      {helpOpen && (
+        <HabitatHelpPanel habitats={modeHabitats} onClose={closeHabitatHelp} />
       )}
     </div>
   )

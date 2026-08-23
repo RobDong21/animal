@@ -9,9 +9,9 @@ export default function Home({ onPlay }) {
       <Card className="w-full max-w-2xl text-center">
         <CardHeader className="space-y-4 pb-2 md:space-y-5">
           <img
-            src={assetUrl('/habitats/forest.jpg')}
-            alt="Animals in nature"
-            className="surface-frame mx-auto h-40 w-full object-cover shadow-md md:h-48 lg:h-64"
+            src={assetUrl('/camimi.webp')}
+            alt="Camimi with farm animals"
+            className="surface-frame mx-auto h-48 w-full object-cover object-[center_35%] shadow-md md:h-56 lg:h-72"
           />
           <h1 className="text-4xl font-bold md:text-5xl">Animal World</h1>
           <p className="text-xl text-muted-foreground md:text-2xl">
@@ -33,14 +33,6 @@ export default function Home({ onPlay }) {
             onClick={() => onPlay({ mode: 'normal', roundSize: SHORT_ROUND_SIZE })}
           >
             ⭐ Normal
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="h-14 w-full text-xl md:h-16 md:text-2xl"
-            onClick={() => onPlay({ mode: 'normal', roundSize: null })}
-          >
-            🌍 Full Adventure (all animals)
           </Button>
         </CardContent>
       </Card>
