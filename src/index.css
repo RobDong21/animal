@@ -49,6 +49,7 @@
 }
 
 :root {
+  --font-friendly: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
   --radius: 1rem;
   --radius-normal: 1rem;
   --radius-large: 2rem;
@@ -156,19 +157,23 @@
   }
 
   .text-display {
+    font-family: var(--font-friendly);
     @apply text-4xl font-bold tracking-tight md:text-5xl;
   }
 
   .text-title {
+    font-family: var(--font-friendly);
     @apply text-2xl font-bold tracking-tight md:text-3xl;
   }
 
   .text-component-title {
-    @apply text-lg font-bold md:text-xl;
+    font-family: var(--font-friendly);
+    @apply text-lg font-semibold md:text-xl;
   }
 
   .text-action {
-    @apply text-lg font-bold leading-tight md:text-xl;
+    font-family: var(--font-friendly);
+    @apply text-lg font-semibold leading-tight md:text-xl;
   }
 
   .text-supporting {
@@ -176,19 +181,23 @@
   }
 
   .cta-primary {
-    @apply min-h-16 w-full px-6 text-xl font-bold md:min-h-20 md:px-8 md:text-2xl;
+    font-family: var(--font-friendly);
+    @apply min-h-16 w-full px-6 text-xl font-semibold md:min-h-20 md:px-8 md:text-2xl;
   }
 
   .cta-secondary {
-    @apply min-h-14 w-full px-6 text-lg font-bold md:min-h-16 md:px-8 md:text-xl;
+    font-family: var(--font-friendly);
+    @apply min-h-14 w-full px-6 text-lg font-semibold md:min-h-16 md:px-8 md:text-xl;
   }
 
   .toolbar-button-icon {
+    font-family: var(--font-friendly);
     @apply h-12 w-12 shrink-0 p-0 text-primary md:h-14 md:w-14 [&_svg]:!h-6 [&_svg]:!w-6 md:[&_svg]:!h-7 md:[&_svg]:!w-7;
   }
 
   .toolbar-button-label {
-    @apply h-12 shrink-0 gap-2 px-4 text-base font-bold md:h-14 md:px-5 md:text-lg [&_svg]:!h-5 [&_svg]:!w-5 md:[&_svg]:!h-6 md:[&_svg]:!w-6;
+    font-family: var(--font-friendly);
+    @apply h-12 shrink-0 gap-2 px-4 text-base font-semibold md:h-14 md:px-5 md:text-lg [&_svg]:!h-5 [&_svg]:!w-5 md:[&_svg]:!h-6 md:[&_svg]:!w-6;
   }
 
   .toolbar-button-label svg {
@@ -200,19 +209,25 @@
   }
 
   .game-toolbar-label {
-    @apply h-auto min-h-12 gap-2 px-4 py-2 text-base font-bold leading-tight md:min-h-14 md:px-5 md:py-3 md:text-lg;
+    @apply h-auto min-h-12 gap-2 px-4 py-2 text-base font-semibold leading-tight md:min-h-14 md:px-5 md:py-3 md:text-lg;
   }
 
   .carousel-control {
+    font-family: var(--font-friendly);
     border-radius: var(--radius-normal);
     border-width: var(--border-normal);
     @apply h-12 w-12 border-border bg-card text-primary hover:bg-accent active:scale-95 md:h-14 md:w-14 [&_svg]:!h-7 [&_svg]:!w-7;
   }
 
   .habitat-tab {
+    font-family: var(--font-friendly);
     border-radius: var(--radius-normal);
     border-width: var(--border-normal);
-    @apply min-h-11 gap-1.5 px-3 text-base font-bold md:min-h-12 md:px-4 md:text-lg;
+    @apply min-h-11 gap-1.5 px-3 text-base font-semibold md:min-h-12 md:px-4 md:text-lg;
+  }
+
+  .game-choice-button {
+    font-family: var(--font-friendly);
   }
 
   .slide-dot-button {
@@ -260,17 +275,17 @@
 
   .game-choice-button {
     min-height: 4.75rem !important;
-    padding-block: 0.625rem !important;
+    padding-block: 0.5rem !important;
   }
 
   .game-type-icon {
-    width: 3rem !important;
-    height: 3rem !important;
+    width: 2.75rem !important;
+    height: 2.75rem !important;
   }
 
   .game-habitat-icon {
-    width: 3rem !important;
-    height: 3rem !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
   }
 }
 
@@ -286,7 +301,7 @@
   cursor: pointer;
   align-items: flex-start !important;
   height: auto !important;
-  padding: 1.25rem 1.5rem !important;
+  padding: 1rem 1.5rem !important;
   transition: transform 0.15s ease, opacity 0.4s !important;
 }
 

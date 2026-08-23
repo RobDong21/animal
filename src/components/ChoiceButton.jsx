@@ -21,7 +21,7 @@ export default function ChoiceButton({
           aria-label={ariaLabel ?? label}
           aria-pressed={highlight}
           className={cn(
-            'game-choice-button surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 py-3 transition-transform md:py-3.5 lg:min-h-24 lg:py-4',
+            'game-choice-button surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 px-2 py-3 transition-transform md:px-3 md:py-4 lg:min-h-24',
             pulse && 'animate-pulse border-error-border bg-error-muted',
             highlight && 'scale-105 ring-4 ring-primary/40',
             eliminated && 'border-error-border bg-error-muted opacity-60',
@@ -30,7 +30,9 @@ export default function ChoiceButton({
           onClick={onClick}
         >
           {icon}
-          <span className="text-base font-bold lg:text-lg">{label}</span>
+          <span className="max-w-full whitespace-normal px-1 text-center text-base font-semibold leading-[1.1] break-words lg:text-lg">
+            {label}
+          </span>
         </Button>
         {eliminated && (
           <div

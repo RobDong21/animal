@@ -98,9 +98,9 @@ export default function HabitatHelpPanel({ habitats, onClose }) {
         >
           <X />
         </Button>
-        <CardHeader className="shrink-0 space-y-4 px-16 pb-4 text-center">
+        <CardHeader className="shrink-0 space-y-4 px-6 pb-4 text-center">
           {selectedHabitat && (
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 px-12">
               <HabitatIcon habitatId={selectedHabitat.id} className="h-10 w-10 text-primary md:h-12 md:w-12" />
               <h2 id="habitat-help-title" className="text-title">
                 {selectedHabitat.name}

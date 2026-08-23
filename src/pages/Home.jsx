@@ -8,7 +8,7 @@ export default function Home({ onPlay }) {
   return (
     <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
       <Card className="w-full max-w-2xl text-center">
-        <CardHeader className="space-y-4 pb-2">
+        <CardHeader className="space-y-4 pb-4">
           <img
             src={assetUrl('/camimi.webp')}
             alt="Camimi with farm animals"

@@ -225,7 +225,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
     return (
       <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
         <Card className="w-full max-w-lg text-center md:max-w-xl">
-          <CardHeader className="space-y-4 pb-2">
+          <CardHeader className="space-y-4 pb-4">
             <div className="text-5xl md:text-6xl">{'⭐'.repeat(stars)}</div>
             <img
               src={assetUrl(current.image)}
@@ -282,7 +282,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
 
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto lg:grid lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-6 lg:overflow-hidden">
         <Card className="lg:min-w-0">
-          <CardHeader className="items-center gap-4 px-4 py-4 text-center lg:gap-6 lg:px-8 lg:py-6">
+          <CardHeader className="items-center gap-4 p-4 text-center lg:gap-6 lg:p-6">
             <AnimalDisplay animal={current} />
           </CardHeader>
         </Card>
@@ -313,7 +313,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
                           <AnimalTypeIcon
                             typeId={type.id}
                             className={cn(
-                              'game-type-icon h-12 w-12 lg:h-14 lg:w-14',
+                              'game-type-icon !h-10 !w-10 md:!h-11 md:!w-11',
                               highlight ? 'text-primary-foreground' : 'text-primary'
                             )}
                           />
@@ -347,7 +347,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
                           <HabitatIcon
                             habitatId={habitat.id}
                             className={cn(
-                              'game-habitat-icon h-14 w-14 lg:h-16 lg:w-16',
+                              'game-habitat-icon !h-9 !w-9 md:!h-10 md:!w-10',
                               highlight ? 'text-primary-foreground' : 'text-primary'
                             )}
                           />
