@@ -23,17 +23,19 @@ import {
   buildIncorrectHabitatFeedback,
   buildIncorrectTypeFeedback,
 } from '@/lib/feedback'
+import { selectRecapAnimals } from '@/lib/recap'
+import { reorderChoicesForReview, selectReviewCandidates } from '@/lib/review'
 import { playCorrectSound, playWrongSound, speakHabitatName, speakTypeName } from '@/lib/sounds'
 import { assetUrl } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 
-function ProgressBar({ current, total }) {
+function ProgressBar({ current, total, label = 'Animal' }) {
   const pct = Math.round((current / total) * 100)
 
   return (
     <div className="space-y-2">
       <div className="text-component-title">
-        <span>Animal {current} of {total}</span>
+        <span>{label} {current} of {total}</span>
       </div>
       <div className="h-4 overflow-hidden rounded-full bg-muted md:h-5">
         <div
@@ -53,8 +55,11 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
 
   const [shuffled, setShuffled] = useState(initialRound)
   const [index, setIndex] = useState(0)
-  const [score, setScore] = useState(0)
-  const [finished, setFinished] = useState(false)
+  const [, setScore] = useState(0)
+  const [phase, setPhase] = useState('normal')
+  const [missHistory, setMissHistory] = useState([])
+  const [reviewQueue, setReviewQueue] = useState([])
+  const [reviewIndex, setReviewIndex] = useState(0)
   const [wrongHabitats, setWrongHabitats] = useState([])
   const [wrongTypes, setWrongTypes] = useState([])
   const [correctHabitatId, setCorrectHabitatId] = useState(null)
@@ -64,11 +69,34 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
   const [helpOpen, setHelpOpen] = useState(false)
   const helpButtonRef = useRef(null)
 
-  const current = shuffled[index]
   const total = shuffled.length
-  const typeChoices = useMemo(() => getTypeChoicesForAnimal(current, mode), [current, mode])
+  const isReview = phase === 'review'
+  const reviewItem = reviewQueue[reviewIndex] ?? null
+  const current = isReview ? reviewItem.animal : shuffled[index]
+  const reviewConcept = reviewItem?.concept
+  const typeChoices = useMemo(() => {
+    const choices = getTypeChoicesForAnimal(current, mode)
+    if (!isReview || reviewConcept !== 'type') return choices
+
+    const choicesById = new Map(choices.map((choice) => [choice.id, choice]))
+    return reorderChoicesForReview(reviewItem.choiceIds, current.id, 'type')
+      .map((id) => choicesById.get(id))
+      .filter(Boolean)
+  }, [current, isReview, mode, reviewConcept, reviewItem])
+  const habitatChoices = useMemo(() => {
+    if (!isReview || reviewConcept !== 'habitat') return modeHabitats
+
+    const choicesById = new Map(modeHabitats.map((choice) => [choice.id, choice]))
+    return reorderChoicesForReview(reviewItem.choiceIds, current.id, 'habitat')
+      .map((id) => choicesById.get(id))
+      .filter(Boolean)
+  }, [current, isReview, modeHabitats, reviewConcept, reviewItem])
   const habitatComplete = correctHabitatId !== null
   const typeComplete = correctTypeId !== null
+  const recapAnimals = useMemo(
+    () => selectRecapAnimals(reviewQueue, missHistory, shuffled),
+    [missHistory, reviewQueue, shuffled]
+  )
 
   function openHabitatHelp() {
     setHelpOpen(true)
@@ -88,6 +116,11 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
     setAnimalComplete(false)
   }
 
+  function recordMiss(concept, choiceIds) {
+    if (isReview) return
+    setMissHistory((history) => [...history, { animal: current, concept, choiceIds }])
+  }
+
   function completeAnimal() {
     setScore((s) => s + 1)
     setAnimalComplete(true)
@@ -95,8 +128,21 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
     playCorrectSound()
   }
 
+  function completeReviewQuestion(text) {
+    setAnimalComplete(true)
+    setFeedback({ tone: 'success', text })
+    playCorrectSound()
+  }
+
   function handleHabitatGuess(habitatId) {
-    if (finished || animalComplete || habitatComplete || wrongHabitats.includes(habitatId)) return
+    if (
+      phase === 'results' ||
+      animalComplete ||
+      habitatComplete ||
+      wrongHabitats.includes(habitatId)
+    ) {
+      return
+    }
 
     const habitat = modeHabitats.find((option) => option.id === habitatId)
     if (habitat) {
@@ -105,13 +151,19 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
 
     if (isCorrectHabitat(current, habitatId)) {
       setCorrectHabitatId(habitatId)
-      if (typeComplete) {
+      if (isReview) {
+        completeReviewQuestion(buildCorrectHabitatFeedback(current))
+      } else if (typeComplete) {
         completeAnimal()
       } else {
         setFeedback({ tone: 'success', text: buildCorrectHabitatFeedback(current) })
         playCorrectSound()
       }
     } else {
+      recordMiss(
+        'habitat',
+        habitatChoices.map((choice) => choice.id)
+      )
       setWrongHabitats((prev) => [...prev, habitatId])
       setFeedback({
         tone: 'error',
@@ -122,7 +174,7 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
   }
 
   function handleTypeGuess(typeId) {
-    if (finished || animalComplete || typeComplete || wrongTypes.includes(typeId)) return
+    if (phase === 'results' || animalComplete || typeComplete || wrongTypes.includes(typeId)) return
 
     const type = getTypeById(typeId)
     if (type) {
@@ -131,13 +183,19 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
 
     if (isCorrectType(current, typeId)) {
       setCorrectTypeId(typeId)
-      if (habitatComplete) {
+      if (isReview) {
+        completeReviewQuestion(buildCorrectTypeFeedback(current))
+      } else if (habitatComplete) {
         completeAnimal()
       } else {
         setFeedback({ tone: 'success', text: buildCorrectTypeFeedback(current) })
         playCorrectSound()
       }
     } else {
+      recordMiss(
+        'type',
+        typeChoices.map((choice) => choice.id)
+      )
       setWrongTypes((prev) => [...prev, typeId])
       setFeedback({
         tone: 'error',
@@ -150,9 +208,25 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
   function handleNextAnimal() {
     resetRoundChoices()
     if (index + 1 >= total) {
-      setFinished(true)
+      const reviews = selectReviewCandidates(missHistory, mode)
+      if (reviews.length > 0) {
+        setReviewQueue(reviews)
+        setReviewIndex(0)
+        setPhase('review')
+      } else {
+        setPhase('results')
+      }
     } else {
       setIndex((i) => i + 1)
+    }
+  }
+
+  function handleNextReview() {
+    resetRoundChoices()
+    if (reviewIndex + 1 >= reviewQueue.length) {
+      setPhase('results')
+    } else {
+      setReviewIndex((currentIndex) => currentIndex + 1)
     }
   }
 
@@ -160,38 +234,63 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
     setShuffled(prepareRound(modeAnimals, roundSize))
     setIndex(0)
     setScore(0)
+    setMissHistory([])
+    setReviewQueue([])
+    setReviewIndex(0)
     resetRoundChoices()
-    setFinished(false)
+    setPhase('normal')
   }
 
-  if (finished) {
-    const pct = Math.round((score / total) * 100)
-    const stars = pct >= 80 ? 3 : pct >= 50 ? 2 : 1
+  if (phase === 'results') {
+    const sessionSummary =
+      reviewQueue.length > 0
+        ? `You explored ${total} animals and completed ${reviewQueue.length} Quick Reviews.`
+        : `You explored ${total} animals.`
 
     return (
-      <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
-        <Card className="w-full max-w-lg text-center md:max-w-xl">
-          <CardHeader className="space-y-4 pb-4">
-            <div className="text-5xl md:text-6xl">{'⭐'.repeat(stars)}</div>
-            <img
-              src={assetUrl(current.image)}
-              alt={current.name}
-              className="radius-large mx-auto h-40 w-40 object-cover md:h-52 md:w-52"
-            />
-            <h2 className="text-title">Amazing job!</h2>
-            <p className="text-supporting">
-              You matched {score} out of {total} animals!
-            </p>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4 pb-8">
-            <Button size="xl" className="cta-primary" onClick={handlePlayAgain}>
-              Play Again
-            </Button>
-            <Button size="lg" variant="outline" className="cta-secondary" onClick={onBack}>
-              Back to Home
-            </Button>
-          </CardContent>
-        </Card>
+      <div className="h-full min-h-0 overflow-y-auto px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">
+        <div className="mx-auto flex min-h-full w-full max-w-3xl items-center py-4">
+          <Card className="w-full">
+            <CardHeader
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              className="space-y-2 p-4 pb-2 text-center md:p-6 md:pb-3"
+            >
+              <h1 className="text-title">Great exploring!</h1>
+              <p className="text-supporting">{sessionSummary}</p>
+            </CardHeader>
+            <CardContent className="space-y-4 p-4 pt-2 md:p-6 md:pt-3">
+              <section aria-labelledby="learning-recap-heading" className="space-y-2">
+                <h2 id="learning-recap-heading" className="text-component-title text-center">
+                  What you learned
+                </h2>
+                <ul className="divide-y divide-border">
+                  {recapAnimals.map((animal) => (
+                    <li key={animal.id} className="flex items-center gap-4 py-2 text-left">
+                      <img
+                        src={assetUrl(animal.image)}
+                        alt={animal.name}
+                        className="radius-normal h-16 w-16 shrink-0 object-cover"
+                      />
+                      <p className="text-base font-medium leading-snug md:text-lg">
+                        {buildAnimalSummary(animal)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <div className="flex flex-col gap-3">
+                <Button size="xl" className="cta-primary" onClick={handlePlayAgain}>
+                  Play Again
+                </Button>
+                <Button size="lg" variant="outline" className="cta-secondary" onClick={onBack}>
+                  Choose Another Level
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     )
   }
@@ -209,7 +308,11 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
             <Home />
           </Button>
           <div className="min-w-0 flex-1">
-            <ProgressBar current={index + 1} total={total} />
+            <ProgressBar
+              current={isReview ? reviewIndex + 1 : index + 1}
+              total={isReview ? reviewQueue.length : total}
+              label={isReview ? 'Review' : 'Animal'}
+            />
           </div>
           <Button
             ref={helpButtonRef}
@@ -221,9 +324,23 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
             Habitat Help
           </Button>
         </div>
-        <p className="text-center text-base font-semibold text-muted-foreground md:text-lg">
-          Pick what it is and where it lives
-        </p>
+        {isReview ? (
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="text-center"
+          >
+            <h1 className="text-component-title">Quick Review</h1>
+            <p className="text-base font-semibold text-muted-foreground md:text-lg">
+              Let&apos;s try a few again.
+            </p>
+          </div>
+        ) : (
+          <p className="text-center text-base font-semibold text-muted-foreground md:text-lg">
+            Pick what it is and where it lives
+          </p>
+        )}
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto lg:grid lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-6 lg:overflow-hidden">
@@ -236,9 +353,20 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
         <div className="flex min-w-0 shrink-0 flex-col gap-4 lg:shrink lg:overflow-y-auto">
           <Card>
             <CardContent className="space-y-4 p-4">
-              <div className="space-y-2">
+              {(!isReview || reviewConcept === 'type') && (
+              <div
+                className="space-y-2"
+                role={isReview ? 'group' : undefined}
+                aria-label={
+                  isReview
+                    ? `Review ${reviewIndex + 1} of ${reviewQueue.length}: What is it?`
+                    : undefined
+                }
+              >
                 <div className="flex items-center justify-center gap-2">
-                  <p className="text-component-title">1. What is it?</p>
+                  <p className="text-component-title">
+                    {isReview ? 'What is it?' : '1. What is it?'}
+                  </p>
                   {typeComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -283,14 +411,26 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
                   })}
                 </div>
               </div>
+              )}
 
-              <div className="space-y-2">
+              {(!isReview || reviewConcept === 'habitat') && (
+              <div
+                className="space-y-2"
+                role={isReview ? 'group' : undefined}
+                aria-label={
+                  isReview
+                    ? `Review ${reviewIndex + 1} of ${reviewQueue.length}: Where does it live?`
+                    : undefined
+                }
+              >
                 <div className="flex items-center justify-center gap-2">
-                  <p className="text-component-title">2. Where does it live?</p>
+                  <p className="text-component-title">
+                    {isReview ? 'Where does it live?' : '2. Where does it live?'}
+                  </p>
                   {habitatComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
                 </div>
                 <div className={cn('grid gap-2', isDiscover ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-4')}>
-                  {modeHabitats.map((habitat) => {
+                  {habitatChoices.map((habitat) => {
                     const eliminated = wrongHabitats.includes(habitat.id)
                     const highlight = correctHabitatId === habitat.id
                     const revealed =
@@ -334,6 +474,7 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
                   })}
                 </div>
               </div>
+              )}
 
               {feedback && (
                 <div
@@ -360,9 +501,13 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
                 <Button
                   size="lg"
                   className="min-h-14 w-full text-lg font-bold md:text-xl"
-                  onClick={handleNextAnimal}
+                  onClick={isReview ? handleNextReview : handleNextAnimal}
                 >
-                  Next Animal
+                  {isReview
+                    ? reviewIndex + 1 < reviewQueue.length
+                      ? 'Next Review'
+                      : 'See Results'
+                    : 'Next Animal'}
                 </Button>
               )}
             </CardContent>
