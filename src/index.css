@@ -274,18 +274,19 @@
   }
 
   .game-choice-button {
-    min-height: 4.75rem !important;
+    min-height: 4.25rem !important;
+    gap: 0.25rem !important;
     padding-block: 0.5rem !important;
   }
 
   .game-type-icon {
-    width: 2.75rem !important;
-    height: 2.75rem !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
   }
 
   .game-habitat-icon {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
   }
 }
 

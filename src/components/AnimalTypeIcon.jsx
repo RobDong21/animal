@@ -1,13 +1,14 @@
-import { Bird, Bug, Fish, PawPrint, Shell, Turtle } from 'lucide-react'
+import { Bird, Bug, Droplets, Fish, PawPrint, Shell, Turtle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const typeIcons = {
   mammal: PawPrint,
   bird: Bird,
   fish: Fish,
-  insect: Bug,
   reptile: Turtle,
-  'sea-creature': Shell,
+  amphibian: Droplets,
+  insect: Bug,
+  'other-invertebrate': Shell,
 }
 
 export default function AnimalTypeIcon({ typeId, className }) {

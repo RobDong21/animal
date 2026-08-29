@@ -6,8 +6,8 @@ export default function ChoiceButton({
   icon,
   disabled,
   eliminated,
+  revealed,
   onClick,
-  pulse,
   highlight,
   ariaLabel,
 }) {
@@ -22,10 +22,11 @@ export default function ChoiceButton({
           aria-pressed={highlight}
           className={cn(
             'game-choice-button surface-interactive-lg h-auto min-h-20 w-full flex-col gap-2 px-2 py-3 transition-transform md:px-3 md:py-4 lg:min-h-24',
-            pulse && 'animate-pulse border-error-border bg-error-muted',
             highlight && 'scale-105 ring-4 ring-primary/40',
+            revealed &&
+              'border-success-border border-dashed bg-success-muted text-success-content hover:bg-success-muted',
             eliminated && 'border-error-border bg-error-muted opacity-60',
-            !highlight && !pulse && !eliminated && 'hover:scale-[1.02] active:scale-95'
+            !highlight && !eliminated && 'hover:scale-[1.02] active:scale-95'
           )}
           onClick={onClick}
         >
@@ -34,6 +35,14 @@ export default function ChoiceButton({
             {label}
           </span>
         </Button>
+        {revealed && !highlight && (
+          <span
+            className="pointer-events-none absolute top-1 right-1 rounded-full bg-success-content px-2 py-0.5 text-xs font-bold text-success-foreground"
+            aria-hidden="true"
+          >
+            Try this
+          </span>
+        )}
         {eliminated && (
           <div
             className="pointer-events-none absolute inset-1 z-10 flex items-center justify-center text-error"

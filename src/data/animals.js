@@ -121,9 +121,10 @@ export const animalTypes = [
   { id: 'mammal', name: 'Mammal' },
   { id: 'bird', name: 'Bird' },
   { id: 'fish', name: 'Fish' },
-  { id: 'insect', name: 'Insect' },
   { id: 'reptile', name: 'Reptile' },
-  { id: 'sea-creature', name: 'Sea Creature' },
+  { id: 'amphibian', name: 'Amphibian' },
+  { id: 'insect', name: 'Insect' },
+  { id: 'other-invertebrate', name: 'Other Invertebrate' },
 ]
 
 const animalTypeById = {
@@ -135,7 +136,7 @@ const animalTypeById = {
   rabbit: 'mammal',
   butterfly: 'insect',
   ladybug: 'insect',
-  snail: 'insect',
+  snail: 'other-invertebrate',
   cow: 'mammal',
   pig: 'mammal',
   chicken: 'bird',
@@ -144,7 +145,7 @@ const animalTypeById = {
   duck: 'bird',
   rooster: 'bird',
   turkey: 'bird',
-  frog: 'reptile',
+  frog: 'amphibian',
   bee: 'insect',
   peacock: 'bird',
   bear: 'mammal',
@@ -159,23 +160,23 @@ const animalTypeById = {
   dolphin: 'mammal',
   whale: 'mammal',
   shark: 'fish',
-  octopus: 'sea-creature',
+  octopus: 'other-invertebrate',
   'sea-turtle': 'reptile',
-  jellyfish: 'sea-creature',
+  jellyfish: 'other-invertebrate',
   clownfish: 'fish',
   seahorse: 'fish',
   angelfish: 'fish',
   tuna: 'fish',
   salmon: 'fish',
-  starfish: 'sea-creature',
-  crab: 'sea-creature',
-  squid: 'sea-creature',
-  shrimp: 'sea-creature',
-  'sea-urchin': 'sea-creature',
+  starfish: 'other-invertebrate',
+  crab: 'other-invertebrate',
+  squid: 'other-invertebrate',
+  shrimp: 'other-invertebrate',
+  'sea-urchin': 'other-invertebrate',
   crocodile: 'reptile',
   flamingo: 'bird',
   camel: 'mammal',
-  scorpion: 'insect',
+  scorpion: 'other-invertebrate',
   tortoise: 'reptile',
   lizard: 'reptile',
   vulture: 'bird',
@@ -200,18 +201,18 @@ const animalTypeById = {
   swan: 'bird',
   eagle: 'bird',
   otter: 'mammal',
-  lobster: 'sea-creature',
+  lobster: 'other-invertebrate',
   bison: 'mammal',
   gecko: 'reptile',
   iguana: 'reptile',
   alligator: 'reptile',
-  newt: 'reptile',
+  newt: 'amphibian',
   'bearded-dragon': 'reptile',
   grasshopper: 'insect',
   dragonfly: 'insect',
   caterpillar: 'insect',
   beetle: 'insect',
-  worm: 'insect',
+  worm: 'other-invertebrate',
 }
 
 export const animals = [
@@ -370,6 +371,28 @@ export function getTypesForMode(mode) {
   return animalTypes
 }
 
+function hashId(id) {
+  return [...id].reduce((hash, character) => (hash * 31 + character.charCodeAt(0)) >>> 0, 0)
+}
+
+export function getTypeChoicesForAnimal(animal, mode) {
+  const availableTypes = getTypesForMode(mode)
+  if (mode === 'discover') return availableTypes
+
+  const distractors = availableTypes
+    .filter((type) => type.id !== animal.type)
+    .map((type) => ({
+      type,
+      rank: hashId(`${animal.id}:${type.id}`),
+    }))
+    .sort((a, b) => a.rank - b.rank)
+    .slice(0, 3)
+    .map(({ type }) => type)
+
+  const choiceIds = new Set([animal.type, ...distractors.map((type) => type.id)])
+  return availableTypes.filter((type) => choiceIds.has(type.id))
+}
+
 export function getAnimalsForMode(mode) {
   if (mode !== 'discover') return animals
   return animals
@@ -403,11 +426,4 @@ export function isCorrectHabitat(animal, habitatId) {
 
 export function isCorrectType(animal, typeId) {
   return animal.type === typeId
-}
-
-export function formatHabitatNames(habitatIds) {
-  return habitatIds
-    .map((id) => getHabitatById(id)?.name)
-    .filter(Boolean)
-    .join(' or ')
 }
