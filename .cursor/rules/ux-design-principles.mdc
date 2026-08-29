@@ -1,0 +1,22 @@
+---
+description: Preserve the approved simple, consistent, and child-friendly interface
+alwaysApply: true
+---
+
+# UX and Visual Design Principles
+
+- Design for children aged 5–8 using iPad landscape as the primary experience.
+- Prefer simplicity, clarity, and meaning over decoration. Every visible element should support understanding, navigation, or feedback.
+- Preserve a clear hierarchy: one primary action or focal point per section, with supporting content visually quieter.
+- Reuse the established typography, color, radius, border, spacing, and elevation tokens in `src/index.css`; do not introduce one-off styles when an existing role fits.
+- Components with the same purpose must use the same visual role. Keep CTAs, toolbar controls, choice buttons, habitat tabs, and carousel controls internally consistent.
+- Use one coherent border treatment for interactive choices. Communicate interactivity primarily through shape, border, fill, and pressed feedback—not decorative shadows.
+- Reserve elevation for surfaces and overlays where depth communicates structure. Avoid shadows on ordinary buttons and repeated controls.
+- Use the existing rounded, friendly typography for headings and controls. Keep labels concise, readable, and large enough for the target audience.
+- Use Lucide icons consistently, with matching visual weight and clear meaning. Do not mix emoji and line icons for equivalent UI roles.
+- Follow an approximately 8px spacing rhythm. Group related elements closely and separate distinct sections clearly.
+- Keep touch targets at least 44×44px and provide visible hover, pressed, selected, disabled, success, and error states where relevant.
+- Avoid redundant instructions, labels, borders, containers, and competing emphasis.
+- Ensure pages and dialogs fit without cropping in iPad landscape while using available space effectively; do not solve overflow by creating large unused areas.
+- Keep modal controls predictable: a clearly visible top-right close control, keyboard dismissal, focus management, and appropriately sized media.
+- After UI changes, review the full screen—not only the edited component—for consistency, balance, readability, and responsive behavior.

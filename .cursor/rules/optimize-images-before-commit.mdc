@@ -1,0 +1,14 @@
+---
+description: Optimize new or updated image assets before committing them
+alwaysApply: true
+---
+
+# Image Optimization Before Commit
+
+- Before committing any new or modified image, verify that it is optimized for its actual in-app display size.
+- For raster images, prefer WebP unless transparency, animation, or another concrete requirement calls for a different format.
+- Resize oversized source images to the smallest dimensions that still look sharp at the maximum rendered size; never upscale.
+- Use `sharp` and existing project scripts where possible. Habitat samples must be processed with `npm run optimize-habitats`.
+- Preserve acceptable visual quality while reducing file size; use approximately WebP quality 80 as a starting point.
+- Check the optimized file's dimensions and size, update all code references, and remove superseded source files when they are no longer used.
+- Run `npm run validate-assets` when image paths or assets change. Do not commit until new image-related validation failures are resolved.
