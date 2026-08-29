@@ -65,3 +65,32 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - Explorer uses Mammal, Bird, Fish, Reptile, Amphibian, Insect, and Other Invertebrate.
 - Sea Creature is removed as an animal type.
 - Explorer shows no more than four relevant type choices for one animal.
+
+### D-010: Quick Review
+
+- **Status:** Accepted
+- Missed concepts are reviewed in a Quick Review phase after the normal round.
+- Only the missed type or habitat question is repeated.
+- Type and habitat are separate review concepts, including when both were missed for one animal.
+- Discover reviews at most two concepts; Explorer reviews at most three.
+- Review mistakes receive educational feedback but never create another review loop.
+- Review questions do not affect score, base round size, or future sessions.
+
+### D-011: Learning-focused results
+
+- **Status:** Accepted
+- The results screen emphasizes vocabulary encountered rather than accuracy or competitive grading.
+- Stars, percentages, and “matched X out of Y” are removed.
+- The recap shows up to three distinct animal summaries, prioritizing animals from Quick Review.
+- The recap displays animals explored and Quick Reviews completed without showing mistake counts.
+- Play Again keeps the same level; Choose Another Level returns to level selection.
+
+### D-012: Animal image sourcing and approval
+
+- **Status:** Accepted
+- Core animal vocabulary uses real photographs rather than generated illustrations.
+- New sources must be explicitly CC0 or public domain.
+- Candidate images are cropped and optimized to 4:3 WebP previews before replacing production assets.
+- Product approval is required after side-by-side review at game size.
+- Image provenance is recorded even when legal attribution is not required.
+- Production assets are optimized through a reusable Sharp script before commit.

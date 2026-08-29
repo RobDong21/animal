@@ -21,6 +21,8 @@ Make every type or habitat selection an immediate, accurate vocabulary-learning 
 - Adaptive difficulty or persistent progress
 - Changes to scoring
 
+
+
 ## Feedback experience
 
 - Every enabled type or habitat selection produces immediate inline feedback.
@@ -33,6 +35,8 @@ Make every type or habitat selection an immediate, accurate vocabulary-learning 
 - After both questions are complete, show a combined learning summary and a prominent **Next Animal** button.
 - Do not advance automatically. The child decides when to continue.
 
+
+
 ## Feedback copy
 
 Copy may adjust for natural grammar, but it must retain the animal name and learning relationship.
@@ -41,17 +45,25 @@ Copy may adjust for natural grammar, but it must retain the animal name and lear
 
 > Yes! A dolphin is a mammal. Mammals breathe air, and mothers feed milk to their babies.
 
+
+
 ### Incorrect type
 
 > Not quite. A dolphin is a mammal, not a fish. Mammals breathe air, and mothers feed milk to their babies.
+
+
 
 ### Correct habitat
 
 > Yes! A camel can live in the desert.
 
+
+
 ### Incorrect habitat
 
 > Not quite. A camel does not usually live in the ocean. It can live in the desert.
+
+
 
 ### Completed animal
 
@@ -91,6 +103,8 @@ Audit every animal assignment before release. Do not rely only on the examples a
 - Keep the four choices stable while the current animal is displayed.
 - Every category must be mutually exclusive in the game model.
 
+
+
 ## Habitat language
 
 Use natural phrases in feedback rather than inserting display labels mechanically:
@@ -105,6 +119,8 @@ Use natural phrases in feedback rather than inserting display labels mechanicall
 - Grassland → “in grasslands”
 - Wild → “in the wild”
 
+
+
 ## Visual and interaction requirements
 
 - Place feedback near the questions without covering the animal or controls.
@@ -114,6 +130,8 @@ Use natural phrases in feedback rather than inserting display labels mechanicall
 - The correct-answer reveal must be distinguishable from a completed selection.
 - Follow `.cursor/rules/ux-design-principles.mdc`.
 
+
+
 ## Accessibility
 
 - Announce feedback through a polite live region.
@@ -122,28 +140,34 @@ Use natural phrases in feedback rather than inserting display labels mechanicall
 - Feedback must remain available long enough to read; it cannot depend on animation or sound.
 - Correct, incorrect, revealed, and completed states must have non-color indicators.
 
+
+
 ## Acceptance criteria
 
-- [ ] Every enabled type and habitat selection produces immediate visible feedback.
-- [ ] Correct feedback names the animal and confirms the selected relationship.
-- [ ] Incorrect feedback names the correct relationship and contrasts it with the selected answer.
-- [ ] After an incorrect answer, the child must still tap a correct answer to complete that question.
-- [ ] Feedback remains visible until replaced or the child continues.
-- [ ] Completing both questions shows a combined summary and Next Animal button.
-- [ ] The game never advances to another animal automatically.
-- [ ] Sea Creature is no longer used as an animal type.
-- [ ] All animals use one of the seven approved, mutually exclusive type categories.
-- [ ] Explorer displays at most four stable type choices for each animal.
-- [ ] Discover continues to use its approved four-category content pool.
-- [ ] Multiple valid habitats are explained without marking a valid habitat incorrect.
-- [ ] Feedback grammar uses natural articles and habitat phrases.
-- [ ] Gameplay feedback is usable with sound disabled.
-- [ ] The complete experience fits and remains readable on iPad landscape.
+- [x] Every enabled type and habitat selection produces immediate visible feedback.
+- [x] Correct feedback names the animal and confirms the selected relationship.
+- [x] Incorrect feedback names the correct relationship and contrasts it with the selected answer.
+- [x] After an incorrect answer, the child must still tap a correct answer to complete that question.
+- [x] Feedback remains visible until replaced or the child continues.
+- [x] Completing both questions shows a combined summary and Next Animal button.
+- [x] The game never advances to another animal automatically.
+- [x] Sea Creature is no longer used as an animal type.
+- [x] All animals use one of the seven approved, mutually exclusive type categories.
+- [x] Explorer displays at most four stable type choices for each animal.
+- [x] Discover continues to use its approved four-category content pool.
+- [x] Multiple valid habitats are explained without marking a valid habitat incorrect.
+- [x] Feedback grammar uses natural articles and habitat phrases.
+- [x] Gameplay feedback is usable with sound disabled.
+- [x] The complete experience fits and remains readable on iPad landscape.
+
+
 
 ## Follow-up initiatives
 
 - P-003: Review missed concepts within the round
 - P-004: End-of-round learning recap
+
+
 
 ## Open questions
 
