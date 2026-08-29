@@ -217,10 +217,10 @@ const animalTypeById = {
 
 export const animals = [
   // Home (5)
-  { id: 'dog', name: 'Dog', habitats: ['home', 'farm'], image: '/animals/dog.jpg' },
+  { id: 'dog', name: 'Dog', habitats: ['home', 'farm'], image: '/animals/dog.webp' },
   { id: 'cat', name: 'Cat', habitats: ['home', 'farm'], image: '/animals/cat.jpg' },
   { id: 'goldfish', name: 'Goldfish', habitats: ['home'], image: '/animals/goldfish.jpg' },
-  { id: 'hamster', name: 'Hamster', habitats: ['home'], image: '/animals/hamster.jpg' },
+  { id: 'hamster', name: 'Hamster', habitats: ['home'], image: '/animals/hamster.webp' },
   { id: 'parrot', name: 'Parrot', habitats: ['home', 'jungle'], image: '/animals/parrot.jpg' },
   { id: 'rabbit', name: 'Rabbit', habitats: ['home', 'farm', 'forest'], image: '/animals/rabbit.jpg' },
   { id: 'butterfly', name: 'Butterfly', habitats: ['home', 'farm', 'forest'], image: '/animals/butterfly.jpg' },
@@ -228,11 +228,11 @@ export const animals = [
   { id: 'snail', name: 'Snail', habitats: ['home', 'farm', 'forest'], image: '/animals/snail.jpg' },
   { id: 'pigeon', name: 'Pigeon', habitats: ['home', 'farm'], image: '/animals/pigeon.jpg' },
   { id: 'ant', name: 'Ant', habitats: ['home', 'farm', 'forest', 'grassland'], image: '/animals/ant.jpg' },
-  { id: 'beetle', name: 'Beetle', habitats: ['home', 'farm', 'forest'], image: '/animals/beetle.jpg' },
+  { id: 'beetle', name: 'Beetle', habitats: ['home', 'farm', 'forest'], image: '/animals/beetle.webp' },
   { id: 'worm', name: 'Worm', habitats: ['home', 'farm', 'forest'], image: '/animals/worm.jpg' },
   { id: 'gecko', name: 'Gecko', habitats: ['home', 'jungle', 'desert'], image: '/animals/gecko.jpg' },
   { id: 'bearded-dragon', name: 'Bearded Dragon', habitats: ['home', 'desert'], image: '/animals/bearded-dragon.jpg' },
-  { id: 'newt', name: 'Newt', habitats: ['home', 'forest'], image: '/animals/newt.jpg' },
+  { id: 'newt', name: 'Newt', habitats: ['home', 'forest'], image: '/animals/newt.webp' },
 
   // Farm (10)
   { id: 'cow', name: 'Cow', habitats: ['farm'], image: '/animals/cow.jpg' },
@@ -241,7 +241,7 @@ export const animals = [
   { id: 'horse', name: 'Horse', habitats: ['farm'], image: '/animals/horse.jpg' },
   { id: 'sheep', name: 'Sheep', habitats: ['farm'], image: '/animals/sheep.jpg' },
   { id: 'duck', name: 'Duck', habitats: ['farm'], image: '/animals/duck.jpg' },
-  { id: 'rooster', name: 'Rooster', habitats: ['farm'], image: '/animals/rooster.jpg' },
+  { id: 'rooster', name: 'Rooster', habitats: ['farm'], image: '/animals/rooster.webp' },
   { id: 'turkey', name: 'Turkey', habitats: ['farm', 'forest'], image: '/animals/turkey.jpg' },
   { id: 'frog', name: 'Frog', habitats: ['farm', 'forest'], image: '/animals/frog.jpg' },
   { id: 'bee', name: 'Bee', habitats: ['farm', 'forest'], image: '/animals/bee.jpg' },
@@ -257,7 +257,7 @@ export const animals = [
   { id: 'deer', name: 'Deer', habitats: ['forest'], image: '/animals/deer.jpg' },
   { id: 'fox', name: 'Fox', habitats: ['forest'], image: '/animals/fox.jpg' },
   { id: 'owl', name: 'Owl', habitats: ['forest'], image: '/animals/owl.jpg' },
-  { id: 'squirrel', name: 'Squirrel', habitats: ['forest'], image: '/animals/squirrel.jpg' },
+  { id: 'squirrel', name: 'Squirrel', habitats: ['forest'], image: '/animals/squirrel.webp' },
   { id: 'raccoon', name: 'Raccoon', habitats: ['forest'], image: '/animals/raccoon.jpg' },
   { id: 'woodpecker', name: 'Woodpecker', habitats: ['forest'], image: '/animals/woodpecker.jpg' },
   { id: 'panda', name: 'Panda', habitats: ['forest', 'jungle'], image: '/animals/panda.jpg' },

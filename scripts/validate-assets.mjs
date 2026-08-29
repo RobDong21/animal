@@ -5,7 +5,6 @@ import { animals, habitats, wildHabitat } from '../src/data/animals.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
-const animalsDir = path.join(root, 'public/animals')
 const publicDir = path.join(root, 'public')
 
 const MIN_FILE_SIZE = 8000
@@ -35,7 +34,8 @@ function validateFile(label, filePath, minSize) {
 console.log('Validating animal images...\n')
 
 for (const animal of animals) {
-  validateFile(animal.id, path.join(animalsDir, `${animal.id}.jpg`), MIN_FILE_SIZE)
+  const relativePath = animal.image.replace(/^\//, '')
+  validateFile(animal.id, path.join(publicDir, relativePath), MIN_FILE_SIZE)
 }
 
 console.log('\nValidating habitat sample images...\n')

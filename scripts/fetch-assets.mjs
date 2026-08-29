@@ -5,7 +5,7 @@ import { animals } from '../src/data/animals.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
-const animalsDir = path.join(root, 'public/animals')
+const publicDir = path.join(root, 'public')
 
 const headers = { 'User-Agent': 'AnimalWorldEducationalApp/1.0 (learning@local.dev)' }
 
@@ -31,7 +31,7 @@ const wikiTitles = {
   cow: 'Cattle',
 }
 
-fs.mkdirSync(animalsDir, { recursive: true })
+fs.mkdirSync(path.join(publicDir, 'animals'), { recursive: true })
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms))
 
@@ -74,8 +74,15 @@ async function fetchWikiImage(wikiTitle, outPath) {
 
 console.log('Fetching animal images...')
 for (const animal of animals) {
+  const outPath = path.join(publicDir, animal.image.replace(/^\//, ''))
+  if (path.extname(outPath) !== '.jpg') {
+    const status = fs.existsSync(outPath) ? 'skip' : 'missing'
+    console.log(`${status} managed image ${path.basename(outPath)}`)
+    continue
+  }
+
   const wikiTitle = wikiTitles[animal.id] ?? animal.name
-  await fetchWikiImage(wikiTitle, path.join(animalsDir, `${animal.id}.jpg`))
+  await fetchWikiImage(wikiTitle, outPath)
   await delay(500)
 }
 
