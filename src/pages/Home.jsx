@@ -1,7 +1,7 @@
 import { Sparkles, Sprout } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { SHORT_ROUND_SIZE } from '@/data/animals'
+import { DISCOVER_ROUND_SIZE, EXPLORER_ROUND_SIZE } from '@/data/animals'
 import { assetUrl } from '@/lib/assets'
 
 export default function Home({ onPlay }) {
@@ -22,14 +22,15 @@ export default function Home({ onPlay }) {
         <CardContent className="space-y-4 pb-8">
           <Button
             size="xl"
-            className="cta-primary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
-            onClick={() => onPlay({ mode: 'easy', roundSize: SHORT_ROUND_SIZE })}
+            variant="outline"
+            className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
+            onClick={() => onPlay({ mode: 'discover', roundSize: DISCOVER_ROUND_SIZE })}
           >
-            <Sprout aria-hidden="true" />
+            <Sprout className="text-primary" aria-hidden="true" />
             <span className="flex flex-col">
-              <span>Easy</span>
-              <span className="text-sm font-medium opacity-85 md:text-base">
-                4 animal types · 3 homes
+              <span>Discover</span>
+              <span className="text-sm font-medium text-muted-foreground md:text-base">
+                Familiar animals with fewer choices.
               </span>
             </span>
           </Button>
@@ -37,13 +38,13 @@ export default function Home({ onPlay }) {
             size="xl"
             variant="outline"
             className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
-            onClick={() => onPlay({ mode: 'normal', roundSize: SHORT_ROUND_SIZE })}
+            onClick={() => onPlay({ mode: 'explorer', roundSize: EXPLORER_ROUND_SIZE })}
           >
             <Sparkles className="text-primary" aria-hidden="true" />
             <span className="flex flex-col">
-              <span>Normal</span>
+              <span>Explorer</span>
               <span className="text-sm font-medium text-muted-foreground md:text-base">
-                More animal types and habitats
+                More animals, types, and habitats.
               </span>
             </span>
           </Button>

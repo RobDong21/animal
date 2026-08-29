@@ -71,12 +71,12 @@ function advanceRound({
   }, 600)
 }
 
-export default function Game({ onBack, roundSize, mode = 'normal' }) {
+export default function Game({ onBack, roundSize, mode = 'explorer' }) {
   const modeAnimals = useMemo(() => getAnimalsForMode(mode), [mode])
   const modeHabitats = useMemo(() => getHabitatsForMode(mode), [mode])
   const modeTypes = useMemo(() => getTypesForMode(mode), [mode])
   const initialRound = useMemo(() => prepareRound(modeAnimals, roundSize), [modeAnimals, roundSize])
-  const isEasy = mode === 'easy'
+  const isDiscover = mode === 'discover'
 
   const [shuffled, setShuffled] = useState(initialRound)
   const [index, setIndex] = useState(0)
@@ -295,7 +295,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
                   <p className="text-component-title">1. What is it?</p>
                   {typeComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
                 </div>
-                <div className={cn('grid gap-2', isEasy ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3')}>
+                <div className={cn('grid gap-2', isDiscover ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3')}>
                   {modeTypes.map((type) => {
                     const eliminated = wrongTypes.includes(type.id)
                     const highlight = correctTypeId === type.id
@@ -329,7 +329,7 @@ export default function Game({ onBack, roundSize, mode = 'normal' }) {
                   <p className="text-component-title">2. Where does it live?</p>
                   {habitatComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
                 </div>
-                <div className={cn('grid gap-2', isEasy ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-4')}>
+                <div className={cn('grid gap-2', isDiscover ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-4')}>
                   {modeHabitats.map((habitat) => {
                     const eliminated = wrongHabitats.includes(habitat.id)
                     const highlight = correctHabitatId === habitat.id

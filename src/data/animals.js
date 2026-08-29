@@ -329,11 +329,13 @@ export function shuffleAnimals(list) {
   return shuffled
 }
 
-export const SHORT_ROUND_SIZE = 10
+export const DISCOVER_ROUND_SIZE = 5
 
-export const EASY_TYPE_IDS = ['mammal', 'bird', 'fish', 'insect']
+export const EXPLORER_ROUND_SIZE = 8
 
-export const EASY_EXCLUDED_ANIMAL_IDS = new Set([
+export const DISCOVER_TYPE_IDS = ['mammal', 'bird', 'fish', 'insect']
+
+export const DISCOVER_EXCLUDED_ANIMAL_IDS = new Set([
   'dolphin',
   'whale',
   'seal',
@@ -346,35 +348,39 @@ export const EASY_EXCLUDED_ANIMAL_IDS = new Set([
   'scorpion',
 ])
 
-export function mapHabitatToEasy(habitatId) {
+export function mapHabitatToDiscover(habitatId) {
   return habitatId === 'home' || habitatId === 'farm' ? habitatId : 'wild'
 }
 
-export function mapHabitatsToEasy(habitatIds) {
-  return [...new Set(habitatIds.map(mapHabitatToEasy))]
+export function mapHabitatsToDiscover(habitatIds) {
+  return [...new Set(habitatIds.map(mapHabitatToDiscover))]
 }
 
 export function getHabitatsForMode(mode) {
-  if (mode === 'easy') {
+  if (mode === 'discover') {
     return [habitatsById.home, habitatsById.farm, wildHabitat]
   }
   return habitats
 }
 
 export function getTypesForMode(mode) {
-  if (mode === 'easy') {
-    return animalTypes.filter((type) => EASY_TYPE_IDS.includes(type.id))
+  if (mode === 'discover') {
+    return animalTypes.filter((type) => DISCOVER_TYPE_IDS.includes(type.id))
   }
   return animalTypes
 }
 
 export function getAnimalsForMode(mode) {
-  if (mode !== 'easy') return animals
+  if (mode !== 'discover') return animals
   return animals
-    .filter((animal) => EASY_TYPE_IDS.includes(animal.type) && !EASY_EXCLUDED_ANIMAL_IDS.has(animal.id))
+    .filter(
+      (animal) =>
+        DISCOVER_TYPE_IDS.includes(animal.type) &&
+        !DISCOVER_EXCLUDED_ANIMAL_IDS.has(animal.id)
+    )
     .map((animal) => ({
       ...animal,
-      habitats: mapHabitatsToEasy(animal.habitats),
+      habitats: mapHabitatsToDiscover(animal.habitats),
     }))
 }
 
