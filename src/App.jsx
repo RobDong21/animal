@@ -1,14 +1,25 @@
 import { useState } from 'react'
 import Home from '@/pages/Home'
 import Game from '@/pages/Game'
+import StartersWords from '@/pages/StartersWords'
 import packageJson from '../package.json'
 
 export default function App() {
   const [view, setView] = useState('home')
   const [gameConfig, setGameConfig] = useState(null)
 
-  const content =
-    view === 'game' && gameConfig ? (
+  let content = (
+    <Home
+      onPlay={(config) => {
+        setGameConfig(config)
+        setView('game')
+      }}
+      onOpenStarters={() => setView('starters')}
+    />
+  )
+
+  if (view === 'game' && gameConfig) {
+    content = (
       <Game
         mode={gameConfig.mode}
         roundSize={gameConfig.roundSize}
@@ -17,14 +28,10 @@ export default function App() {
           setGameConfig(null)
         }}
       />
-    ) : (
-      <Home
-        onPlay={(config) => {
-          setGameConfig(config)
-          setView('game')
-        }}
-      />
     )
+  } else if (view === 'starters') {
+    content = <StartersWords onBack={() => setView('home')} />
+  }
 
   return (
     <>

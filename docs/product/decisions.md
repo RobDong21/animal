@@ -94,3 +94,12 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - Product approval is required after side-by-side review at game size.
 - Image provenance is recorded even when legal attribution is not required.
 - Production assets are optimized through a reusable Sharp script before commit.
+
+### D-013: Starters Words as a separate activity
+
+- **Status:** Accepted
+- Cambridge Pre A1 Starters practice is a second home activity, not part of Discover or Explorer.
+- The first release is category-based one-word reading practice with speech, not a quiz.
+- Rounds use 8–12 words from one category.
+- Pictures are deferred; Animals, Colours, and Food are the preferred first picture categories later.
+- Keep the Animal World brand for now; do not present the activity as an official Cambridge product.

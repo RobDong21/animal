@@ -13,6 +13,13 @@ This document is the prioritized product backlog. Keep only one initiative in **
 
 ## Next
 
+### P-006: Cambridge Pre A1 Starters Words
+
+- **Status:** Approved for engineering
+- **Priority:** High
+- **Outcome:** Children can practise Starters vocabulary one word at a time through reading and speech.
+- **Specification:** [`../specs/P-006-starters-words.md`](../specs/P-006-starters-words.md)
+
 ### P-004: End-of-round learning recap
 
 - **Status:** Approved for engineering
@@ -22,7 +29,8 @@ This document is the prioritized product backlog. Keep only one initiative in **
 
 ## Later
 
-- Optional spoken vocabulary and instructions
+- Starters Words pictures by category
+- Optional spoken vocabulary and instructions for Animal World
 - Description-based questions
 - “Who lives here?” habitat mode
 - Wildlife Expert difficulty level

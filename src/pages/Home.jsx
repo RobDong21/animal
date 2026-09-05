@@ -1,10 +1,10 @@
-import { Sparkles, Sprout } from 'lucide-react'
+import { BookOpen, Sparkles, Sprout } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { DISCOVER_ROUND_SIZE, EXPLORER_ROUND_SIZE } from '@/data/animals'
 import { assetUrl } from '@/lib/assets'
 
-export default function Home({ onPlay }) {
+export default function Home({ onPlay, onOpenStarters }) {
   return (
     <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
       <Card className="w-full max-w-2xl text-center">
@@ -45,6 +45,20 @@ export default function Home({ onPlay }) {
               <span>Explorer</span>
               <span className="text-sm font-medium text-muted-foreground md:text-base">
                 More animals, types, and habitats.
+              </span>
+            </span>
+          </Button>
+          <Button
+            size="xl"
+            variant="outline"
+            className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
+            onClick={onOpenStarters}
+          >
+            <BookOpen className="text-primary" aria-hidden="true" />
+            <span className="flex flex-col">
+              <span>Starters Words</span>
+              <span className="text-sm font-medium text-muted-foreground md:text-base">
+                Practice Cambridge Pre A1 words.
               </span>
             </span>
           </Button>
