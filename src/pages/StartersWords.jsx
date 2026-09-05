@@ -20,12 +20,6 @@ export default function StartersWords({ onBack }) {
   const total = round.length
 
   useEffect(() => {
-    if (phase !== 'practice' || !currentWord) return
-
-    speakText(currentWord)
-  }, [phase, currentWord, index])
-
-  useEffect(() => {
     return () => {
       if (window.speechSynthesis) window.speechSynthesis.cancel()
     }
@@ -56,12 +50,13 @@ export default function StartersWords({ onBack }) {
 
   function handlePrevious() {
     if (index === 0) return
+    if (window.speechSynthesis) window.speechSynthesis.cancel()
     setIndex((current) => current - 1)
   }
 
   function handleNext() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel()
     if (index + 1 >= total) {
-      if (window.speechSynthesis) window.speechSynthesis.cancel()
       setPhase('done')
       return
     }
