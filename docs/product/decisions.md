@@ -103,3 +103,13 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - Rounds use 8–12 words from one category.
 - Pictures are deferred; Animals, Colours, and Food are the preferred first picture categories later.
 - Keep the Animal World brand for now; do not present the activity as an official Cambridge product.
+
+### D-014: Starters reading support loop
+
+- **Status:** Accepted
+- Each Starters word follows: see → try → optionally break apart → hear full word at least once → continue.
+- Next stays locked until the full word has been heard once.
+- Cards do not auto-speak on appearance.
+- Break it apart is always available but visually quieter than Hear word.
+- Chunk taps speak only the chunk; only full-word hearing unlocks Next.
+- Multi-word and hyphenated forms split automatically; curated chunks are preferred when provided.

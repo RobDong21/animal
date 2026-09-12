@@ -2,7 +2,7 @@
 
 ## Status
 
-Approved for engineering.
+Completed and product-approved. Live testing identified follow-up work in P-007.
 
 ## Problem
 

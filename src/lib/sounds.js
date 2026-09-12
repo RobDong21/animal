@@ -36,14 +36,24 @@ export function playWrongSound() {
   playTone(220, 0.25, 'triangle', 0.15)
 }
 
-export function speakText(text) {
-  if (!window.speechSynthesis) return
+export function speakText(text, { onEnd, onError } = {}) {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    onError?.('unavailable')
+    return false
+  }
 
   window.speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.rate = 0.85
   utterance.pitch = 1.05
+  utterance.onend = () => onEnd?.()
+  utterance.onerror = (event) => onError?.(event.error ?? 'error')
   window.speechSynthesis.speak(utterance)
+  return true
+}
+
+export function isSpeechSynthesisAvailable() {
+  return typeof window !== 'undefined' && Boolean(window.speechSynthesis)
 }
 
 export function speakHabitatName(name) {

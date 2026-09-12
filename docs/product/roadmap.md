@@ -4,21 +4,21 @@ This document is the prioritized product backlog. Keep only one initiative in **
 
 ## Now
 
+### P-007: Starters reading support
+
+- **Status:** Approved for engineering
+- **Priority:** High
+- **Outcome:** Each Starters word is tried, optionally broken apart, heard at least once, then continued.
+- **Specification:** [`../specs/P-007-starters-reading-support.md`](../specs/P-007-starters-reading-support.md)
+
+## Next
+
 ### P-005: Animal image replacement preview
 
 - **Status:** Approved for engineering
 - **Priority:** Urgent
 - **Outcome:** Every animal image provides a clear, legally documented one-word, one-animal vocabulary cue.
 - **Specification:** [`../specs/P-005-animal-image-preview.md`](../specs/P-005-animal-image-preview.md)
-
-## Next
-
-### P-006: Cambridge Pre A1 Starters Words
-
-- **Status:** Approved for engineering
-- **Priority:** High
-- **Outcome:** Children can practise Starters vocabulary one word at a time through reading and speech.
-- **Specification:** [`../specs/P-006-starters-words.md`](../specs/P-006-starters-words.md)
 
 ### P-004: End-of-round learning recap
 
@@ -45,6 +45,12 @@ This document is the prioritized product backlog. Keep only one initiative in **
 - Parent or educator dashboard
 
 ## Done
+
+### P-006: Cambridge Pre A1 Starters Words
+
+- **Status:** Completed and product-approved
+- **Outcome:** Children can practise Starters vocabulary one word at a time through reading and speech.
+- **Specification:** [`../specs/P-006-starters-words.md`](../specs/P-006-starters-words.md)
 
 ### P-003: Review missed concepts within the round
 

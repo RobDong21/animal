@@ -7,17 +7,26 @@ import {
   prepareStartersRound,
   startersCategories,
 } from '@/data/startersWords'
-import { speakText } from '@/lib/sounds'
+import { getStartersChunks } from '@/lib/startersChunks'
+import { isSpeechSynthesisAvailable, speakText } from '@/lib/sounds'
 
 export default function StartersWords({ onBack }) {
   const [phase, setPhase] = useState('categories')
   const [categoryId, setCategoryId] = useState(null)
   const [round, setRound] = useState([])
   const [index, setIndex] = useState(0)
+  const [heardWord, setHeardWord] = useState(false)
+  const [splitOpen, setSplitOpen] = useState(false)
+  const [speechAvailable, setSpeechAvailable] = useState(true)
 
   const category = categoryId ? getStartersCategory(categoryId) : null
   const currentWord = round[index] ?? null
   const total = round.length
+  const chunks = currentWord ? getStartersChunks(currentWord) : []
+
+  useEffect(() => {
+    setSpeechAvailable(isSpeechSynthesisAvailable())
+  }, [])
 
   useEffect(() => {
     return () => {
@@ -25,13 +34,20 @@ export default function StartersWords({ onBack }) {
     }
   }, [])
 
+  function resetCardSupport() {
+    setHeardWord(false)
+    setSplitOpen(false)
+  }
+
   function startRound(nextCategoryId) {
     const nextCategory = getStartersCategory(nextCategoryId)
     if (!nextCategory) return
 
+    if (window.speechSynthesis) window.speechSynthesis.cancel()
     setCategoryId(nextCategoryId)
     setRound(prepareStartersRound(nextCategory))
     setIndex(0)
+    resetCardSupport()
     setPhase('practice')
   }
 
@@ -46,21 +62,43 @@ export default function StartersWords({ onBack }) {
     setCategoryId(null)
     setRound([])
     setIndex(0)
+    resetCardSupport()
   }
 
   function handlePrevious() {
     if (index === 0) return
     if (window.speechSynthesis) window.speechSynthesis.cancel()
+    resetCardSupport()
     setIndex((current) => current - 1)
   }
 
   function handleNext() {
+    if (!heardWord) return
     if (window.speechSynthesis) window.speechSynthesis.cancel()
     if (index + 1 >= total) {
       setPhase('done')
+      resetCardSupport()
       return
     }
+    resetCardSupport()
     setIndex((current) => current + 1)
+  }
+
+  function handleHearWord() {
+    if (!currentWord) return
+
+    const started = speakText(currentWord, {
+      onEnd: () => setHeardWord(true),
+      onError: (reason) => {
+        if (reason === 'unavailable') setSpeechAvailable(false)
+      },
+    })
+
+    if (!started) setSpeechAvailable(false)
+  }
+
+  function handleHearChunk(chunk) {
+    speakText(chunk)
   }
 
   if (phase === 'categories') {
@@ -174,25 +212,80 @@ export default function StartersWords({ onBack }) {
       </div>
 
       <Card className="flex min-h-0 flex-1 flex-col">
-        <CardContent className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 p-4 md:p-8">
-          <p
+        <CardContent className="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto p-4 md:gap-6 md:p-8">
+          <div
             role="status"
             aria-live="polite"
             aria-atomic="true"
-            className="text-display max-w-full px-2 text-center break-words"
+            className="flex w-full max-w-2xl flex-col items-center gap-4"
           >
-            {currentWord}
-          </p>
-          <Button
-            size="lg"
-            variant="outline"
-            className="min-h-14 gap-3 px-6 text-lg font-semibold md:min-h-16 md:text-xl [&_svg]:!h-7 [&_svg]:!w-7"
-            onClick={() => currentWord && speakText(currentWord)}
-            aria-label={`Speak ${currentWord}`}
-          >
-            <Volume2 aria-hidden="true" />
-            Hear word
-          </Button>
+            {splitOpen ? (
+              <>
+                <p className="text-title text-center text-muted-foreground">{currentWord}</p>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {chunks.map((chunk, chunkIndex) => (
+                    <div key={`${chunk}-${chunkIndex}`} className="flex items-center gap-2">
+                      {chunkIndex > 0 && (
+                        <span className="text-2xl font-semibold text-muted-foreground" aria-hidden="true">
+                          ·
+                        </span>
+                      )}
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="min-h-12 px-4 text-xl font-semibold md:min-h-14 md:text-2xl"
+                        onClick={() => handleHearChunk(chunk)}
+                        aria-label={`Speak chunk ${chunk}`}
+                      >
+                        {chunk}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="text-display max-w-full px-2 text-center break-words">{currentWord}</p>
+            )}
+          </div>
+
+          <div className="flex w-full max-w-md flex-col items-center gap-3">
+            <Button
+              size="lg"
+              variant="outline"
+              className="min-h-14 w-full gap-3 px-6 text-lg font-semibold md:min-h-16 md:text-xl [&_svg]:!h-7 [&_svg]:!w-7"
+              onClick={handleHearWord}
+              aria-label={`Speak ${currentWord}`}
+            >
+              <Volume2 aria-hidden="true" />
+              Hear word
+            </Button>
+
+            <Button
+              size="lg"
+              variant="ghost"
+              className="min-h-11 text-base font-semibold text-muted-foreground md:min-h-12 md:text-lg"
+              onClick={() => setSplitOpen((open) => !open)}
+              aria-label={splitOpen ? 'Put the word together' : 'Break the word apart'}
+            >
+              {splitOpen ? 'Put together' : 'Break it apart'}
+            </Button>
+
+            {!speechAvailable && (
+              <div className="w-full space-y-3 text-center">
+                <p className="text-supporting">
+                  Speech is unavailable on this device. An adult can read the word aloud.
+                </p>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="cta-secondary"
+                  onClick={() => setHeardWord(true)}
+                >
+                  Heard it
+                </Button>
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
 
@@ -212,7 +305,12 @@ export default function StartersWords({ onBack }) {
           size="lg"
           className="cta-primary flex-1 gap-2"
           onClick={handleNext}
-          aria-label="Next word"
+          disabled={!heardWord}
+          aria-label={
+            heardWord
+              ? 'Next word'
+              : 'Next word unavailable until the word is heard'
+          }
         >
           Next
           <ChevronRight aria-hidden="true" />
