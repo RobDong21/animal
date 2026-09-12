@@ -1,5 +1,21 @@
 import { useEffect, useState } from 'react'
-import { BookOpen, ChevronLeft, ChevronRight, Home, Volume2 } from 'lucide-react'
+import {
+  Apple,
+  ChevronLeft,
+  ChevronRight,
+  Footprints,
+  Hash,
+  Home,
+  House,
+  Palette,
+  PawPrint,
+  Puzzle,
+  Shirt,
+  Smile,
+  Star,
+  Users,
+  Volume2,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
@@ -9,6 +25,20 @@ import {
 } from '@/data/startersWords'
 import { getStartersChunks } from '@/lib/startersChunks'
 import { isSpeechSynthesisAvailable, speakText } from '@/lib/sounds'
+
+const CATEGORY_ICONS = {
+  Animals: PawPrint,
+  'Body and Face': Smile,
+  Clothes: Shirt,
+  Colours: Palette,
+  'Family & People': Users,
+  'Food and Drink': Apple,
+  'The Home': House,
+  'Toys & Play': Puzzle,
+  Actions: Footprints,
+  Descriptive: Star,
+  Numbers: Hash,
+}
 
 export default function StartersWords({ onBack }) {
   const [phase, setPhase] = useState('categories')
@@ -124,23 +154,28 @@ export default function StartersWords({ onBack }) {
 
           <Card>
             <CardContent className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 md:p-6">
-              {startersCategories.map((item) => (
-                <Button
-                  key={item.id}
-                  size="xl"
-                  variant="outline"
-                  className="cta-secondary justify-start gap-3 text-left [&_svg]:!h-7 [&_svg]:!w-7"
-                  onClick={() => startRound(item.id)}
-                >
-                  <BookOpen className="text-primary" aria-hidden="true" />
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate">{item.name}</span>
-                    <span className="text-sm font-medium text-muted-foreground md:text-base">
-                      {item.words.length} words
+              {startersCategories.map((item) => {
+                const Icon = CATEGORY_ICONS[item.id]
+                return (
+                  <Button
+                    key={item.id}
+                    size="xl"
+                    variant="outline"
+                    className="cta-secondary justify-start gap-3 text-left [&_svg]:!h-7 [&_svg]:!w-7"
+                    onClick={() => startRound(item.id)}
+                  >
+                    {Icon && (
+                      <Icon className="text-primary" strokeWidth={2.5} aria-hidden="true" />
+                    )}
+                    <span className="flex min-w-0 flex-col">
+                      <span className="truncate">{item.name}</span>
+                      <span className="text-sm font-medium text-muted-foreground md:text-base">
+                        {item.words.length} words
+                      </span>
                     </span>
-                  </span>
-                </Button>
-              ))}
+                  </Button>
+                )
+              })}
             </CardContent>
           </Card>
         </div>
