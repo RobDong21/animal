@@ -215,3 +215,10 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - Home Starters Words description uses child language: **Practice reading words.**
 - Keep Cambridge Pre A1 wording in parent docs, specs, and data comments where accuracy matters.
 - Words practice games share one round header, Hear word control, and feedback banner implementation.
+
+### D-027: Sequential animal questions
+
+- **Status:** Accepted
+- Normal Discover / Explorer play asks **What is it?** first, then **Where does it live?** on the same animal.
+- Type and habitat remain one learning story; they are not split into separate Home games.
+- Quick Review stays one concept at a time.

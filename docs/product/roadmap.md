@@ -15,13 +15,6 @@ _No active initiative._
 - **Outcome:** Every animal image provides a clear, legally documented one-word, one-animal vocabulary cue.
 - **Specification:** [`../specs/P-005-animal-image-preview.md`](../specs/P-005-animal-image-preview.md)
 
-### P-004: End-of-round learning recap
-
-- **Status:** Approved for engineering
-- **Priority:** High
-- **Outcome:** Children finish each round knowing what they learned.
-- **Specification:** [`../specs/P-004-learning-recap.md`](../specs/P-004-learning-recap.md)
-
 ## Later
 
 - First Letter spelling game
@@ -42,6 +35,18 @@ _No active initiative._
 - Parent or educator dashboard
 
 ## Done
+
+### P-018: Sequential animal questions
+
+- **Status:** Completed and product-approved
+- **Outcome:** Normal Animal play asks type first, then habitat, on the same animal card.
+- **Specification:** [`../specs/P-018-sequential-animal-questions.md`](../specs/P-018-sequential-animal-questions.md)
+
+### P-004: End-of-round learning recap
+
+- **Status:** Completed and product-approved
+- **Outcome:** Children finish each Animal round knowing what they learned, without scores.
+- **Specification:** [`../specs/P-004-learning-recap.md`](../specs/P-004-learning-recap.md)
 
 ### P-017: Words consistency polish
 

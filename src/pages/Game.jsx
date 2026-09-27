@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CheckCircle2, CircleX, HelpCircle, Home } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -55,7 +55,6 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
 
   const [shuffled, setShuffled] = useState(initialRound)
   const [index, setIndex] = useState(0)
-  const [, setScore] = useState(0)
   const [phase, setPhase] = useState('normal')
   const [missHistory, setMissHistory] = useState([])
   const [reviewQueue, setReviewQueue] = useState([])
@@ -68,6 +67,7 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
   const [animalComplete, setAnimalComplete] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
   const helpButtonRef = useRef(null)
+  const recapHeadingRef = useRef(null)
 
   const total = shuffled.length
   const isReview = phase === 'review'
@@ -122,7 +122,6 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
   }
 
   function completeAnimal() {
-    setScore((s) => s + 1)
     setAnimalComplete(true)
     setFeedback({ tone: 'summary', text: buildAnimalSummary(current) })
     playCorrectSound()
@@ -233,13 +232,30 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
   function handlePlayAgain() {
     setShuffled(prepareRound(modeAnimals, roundSize))
     setIndex(0)
-    setScore(0)
     setMissHistory([])
     setReviewQueue([])
     setReviewIndex(0)
     resetRoundChoices()
     setPhase('normal')
   }
+
+  useEffect(() => {
+    if (phase !== 'results') return undefined
+    recapHeadingRef.current?.focus()
+    return undefined
+  }, [phase])
+
+  const showTypeStep = isReview ? reviewConcept === 'type' : !typeComplete
+  const showHabitatStep = isReview
+    ? reviewConcept === 'habitat'
+    : typeComplete && !animalComplete
+  const stepPrompt = isReview
+    ? null
+    : animalComplete
+      ? 'Nice work!'
+      : typeComplete
+        ? 'Where does it live?'
+        : 'What is it?'
 
   if (phase === 'results') {
     const sessionSummary =
@@ -257,7 +273,9 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
               aria-atomic="true"
               className="space-y-2 p-4 pb-2 text-center md:p-6 md:pb-3"
             >
-              <h1 className="text-title">Great exploring!</h1>
+              <h1 ref={recapHeadingRef} tabIndex={-1} className="text-title outline-none">
+                Great exploring!
+              </h1>
               <p className="text-supporting">{sessionSummary}</p>
             </CardHeader>
             <CardContent className="space-y-4 p-4 pt-2 md:p-6 md:pt-3">
@@ -337,8 +355,13 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
             </p>
           </div>
         ) : (
-          <p className="text-center text-base font-semibold text-muted-foreground md:text-lg">
-            Pick what it is and where it lives
+          <p
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="text-center text-base font-semibold text-muted-foreground md:text-lg"
+          >
+            {stepPrompt}
           </p>
         )}
       </div>
@@ -353,20 +376,18 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
         <div className="flex min-w-0 shrink-0 flex-col gap-4 lg:shrink lg:overflow-y-auto">
           <Card>
             <CardContent className="space-y-4 p-4">
-              {(!isReview || reviewConcept === 'type') && (
+              {showTypeStep && (
               <div
                 className="space-y-2"
-                role={isReview ? 'group' : undefined}
+                role="group"
                 aria-label={
                   isReview
                     ? `Review ${reviewIndex + 1} of ${reviewQueue.length}: What is it?`
-                    : undefined
+                    : 'What is it?'
                 }
               >
                 <div className="flex items-center justify-center gap-2">
-                  <p className="text-component-title">
-                    {isReview ? 'What is it?' : '1. What is it?'}
-                  </p>
+                  <p className="text-component-title">What is it?</p>
                   {typeComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -413,20 +434,18 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
               </div>
               )}
 
-              {(!isReview || reviewConcept === 'habitat') && (
+              {showHabitatStep && (
               <div
                 className="space-y-2"
-                role={isReview ? 'group' : undefined}
+                role="group"
                 aria-label={
                   isReview
                     ? `Review ${reviewIndex + 1} of ${reviewQueue.length}: Where does it live?`
-                    : undefined
+                    : 'Where does it live?'
                 }
               >
                 <div className="flex items-center justify-center gap-2">
-                  <p className="text-component-title">
-                    {isReview ? 'Where does it live?' : '2. Where does it live?'}
-                  </p>
+                  <p className="text-component-title">Where does it live?</p>
                   {habitatComplete && <CheckCircle2 className="h-5 w-5 text-success" aria-label="Complete" />}
                 </div>
                 <div className={cn('grid gap-2', isDiscover ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-4')}>

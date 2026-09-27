@@ -2,7 +2,7 @@
 
 ## Status
 
-Approved for engineering.
+Completed and product-approved.
 
 ## Problem
 
