@@ -101,6 +101,7 @@ Add a live Home Words game where the child builds a Starters word by tapping scr
 - Tiles and slots must remain easy to tap in landscape, including longer words; allow wrapping rather than tiny tiles.
 - Follow `.cursor/rules/ux-design-principles.mdc`.
 - Fit puzzle, Hear word, feedback, and continue controls without cropping.
+- On each correct assemble, play a short non-blocking fireworks burst (~1s). Celebration must not hide feedback or block Next. Respect `prefers-reduced-motion`.
 
 ## Accessibility
 
