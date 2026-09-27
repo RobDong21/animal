@@ -14,8 +14,11 @@ import {
   Smile,
   Star,
   Users,
-  Volume2,
 } from 'lucide-react'
+import {
+  WordsHearWordButton,
+  WordsRoundHeader,
+} from '@/components/WordsPracticeChrome'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
@@ -304,32 +307,12 @@ export default function StartersWords({ onBack }) {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-4 overflow-hidden px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">
-      <div className="flex shrink-0 flex-col gap-3">
-        <div className="flex items-center gap-3">
-          <Button
-            size="icon"
-            variant="outline"
-            className="toolbar-button-icon"
-            onClick={onBack}
-            aria-label="Home"
-          >
-            <Home />
-          </Button>
-          <div className="min-w-0 flex-1 space-y-2 text-center">
-            <div className="text-component-title">
-              {isReview ? 'Review' : 'Word'} {progressCurrent} of {progressTotal}
-            </div>
-            <div className="h-4 overflow-hidden rounded-full bg-muted md:h-5">
-              <div
-                className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
-                style={{ width: `${Math.round((progressCurrent / progressTotal) * 100)}%` }}
-              />
-            </div>
-            <p className="text-supporting">{category?.name}</p>
-          </div>
-          <div className="h-12 w-12 shrink-0 md:h-14 md:w-14" aria-hidden="true" />
-        </div>
-
+      <WordsRoundHeader
+        onHome={onBack}
+        progressLabel={`${isReview ? 'Review' : 'Word'} ${progressCurrent} of ${progressTotal}`}
+        progressRatio={progressCurrent / progressTotal}
+        categoryName={category?.name}
+      >
         {isReview && (
           <div
             role="status"
@@ -341,7 +324,7 @@ export default function StartersWords({ onBack }) {
             <p className="text-supporting">Let&apos;s try a few again.</p>
           </div>
         )}
-      </div>
+      </WordsRoundHeader>
 
       <Card className="flex min-h-0 flex-1 flex-col">
         <CardContent className="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto p-4 md:gap-6 md:p-8">
@@ -381,16 +364,11 @@ export default function StartersWords({ onBack }) {
           </div>
 
           <div className="flex w-full max-w-md flex-col items-center gap-3">
-            <Button
-              size="lg"
-              variant="outline"
-              className="min-h-14 w-full gap-3 px-6 text-lg font-semibold md:min-h-16 md:text-xl [&_svg]:!h-7 [&_svg]:!w-7"
+            <WordsHearWordButton
               onClick={handleHearWord}
-              aria-label={`Speak ${currentWord}`}
-            >
-              <Volume2 aria-hidden="true" />
-              Hear word
-            </Button>
+              ariaLabel={`Speak ${currentWord}`}
+              className="w-full max-w-none"
+            />
 
             <Button
               size="lg"

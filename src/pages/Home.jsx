@@ -16,12 +16,12 @@ function PlayButton({ icon: Icon, title, description, onClick, ariaLabel }) {
     <Button
       size="xl"
       variant="outline"
-      className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
+      className="cta-secondary h-auto min-h-14 justify-start gap-4 whitespace-normal py-3 text-left md:min-h-16 md:py-4 [&_svg]:!h-8 [&_svg]:!w-8"
       onClick={onClick}
       aria-label={ariaLabel ?? title}
     >
-      <Icon className="text-primary" aria-hidden="true" />
-      <span className="flex flex-col">
+      <Icon className="shrink-0 text-primary" aria-hidden="true" />
+      <span className="flex min-w-0 flex-col">
         <span>{title}</span>
         <span className="text-sm font-medium text-muted-foreground md:text-base">{description}</span>
       </span>
@@ -70,7 +70,7 @@ export default function Home({
               <PlayButton
                 icon={BookOpen}
                 title="Starters Words"
-                description="Practice Cambridge Pre A1 words."
+                description="Practice reading words."
                 onClick={onOpenStarters}
               />
               <PlayButton

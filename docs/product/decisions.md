@@ -208,3 +208,10 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - **Normal:** keeps full-word evaluation (current behaviour); no per-letter tick / cross while building.
 - Fireworks celebrate only when a word is finished correctly.
 - Mode is chosen each session path and is not persisted; Play Again keeps category and mode.
+
+### D-026: Child-facing Home copy for Words
+
+- **Status:** Accepted
+- Home Starters Words description uses child language: **Practice reading words.**
+- Keep Cambridge Pre A1 wording in parent docs, specs, and data comments where accuracy matters.
+- Words practice games share one round header, Hear word control, and feedback banner implementation.

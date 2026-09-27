@@ -2,10 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Apple,
   Check,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  CircleX,
   Footprints,
   HandHelping,
   Hash,
@@ -19,10 +17,14 @@ import {
   Star,
   Undo2,
   Users,
-  Volume2,
   X,
 } from 'lucide-react'
 import { SuccessFireworks } from '@/components/SuccessFireworks'
+import {
+  WordsFeedbackBanner,
+  WordsHearWordButton,
+  WordsRoundHeader,
+} from '@/components/WordsPracticeChrome'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
@@ -472,30 +474,12 @@ export default function BuildTheWord({ onBack }) {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-4 overflow-hidden px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">
-      <div className="flex shrink-0 items-center gap-3">
-        <Button
-          size="icon"
-          variant="outline"
-          className="toolbar-button-icon"
-          onClick={onBack}
-          aria-label="Home"
-        >
-          <Home />
-        </Button>
-        <div className="min-w-0 flex-1 space-y-2 text-center">
-          <div className="text-component-title">
-            Word {index + 1} of {total}
-          </div>
-          <div className="h-4 overflow-hidden rounded-full bg-muted md:h-5">
-            <div
-              className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
-              style={{ width: `${Math.round(((index + 1) / total) * 100)}%` }}
-            />
-          </div>
-          <p className="text-supporting">{category?.name}</p>
-        </div>
-        <div className="h-12 w-12 shrink-0 md:h-14 md:w-14" aria-hidden="true" />
-      </div>
+      <WordsRoundHeader
+        onHome={onBack}
+        progressLabel={`Word ${index + 1} of ${total}`}
+        progressRatio={(index + 1) / total}
+        categoryName={category?.name}
+      />
 
       <Card className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
         <SuccessFireworks active={solved} />
@@ -587,16 +571,11 @@ export default function BuildTheWord({ onBack }) {
           </div>
 
           <div className="flex w-full max-w-md flex-col gap-3">
-            <Button
-              size="lg"
-              variant="outline"
-              className="min-h-14 w-full gap-3 px-6 text-lg font-semibold md:min-h-16 md:text-xl [&_svg]:!h-7 [&_svg]:!w-7"
+            <WordsHearWordButton
               onClick={handleHearWord}
-              aria-label={`Speak ${currentWord}`}
-            >
-              <Volume2 aria-hidden="true" />
-              Hear word
-            </Button>
+              ariaLabel={`Speak ${currentWord}`}
+              className="w-full max-w-none"
+            />
             <Button
               size="lg"
               variant="ghost"
@@ -614,26 +593,7 @@ export default function BuildTheWord({ onBack }) {
             </Button>
           </div>
 
-          {feedback && (
-            <div
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-              className={cn(
-                'radius-normal border-normal flex w-full max-w-md items-start gap-3 px-3 py-2.5 text-base font-medium leading-snug',
-                feedback.tone === 'error'
-                  ? 'border-error-border bg-error-muted text-error-content'
-                  : 'border-success-border bg-success-muted text-success-content'
-              )}
-            >
-              {feedback.tone === 'error' ? (
-                <CircleX className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-              ) : (
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-              )}
-              <p>{feedback.text}</p>
-            </div>
-          )}
+          <WordsFeedbackBanner feedback={feedback} />
         </CardContent>
       </Card>
 

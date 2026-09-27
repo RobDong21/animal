@@ -4,58 +4,9 @@ This document is the prioritized product backlog. Keep only one initiative in **
 
 ## Now
 
-_No active initiative — pick the next consistency or learning item._
+_No active initiative._
 
 ## Next
-
-### P-012 → P-013: Home worlds and Missing Letter
-
-Deliver in order if not already shipped:
-
-1. **P-012: Home worlds restructure and Coming soon placeholders**
-   - **Status:** Approved for engineering
-   - **Specification:** [`../specs/P-012-home-worlds-restructure.md`](../specs/P-012-home-worlds-restructure.md)
-2. **P-013: Missing Letter spelling mode**
-   - **Status:** Approved for engineering
-   - **Specification:** [`../specs/P-013-missing-letter.md`](../specs/P-013-missing-letter.md)
-
-- **Priority:** High
-- **Outcome:** Home is organized into Animals, Words, and For parents; Missing Letter ships as a live Words game.
-
-### P-009: Starters word size and Previous control
-
-- **Status:** Approved for engineering
-- **Priority:** High
-- **Outcome:** The practice word is large enough to read comfortably, and Previous stays available but much smaller than Next.
-- **Specification:** [`../specs/P-009-starters-word-size-previous.md`](../specs/P-009-starters-word-size-previous.md)
-
-### P-010: Parent word list browser
-
-- **Status:** Approved for engineering
-- **Priority:** High
-- **Outcome:** Parents can review and confirm the full Starters wordlist by category.
-- **Specification:** [`../specs/P-010-parent-word-list.md`](../specs/P-010-parent-word-list.md)
-
-### P-011: Parent animal list browser
-
-- **Status:** Approved for engineering
-- **Priority:** High
-- **Outcome:** Parents can review and confirm animal names, types, habitats, and mode availability.
-- **Specification:** [`../specs/P-011-parent-animal-list.md`](../specs/P-011-parent-animal-list.md)
-
-### P-007 → P-008: Starters reading support and Quick Review
-
-Deliver in order if not already shipped:
-
-1. **P-007: Starters reading support**
-   - **Status:** Approved for engineering
-   - **Specification:** [`../specs/P-007-starters-reading-support.md`](../specs/P-007-starters-reading-support.md)
-2. **P-008: Starters Quick Review**
-   - **Status:** Approved for engineering
-   - **Specification:** [`../specs/P-008-starters-quick-review.md`](../specs/P-008-starters-quick-review.md)
-
-- **Priority:** High
-- **Outcome:** Each word is tried, supported, heard, marked Got it / Practise again, and hard words are reviewed at the end.
 
 ### P-005: Animal image replacement preview
 
@@ -81,6 +32,7 @@ Deliver in order if not already shipped:
 - Wildlife Expert difficulty level
 - Support for animals with multiple valid habitats
 - Animal collection book
+- Align Animal play density with Words calmness (or document an intentional contrast)
 
 ## Parking lot
 
@@ -90,6 +42,30 @@ Deliver in order if not already shipped:
 - Parent or educator dashboard
 
 ## Done
+
+### P-017: Words consistency polish
+
+- **Status:** Completed and product-approved
+- **Outcome:** Child-facing Home copy and shared Words practice chrome so Words games feel like one product surface.
+- **Specification:** [`../specs/P-017-words-consistency-polish.md`](../specs/P-017-words-consistency-polish.md)
+
+### P-012 → P-013: Home worlds and Missing Letter
+
+- **Status:** Completed and product-approved
+- **Outcome:** Home uses Animals / Words / Parents; Missing Letter ships as a live Words game.
+- **Specifications:** [`../specs/P-012-home-worlds-restructure.md`](../specs/P-012-home-worlds-restructure.md), [`../specs/P-013-missing-letter.md`](../specs/P-013-missing-letter.md)
+
+### P-009 → P-011: Starters size, Previous, and parent lists
+
+- **Status:** Completed and product-approved
+- **Outcome:** Starters word size and Previous control; parent word and animal list browsers.
+- **Specifications:** [`../specs/P-009-starters-word-size-previous.md`](../specs/P-009-starters-word-size-previous.md), [`../specs/P-010-parent-word-list.md`](../specs/P-010-parent-word-list.md), [`../specs/P-011-parent-animal-list.md`](../specs/P-011-parent-animal-list.md)
+
+### P-007 → P-008: Starters reading support and Quick Review
+
+- **Status:** Completed and product-approved
+- **Outcome:** Each word is tried, supported, heard, marked, and hard words can be reviewed.
+- **Specifications:** [`../specs/P-007-starters-reading-support.md`](../specs/P-007-starters-reading-support.md), [`../specs/P-008-starters-quick-review.md`](../specs/P-008-starters-quick-review.md)
 
 ### P-016: Build the Word difficulty modes
 
