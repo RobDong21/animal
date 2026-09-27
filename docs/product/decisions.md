@@ -193,3 +193,18 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - The target word is heard, not shown as the prompt.
 - Children choose from written options in the same category.
 - Incorrect choices are taught and require tapping the correct word before continuing.
+
+### D-025: Build the Word difficulty modes
+
+- **Status:** Accepted
+- Home keeps a single **Build the Word** entry.
+- After category selection, the child chooses a mode (Option C) on large peer CTAs.
+- Mode labels show **Easy** and **Normal** as the primary titles, with descriptive names secondary:
+  - **Easy** — Build with Help
+  - **Normal** — Build the Word
+- This is an intentional exception to Animals’ Discover / Explorer naming (D-005); Easy / Normal are shown only on the Build the Word mode chooser.
+- **Easy:** place into the next slot only; correct letters stay with a small success-colored tick at the bottom-right of the slot; incorrect letters still place with a small error-colored cross at the bottom-right; child must Undo or tap the letter to clear; bank stays locked until cleared; no auto-clear; no full-word reveal on a single wrong letter.
+- Mode CTAs grow with their text (min-height, not fixed height).
+- **Normal:** keeps full-word evaluation (current behaviour); no per-letter tick / cross while building.
+- Fireworks celebrate only when a word is finished correctly.
+- Mode is chosen each session path and is not persisted; Play Again keeps category and mode.

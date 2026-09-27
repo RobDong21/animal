@@ -55,3 +55,14 @@ export function assembleWord(structure, placedCharacters) {
 export function countLetterSlots(structure) {
   return structure.filter((part) => part.type === 'letter').length
 }
+
+/** Next letter character the child should place (Help mode), or null if done. */
+export function getNextExpectedLetter(structure, placedCount) {
+  let letterIndex = 0
+  for (const part of structure) {
+    if (part.type !== 'letter') continue
+    if (letterIndex === placedCount) return part.character
+    letterIndex += 1
+  }
+  return null
+}

@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Apple,
+  Check,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
   CircleX,
   Footprints,
+  HandHelping,
   Hash,
   Home,
   House,
@@ -18,6 +20,7 @@ import {
   Undo2,
   Users,
   Volume2,
+  X,
 } from 'lucide-react'
 import { SuccessFireworks } from '@/components/SuccessFireworks'
 import { Button } from '@/components/ui/button'
@@ -32,6 +35,7 @@ import {
   buildLetterTiles,
   buildWordStructure,
   countLetterSlots,
+  getNextExpectedLetter,
 } from '@/lib/buildTheWord'
 import { speakText } from '@/lib/sounds'
 import { cn } from '@/lib/utils'
@@ -50,9 +54,27 @@ const CATEGORY_ICONS = {
   Numbers: Hash,
 }
 
+const MODES = [
+  {
+    id: 'easy',
+    title: 'Easy',
+    name: 'Build with Help',
+    description: 'Check each letter as you go.',
+    icon: HandHelping,
+  },
+  {
+    id: 'normal',
+    title: 'Normal',
+    name: 'Build the Word',
+    description: 'Build the whole word, then check.',
+    icon: Puzzle,
+  },
+]
+
 export default function BuildTheWord({ onBack }) {
   const [phase, setPhase] = useState('categories')
   const [categoryId, setCategoryId] = useState(null)
+  const [mode, setMode] = useState(null)
   const [round, setRound] = useState([])
   const [index, setIndex] = useState(0)
   const [attempt, setAttempt] = useState(0)
@@ -61,6 +83,7 @@ export default function BuildTheWord({ onBack }) {
   const [locked, setLocked] = useState(false)
   const [feedback, setFeedback] = useState(null)
   const resetTimerRef = useRef(null)
+  const helpErrorTimerRef = useRef(null)
 
   const category = categoryId ? getStartersCategory(categoryId) : null
   const currentWord = round[index] ?? null
@@ -78,10 +101,16 @@ export default function BuildTheWord({ onBack }) {
   const tileById = useMemo(() => new Map(tiles.map((tile) => [tile.id, tile])), [tiles])
   const placedCharacters = placedIds.map((id) => tileById.get(id)?.character ?? '')
   const bankTiles = tiles.filter((tile) => !placedIds.includes(tile.id))
+  const easyHasWrong =
+    mode === 'easy' &&
+    placedIds.length > 0 &&
+    placedCharacters[placedIds.length - 1] !==
+      getNextExpectedLetter(structure, placedIds.length - 1)
 
   useEffect(() => {
     return () => {
       if (resetTimerRef.current) window.clearTimeout(resetTimerRef.current)
+      if (helpErrorTimerRef.current) window.clearTimeout(helpErrorTimerRef.current)
       if (window.speechSynthesis) window.speechSynthesis.cancel()
     }
   }, [])
@@ -93,8 +122,16 @@ export default function BuildTheWord({ onBack }) {
     }
   }
 
+  function clearHelpErrorTimer() {
+    if (helpErrorTimerRef.current) {
+      window.clearTimeout(helpErrorTimerRef.current)
+      helpErrorTimerRef.current = null
+    }
+  }
+
   function resetCardState() {
     clearResetTimer()
+    clearHelpErrorTimer()
     setPlacedIds([])
     setAttempt(0)
     setSolved(false)
@@ -102,12 +139,26 @@ export default function BuildTheWord({ onBack }) {
     setFeedback(null)
   }
 
-  function startRound(nextCategoryId) {
+  function handleSelectCategory(nextCategoryId) {
     const nextCategory = getStartersCategory(nextCategoryId)
     if (!nextCategory) return
 
     if (window.speechSynthesis) window.speechSynthesis.cancel()
     setCategoryId(nextCategoryId)
+    setMode(null)
+    setRound([])
+    setIndex(0)
+    resetCardState()
+    setPhase('modes')
+  }
+
+  function startPractice(nextMode, nextCategoryId = categoryId) {
+    const nextCategory = getStartersCategory(nextCategoryId)
+    if (!nextCategory || !nextMode) return
+
+    if (window.speechSynthesis) window.speechSynthesis.cancel()
+    setCategoryId(nextCategoryId)
+    setMode(nextMode)
     setRound(prepareStartersRound(nextCategory))
     setIndex(0)
     resetCardState()
@@ -115,14 +166,25 @@ export default function BuildTheWord({ onBack }) {
   }
 
   function handlePlayAgain() {
-    if (!categoryId) return
-    startRound(categoryId)
+    if (!categoryId || !mode) return
+    startPractice(mode, categoryId)
   }
 
   function handleChooseCategory() {
     if (window.speechSynthesis) window.speechSynthesis.cancel()
     setPhase('categories')
     setCategoryId(null)
+    setMode(null)
+    setRound([])
+    setIndex(0)
+    resetCardState()
+  }
+
+  function handleBackFromModes() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel()
+    setPhase('categories')
+    setCategoryId(null)
+    setMode(null)
     setRound([])
     setIndex(0)
     resetCardState()
@@ -154,14 +216,18 @@ export default function BuildTheWord({ onBack }) {
     speakText(currentWord)
   }
 
-  function evaluatePlacement(nextPlacedIds) {
+  function markSolved() {
+    setSolved(true)
+    setLocked(false)
+    setFeedback({ tone: 'success', text: `Yes! ${currentWord}.` })
+  }
+
+  function evaluateFullBuild(nextPlacedIds) {
     const characters = nextPlacedIds.map((id) => tileById.get(id)?.character ?? '')
     const built = assembleWord(structure, characters)
 
     if (built === currentWord) {
-      setSolved(true)
-      setLocked(false)
-      setFeedback({ tone: 'success', text: `Yes! ${currentWord}.` })
+      markSolved()
       return
     }
 
@@ -176,24 +242,64 @@ export default function BuildTheWord({ onBack }) {
     }, 1000)
   }
 
+  function showHelpError() {
+    clearHelpErrorTimer()
+    setFeedback({ tone: 'error', text: 'Not quite. Try the next letter.' })
+    helpErrorTimerRef.current = window.setTimeout(() => {
+      helpErrorTimerRef.current = null
+      setFeedback((current) => (current?.tone === 'error' ? null : current))
+    }, 1200)
+  }
+
   function handlePlaceTile(tileId) {
-    if (solved || locked) return
+    if (solved || locked || easyHasWrong) return
     if (placedIds.includes(tileId)) return
     if (placedIds.length >= letterSlotCount) return
+
+    const tile = tileById.get(tileId)
+    if (!tile) return
+
+    if (mode === 'easy') {
+      const expected = getNextExpectedLetter(structure, placedIds.length)
+      const nextPlacedIds = [...placedIds, tileId]
+      setPlacedIds(nextPlacedIds)
+
+      if (tile.character !== expected) {
+        showHelpError()
+        return
+      }
+
+      clearHelpErrorTimer()
+      setFeedback(null)
+
+      if (nextPlacedIds.length === letterSlotCount) {
+        markSolved()
+      }
+      return
+    }
 
     setFeedback((current) => (current?.tone === 'error' ? current : null))
     const nextPlacedIds = [...placedIds, tileId]
     setPlacedIds(nextPlacedIds)
 
     if (nextPlacedIds.length === letterSlotCount) {
-      evaluatePlacement(nextPlacedIds)
+      evaluateFullBuild(nextPlacedIds)
     }
   }
 
   function handleUndo() {
-    if (solved || locked || placedIds.length === 0) return
-    setFeedback((current) => (current?.tone === 'error' ? current : null))
+    if (solved || placedIds.length === 0) return
+    if (mode === 'normal' && locked) return
+
+    clearHelpErrorTimer()
+    setFeedback((current) => (current?.tone === 'error' ? null : current))
     setPlacedIds((previous) => previous.slice(0, -1))
+  }
+
+  function slotMark(slotIndex, character) {
+    if (mode !== 'easy' || !character) return null
+    const expected = getNextExpectedLetter(structure, slotIndex)
+    return character === expected ? 'correct' : 'incorrect'
   }
 
   if (phase === 'categories') {
@@ -227,7 +333,7 @@ export default function BuildTheWord({ onBack }) {
                     size="xl"
                     variant="outline"
                     className="cta-secondary justify-start gap-3 text-left [&_svg]:!h-7 [&_svg]:!w-7"
-                    onClick={() => startRound(item.id)}
+                    onClick={() => handleSelectCategory(item.id)}
                   >
                     {Icon && (
                       <Icon className="text-primary" strokeWidth={2.5} aria-hidden="true" />
@@ -241,6 +347,67 @@ export default function BuildTheWord({ onBack }) {
                   </Button>
                 )
               })}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
+  if (phase === 'modes') {
+    return (
+      <div className="h-full min-h-0 overflow-y-auto px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">
+        <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-4 py-4">
+          <div className="flex items-center gap-3">
+            <Button
+              size="icon"
+              variant="outline"
+              className="toolbar-button-icon"
+              onClick={onBack}
+              aria-label="Home"
+            >
+              <Home />
+            </Button>
+            <div className="min-w-0 flex-1 text-center">
+              <h1 className="text-title">How do you want to build?</h1>
+              <p className="text-supporting">Pick one, then start.</p>
+            </div>
+            <div className="h-12 w-12 shrink-0 md:h-14 md:w-14" aria-hidden="true" />
+          </div>
+
+          <Card>
+            <CardContent className="flex flex-col gap-3 p-4 md:p-6">
+              {MODES.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Button
+                    key={item.id}
+                    variant="outline"
+                    className="cta-secondary !h-auto min-h-14 items-start justify-start gap-4 !whitespace-normal px-4 py-3 text-left md:min-h-16 md:px-6 md:py-4 [&_svg]:!h-8 [&_svg]:!w-8 [&_svg]:mt-1"
+                    onClick={() => startPractice(item.id)}
+                    aria-label={`${item.title}. ${item.name}. ${item.description}`}
+                  >
+                    <Icon className="shrink-0 text-primary" aria-hidden="true" />
+                    <span className="flex min-w-0 flex-col gap-0.5">
+                      <span>{item.title}</span>
+                      <span className="text-sm font-medium text-muted-foreground md:text-base">
+                        {item.name}
+                      </span>
+                      <span className="text-sm font-medium text-muted-foreground md:text-base">
+                        {item.description}
+                      </span>
+                    </span>
+                  </Button>
+                )
+              })}
+              <Button
+                size="lg"
+                variant="ghost"
+                className="min-h-11 text-base font-semibold text-muted-foreground"
+                onClick={handleBackFromModes}
+              >
+                Back to categories
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -292,10 +459,16 @@ export default function BuildTheWord({ onBack }) {
     .map((part) => {
       if (part.type === 'fixed') return part.character === ' ' ? 'space' : part.character
       const character = placedCharacters[letterCursor]
+      const mark = slotMark(letterCursor, character)
       letterCursor += 1
-      return character || 'empty'
+      if (!character) return 'empty'
+      if (mark === 'correct') return `${character}, correct`
+      if (mark === 'incorrect') return `${character}, incorrect`
+      return character
     })
     .join(', ')
+
+  const bankDisabled = solved || locked || easyHasWrong
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-4 overflow-hidden px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">
@@ -351,6 +524,7 @@ export default function BuildTheWord({ onBack }) {
 
                 const character = placedCharacters[nextLetter]
                 const slotIndex = nextLetter
+                const mark = slotMark(slotIndex, character)
                 nextLetter += 1
 
                 return (
@@ -358,19 +532,38 @@ export default function BuildTheWord({ onBack }) {
                     key={`slot-${part.index}`}
                     type="button"
                     className={cn(
-                      'radius-normal border-normal flex h-14 min-w-12 items-center justify-center border-dashed bg-muted px-2 text-3xl font-bold md:h-16 md:min-w-14 md:text-4xl',
-                      character ? 'border-solid border-primary bg-card' : 'border-border'
+                      'radius-normal border-normal relative flex h-14 min-w-12 items-center justify-center border-dashed bg-muted px-2 text-3xl font-bold md:h-16 md:min-w-14 md:text-4xl',
+                      character ? 'border-solid border-primary bg-card' : 'border-border',
+                      mark === 'incorrect' && 'border-error-border bg-error-muted'
                     )}
                     onClick={() => {
                       if (slotIndex === placedIds.length - 1) handleUndo()
                     }}
                     aria-label={
                       character
-                        ? `Slot ${slotIndex + 1}, letter ${character.toUpperCase()}`
+                        ? mark === 'correct'
+                          ? `Letter ${character.toUpperCase()}, correct`
+                          : mark === 'incorrect'
+                            ? `Letter ${character.toUpperCase()}, incorrect`
+                            : `Slot ${slotIndex + 1}, letter ${character.toUpperCase()}`
                         : `Slot ${slotIndex + 1}, empty`
                     }
                   >
                     {character ? character.toUpperCase() : ''}
+                    {mark === 'correct' && (
+                      <Check
+                        className="absolute right-0.5 bottom-0.5 h-3.5 w-3.5 text-success md:h-4 md:w-4"
+                        strokeWidth={3}
+                        aria-hidden="true"
+                      />
+                    )}
+                    {mark === 'incorrect' && (
+                      <X
+                        className="absolute right-0.5 bottom-0.5 h-3.5 w-3.5 text-error md:h-4 md:w-4"
+                        strokeWidth={3}
+                        aria-hidden="true"
+                      />
+                    )}
                   </button>
                 )
               })
@@ -384,7 +577,7 @@ export default function BuildTheWord({ onBack }) {
                 size="lg"
                 variant="outline"
                 className="min-h-14 min-w-14 px-3 text-2xl font-bold md:min-h-16 md:min-w-16 md:text-3xl"
-                disabled={solved || locked}
+                disabled={bankDisabled}
                 aria-label={`Letter ${tile.label}`}
                 onClick={() => handlePlaceTile(tile.id)}
               >
@@ -409,7 +602,11 @@ export default function BuildTheWord({ onBack }) {
               variant="ghost"
               className="min-h-11 gap-2 text-base font-semibold text-muted-foreground"
               onClick={handleUndo}
-              disabled={solved || locked || placedIds.length === 0}
+              disabled={
+                solved ||
+                placedIds.length === 0 ||
+                (mode === 'normal' && locked)
+              }
               aria-label="Undo last letter"
             >
               <Undo2 className="h-5 w-5" aria-hidden="true" />

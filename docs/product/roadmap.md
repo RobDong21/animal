@@ -4,19 +4,7 @@ This document is the prioritized product backlog. Keep only one initiative in **
 
 ## Now
 
-### P-014 → P-015: Build the Word and Listen and Choose
-
-Deliver in order:
-
-1. **P-014: Build the Word**
-   - **Status:** Approved for engineering
-   - **Specification:** [`../specs/P-014-build-the-word.md`](../specs/P-014-build-the-word.md)
-2. **P-015: Listen and Choose**
-   - **Status:** Approved for engineering
-   - **Specification:** [`../specs/P-015-listen-and-choose.md`](../specs/P-015-listen-and-choose.md)
-
-- **Priority:** High
-- **Outcome:** Both former Coming soon Words games ship as live play modes and leave the Home placeholder state.
+_No active initiative — pick the next consistency or learning item._
 
 ## Next
 
@@ -102,6 +90,18 @@ Deliver in order if not already shipped:
 - Parent or educator dashboard
 
 ## Done
+
+### P-016: Build the Word difficulty modes
+
+- **Status:** Completed and product-approved
+- **Outcome:** After picking a category, children choose Easy (Build with Help) or Normal (full-word Build the Word).
+- **Specification:** [`../specs/P-016-build-the-word-difficulty.md`](../specs/P-016-build-the-word-difficulty.md)
+
+### P-014 → P-015: Build the Word and Listen and Choose
+
+- **Status:** Completed and product-approved
+- **Outcome:** Both former Coming soon Words games ship as live play modes.
+- **Specifications:** [`../specs/P-014-build-the-word.md`](../specs/P-014-build-the-word.md), [`../specs/P-015-listen-and-choose.md`](../specs/P-015-listen-and-choose.md)
 
 ### P-006: Cambridge Pre A1 Starters Words
 
