@@ -4,14 +4,42 @@ This document is the prioritized product backlog. Keep only one initiative in **
 
 ## Now
 
-### P-007: Starters reading support
+### P-009: Starters word size and Previous control
 
 - **Status:** Approved for engineering
 - **Priority:** High
-- **Outcome:** Each Starters word is tried, optionally broken apart, heard at least once, then continued.
-- **Specification:** [`../specs/P-007-starters-reading-support.md`](../specs/P-007-starters-reading-support.md)
+- **Outcome:** The practice word is large enough to read comfortably, and Previous stays available but much smaller than Next.
+- **Specification:** [`../specs/P-009-starters-word-size-previous.md`](../specs/P-009-starters-word-size-previous.md)
 
 ## Next
+
+### P-010: Parent word list browser
+
+- **Status:** Approved for engineering
+- **Priority:** High
+- **Outcome:** Parents can review and confirm the full Starters wordlist by category.
+- **Specification:** [`../specs/P-010-parent-word-list.md`](../specs/P-010-parent-word-list.md)
+
+### P-011: Parent animal list browser
+
+- **Status:** Approved for engineering
+- **Priority:** High
+- **Outcome:** Parents can review and confirm animal names, types, habitats, and mode availability.
+- **Specification:** [`../specs/P-011-parent-animal-list.md`](../specs/P-011-parent-animal-list.md)
+
+### P-007 → P-008: Starters reading support and Quick Review
+
+Deliver in order if not already shipped:
+
+1. **P-007: Starters reading support**
+   - **Status:** Approved for engineering
+   - **Specification:** [`../specs/P-007-starters-reading-support.md`](../specs/P-007-starters-reading-support.md)
+2. **P-008: Starters Quick Review**
+   - **Status:** Approved for engineering
+   - **Specification:** [`../specs/P-008-starters-quick-review.md`](../specs/P-008-starters-quick-review.md)
+
+- **Priority:** High
+- **Outcome:** Each word is tried, supported, heard, marked Got it / Practise again, and hard words are reviewed at the end.
 
 ### P-005: Animal image replacement preview
 

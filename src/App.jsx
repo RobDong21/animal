@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Home from '@/pages/Home'
 import Game from '@/pages/Game'
+import AnimalList from '@/pages/AnimalList'
+import StartersWordList from '@/pages/StartersWordList'
 import StartersWords from '@/pages/StartersWords'
 import packageJson from '../package.json'
 
@@ -15,6 +17,8 @@ export default function App() {
         setView('game')
       }}
       onOpenStarters={() => setView('starters')}
+      onOpenAnimalList={() => setView('animal-list')}
+      onOpenWordList={() => setView('word-list')}
     />
   )
 
@@ -31,6 +35,10 @@ export default function App() {
     )
   } else if (view === 'starters') {
     content = <StartersWords onBack={() => setView('home')} />
+  } else if (view === 'animal-list') {
+    content = <AnimalList onBack={() => setView('home')} />
+  } else if (view === 'word-list') {
+    content = <StartersWordList onBack={() => setView('home')} />
   }
 
   return (

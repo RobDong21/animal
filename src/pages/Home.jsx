@@ -1,10 +1,10 @@
-import { BookOpen, Sparkles, Sprout } from 'lucide-react'
+import { BookOpen, PawPrint, Sparkles, Sprout } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { DISCOVER_ROUND_SIZE, EXPLORER_ROUND_SIZE } from '@/data/animals'
 import { assetUrl } from '@/lib/assets'
 
-export default function Home({ onPlay, onOpenStarters }) {
+export default function Home({ onPlay, onOpenStarters, onOpenAnimalList, onOpenWordList }) {
   return (
     <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
       <Card className="w-full max-w-2xl text-center">
@@ -62,6 +62,28 @@ export default function Home({ onPlay, onOpenStarters }) {
               </span>
             </span>
           </Button>
+          <div className="flex flex-col items-center gap-2 pt-1 sm:flex-row sm:justify-center">
+            <Button
+              size="lg"
+              variant="ghost"
+              className="min-h-11 gap-2 px-4 text-base font-semibold text-muted-foreground"
+              onClick={onOpenAnimalList}
+              aria-label="Open animal list for parents"
+            >
+              <PawPrint className="h-5 w-5" aria-hidden="true" />
+              Animal list
+            </Button>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="min-h-11 gap-2 px-4 text-base font-semibold text-muted-foreground"
+              onClick={onOpenWordList}
+              aria-label="Open word list for parents"
+            >
+              <BookOpen className="h-5 w-5" aria-hidden="true" />
+              Word list
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -24,7 +24,9 @@ import {
   startersCategories,
 } from '@/data/startersWords'
 import { getStartersChunks } from '@/lib/startersChunks'
+import { selectStartersReviewWords } from '@/lib/startersReview'
 import { isSpeechSynthesisAvailable, speakText } from '@/lib/sounds'
+import { cn } from '@/lib/utils'
 
 const CATEGORY_ICONS = {
   Animals: PawPrint,
@@ -45,14 +47,22 @@ export default function StartersWords({ onBack }) {
   const [categoryId, setCategoryId] = useState(null)
   const [round, setRound] = useState([])
   const [index, setIndex] = useState(0)
+  const [marksByIndex, setMarksByIndex] = useState({})
+  const [reviewQueue, setReviewQueue] = useState([])
+  const [reviewIndex, setReviewIndex] = useState(0)
+  const [reviewMark, setReviewMark] = useState(null)
   const [heardWord, setHeardWord] = useState(false)
   const [splitOpen, setSplitOpen] = useState(false)
   const [speechAvailable, setSpeechAvailable] = useState(true)
 
   const category = categoryId ? getStartersCategory(categoryId) : null
-  const currentWord = round[index] ?? null
+  const isReview = phase === 'review'
+  const currentWord = isReview ? (reviewQueue[reviewIndex] ?? null) : (round[index] ?? null)
   const total = round.length
+  const reviewTotal = reviewQueue.length
   const chunks = currentWord ? getStartersChunks(currentWord) : []
+  const currentMark = isReview ? reviewMark : (marksByIndex[index] ?? null)
+  const canContinue = heardWord && currentMark != null
 
   useEffect(() => {
     setSpeechAvailable(isSpeechSynthesisAvailable())
@@ -69,6 +79,16 @@ export default function StartersWords({ onBack }) {
     setSplitOpen(false)
   }
 
+  function clearRoundState() {
+    setRound([])
+    setIndex(0)
+    setMarksByIndex({})
+    setReviewQueue([])
+    setReviewIndex(0)
+    setReviewMark(null)
+    resetCardSupport()
+  }
+
   function startRound(nextCategoryId) {
     const nextCategory = getStartersCategory(nextCategoryId)
     if (!nextCategory) return
@@ -77,6 +97,10 @@ export default function StartersWords({ onBack }) {
     setCategoryId(nextCategoryId)
     setRound(prepareStartersRound(nextCategory))
     setIndex(0)
+    setMarksByIndex({})
+    setReviewQueue([])
+    setReviewIndex(0)
+    setReviewMark(null)
     resetCardSupport()
     setPhase('practice')
   }
@@ -90,26 +114,73 @@ export default function StartersWords({ onBack }) {
     if (window.speechSynthesis) window.speechSynthesis.cancel()
     setPhase('categories')
     setCategoryId(null)
-    setRound([])
-    setIndex(0)
-    resetCardSupport()
+    clearRoundState()
+  }
+
+  function handleMark(mark) {
+    if (!heardWord) return
+
+    if (isReview) {
+      setReviewMark(mark)
+      return
+    }
+
+    setMarksByIndex((previous) => ({
+      ...previous,
+      [index]: mark,
+    }))
   }
 
   function handlePrevious() {
-    if (index === 0) return
     if (window.speechSynthesis) window.speechSynthesis.cancel()
+
+    if (isReview) {
+      if (reviewIndex === 0) return
+      resetCardSupport()
+      setReviewMark(null)
+      setReviewIndex((current) => current - 1)
+      return
+    }
+
+    if (index === 0) return
     resetCardSupport()
     setIndex((current) => current - 1)
   }
 
   function handleNext() {
-    if (!heardWord) return
+    if (!canContinue) return
     if (window.speechSynthesis) window.speechSynthesis.cancel()
-    if (index + 1 >= total) {
-      setPhase('done')
+
+    if (isReview) {
+      if (reviewIndex + 1 >= reviewTotal) {
+        setPhase('done')
+        resetCardSupport()
+        setReviewMark(null)
+        return
+      }
+
       resetCardSupport()
+      setReviewMark(null)
+      setReviewIndex((current) => current + 1)
       return
     }
+
+    if (index + 1 >= total) {
+      const reviews = selectStartersReviewWords(round, marksByIndex)
+      if (reviews.length > 0) {
+        setReviewQueue(reviews)
+        setReviewIndex(0)
+        setReviewMark(null)
+        resetCardSupport()
+        setPhase('review')
+      } else {
+        setReviewQueue([])
+        setPhase('done')
+        resetCardSupport()
+      }
+      return
+    }
+
     resetCardSupport()
     setIndex((current) => current + 1)
   }
@@ -197,6 +268,9 @@ export default function StartersWords({ onBack }) {
             <p className="text-supporting">
               You practised {total} words about {category.name}.
             </p>
+            {reviewTotal > 0 && (
+              <p className="text-supporting">You also did {reviewTotal} Quick Reviews.</p>
+            )}
           </CardHeader>
           <CardContent className="flex flex-col gap-3 p-4 pt-2 pb-8 md:p-6 md:pt-3">
             <Button size="xl" className="cta-primary" onClick={handlePracticeAgain}>
@@ -219,31 +293,54 @@ export default function StartersWords({ onBack }) {
     )
   }
 
+  const progressCurrent = isReview ? reviewIndex + 1 : index + 1
+  const progressTotal = isReview ? reviewTotal : total
+  const previousDisabled = isReview ? reviewIndex === 0 : index === 0
+  const continueLabel = isReview
+    ? reviewIndex + 1 >= reviewTotal
+      ? 'See Results'
+      : 'Next Review'
+    : 'Next'
+
   return (
     <div className="flex h-full min-h-0 flex-col gap-4 overflow-hidden px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">
-      <div className="flex shrink-0 items-center gap-3">
-        <Button
-          size="icon"
-          variant="outline"
-          className="toolbar-button-icon"
-          onClick={onBack}
-          aria-label="Home"
-        >
-          <Home />
-        </Button>
-        <div className="min-w-0 flex-1 space-y-2 text-center">
-          <div className="text-component-title">
-            Word {index + 1} of {total}
+      <div className="flex shrink-0 flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <Button
+            size="icon"
+            variant="outline"
+            className="toolbar-button-icon"
+            onClick={onBack}
+            aria-label="Home"
+          >
+            <Home />
+          </Button>
+          <div className="min-w-0 flex-1 space-y-2 text-center">
+            <div className="text-component-title">
+              {isReview ? 'Review' : 'Word'} {progressCurrent} of {progressTotal}
+            </div>
+            <div className="h-4 overflow-hidden rounded-full bg-muted md:h-5">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+                style={{ width: `${Math.round((progressCurrent / progressTotal) * 100)}%` }}
+              />
+            </div>
+            <p className="text-supporting">{category?.name}</p>
           </div>
-          <div className="h-4 overflow-hidden rounded-full bg-muted md:h-5">
-            <div
-              className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
-              style={{ width: `${Math.round(((index + 1) / total) * 100)}%` }}
-            />
-          </div>
-          <p className="text-supporting">{category?.name}</p>
+          <div className="h-12 w-12 shrink-0 md:h-14 md:w-14" aria-hidden="true" />
         </div>
-        <div className="h-12 w-12 shrink-0 md:h-14 md:w-14" aria-hidden="true" />
+
+        {isReview && (
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="text-center"
+          >
+            <h1 className="text-component-title">Quick Review</h1>
+            <p className="text-supporting">Let&apos;s try a few again.</p>
+          </div>
+        )}
       </div>
 
       <Card className="flex min-h-0 flex-1 flex-col">
@@ -279,7 +376,7 @@ export default function StartersWords({ onBack }) {
                 </div>
               </>
             ) : (
-              <p className="text-display max-w-full px-2 text-center break-words">{currentWord}</p>
+              <p className="text-reading max-w-full px-2 text-center break-words">{currentWord}</p>
             )}
           </div>
 
@@ -320,34 +417,67 @@ export default function StartersWords({ onBack }) {
                 </Button>
               </div>
             )}
+
+            {heardWord && (
+              <div className="flex w-full gap-3">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className={cn(
+                    'min-h-12 flex-1 text-base font-semibold md:min-h-14 md:text-lg',
+                    currentMark === 'got-it' && 'border-primary bg-accent'
+                  )}
+                  aria-pressed={currentMark === 'got-it'}
+                  aria-label="Got it"
+                  onClick={() => handleMark('got-it')}
+                >
+                  Got it
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className={cn(
+                    'min-h-12 flex-1 text-base font-semibold md:min-h-14 md:text-lg',
+                    currentMark === 'practise-again' && 'border-primary bg-accent'
+                  )}
+                  aria-pressed={currentMark === 'practise-again'}
+                  aria-label="Practise again"
+                  onClick={() => handleMark('practise-again')}
+                >
+                  Practise again
+                </Button>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
 
-      <div className="flex shrink-0 gap-3">
+      <div className="flex shrink-0 items-stretch gap-3">
         <Button
           size="lg"
           variant="outline"
-          className="cta-secondary flex-1 gap-2"
+          className="h-auto min-h-14 shrink-0 gap-1 px-3 text-sm font-semibold text-muted-foreground md:min-h-16 md:px-4 md:text-base"
           onClick={handlePrevious}
-          disabled={index === 0}
-          aria-label="Previous word"
+          disabled={previousDisabled}
+          aria-label={
+            previousDisabled ? 'Previous word unavailable on the first word' : 'Previous word'
+          }
         >
-          <ChevronLeft aria-hidden="true" />
+          <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" aria-hidden="true" />
           Previous
         </Button>
         <Button
           size="lg"
-          className="cta-primary flex-1 gap-2"
+          className="cta-primary min-w-0 flex-1 gap-2"
           onClick={handleNext}
-          disabled={!heardWord}
+          disabled={!canContinue}
           aria-label={
-            heardWord
-              ? 'Next word'
-              : 'Next word unavailable until the word is heard'
+            canContinue
+              ? continueLabel
+              : 'Continue unavailable until the word is heard and marked'
           }
         >
-          Next
+          {continueLabel}
           <ChevronRight aria-hidden="true" />
         </Button>
       </div>

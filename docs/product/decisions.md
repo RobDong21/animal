@@ -113,3 +113,44 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - Break it apart is always available but visually quieter than Hear word.
 - Chunk taps speak only the chunk; only full-word hearing unlocks Next.
 - Multi-word and hyphenated forms split automatically; curated chunks are preferred when provided.
+
+### D-015: Starters Quick Review
+
+- **Status:** Accepted
+- After hearing a Starters word, the child or adult marks Got it or Practise again.
+- Next unlocks only after hearing and marking.
+- Words marked Practise again can appear in an end-of-round Quick Review, up to 3 words.
+- Review reuses the same reading support and does not create another review loop.
+- No scores or mistake counts; language stays encouraging.
+
+### D-016: Starters reading focus
+
+- **Status:** Accepted
+- Starters practice words use a dedicated larger reading type role, bigger than `.text-display`.
+- Previous stays on the same bottom row as Next, but is much smaller so it is harder to press by mistake.
+- Next / Next Review / See Results keeps primary visual weight and most of the row width.
+
+### D-017: Parent word list browser
+
+- **Status:** Accepted
+- Parents can open a secondary Word list from Home to review every word by category.
+- The browser uses a two-column layout: categories with counts on the left, words on the right.
+- The first category is selected by default so browsing other categories takes one tap.
+- The list is read-only and separate from child practice rounds.
+- Practice remains category → short round; the full list is for adult confirmation.
+
+### D-018: Parent animal list browser
+
+- **Status:** Accepted
+- Parents can open a secondary Animal list from Home to review the animal catalogue.
+- The browser uses a two-column layout: All animals plus types with counts on the left, animals on the right.
+- A mode filter supports All / Discover / Explorer.
+- Each row shows name, type, habitats, and mode availability.
+- The list is read-only and separate from child play.
+
+### D-019: Parent lists live on Home
+
+- **Status:** Accepted
+- Animal list and Word list are grouped as secondary parent tools on Home.
+- Child play entries remain Discover, Explorer, and Starters Words.
+- Parent list entry points are not nested inside individual activity screens.

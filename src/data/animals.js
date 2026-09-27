@@ -427,3 +427,17 @@ export function isCorrectHabitat(animal, habitatId) {
 export function isCorrectType(animal, typeId) {
   return animal.type === typeId
 }
+
+export function isAnimalInDiscover(animal) {
+  return (
+    DISCOVER_TYPE_IDS.includes(animal.type) &&
+    !DISCOVER_EXCLUDED_ANIMAL_IDS.has(animal.id)
+  )
+}
+
+export function formatHabitatNames(habitatIds) {
+  return habitatIds
+    .map((id) => getHabitatById(id)?.name)
+    .filter(Boolean)
+    .join(', ')
+}
