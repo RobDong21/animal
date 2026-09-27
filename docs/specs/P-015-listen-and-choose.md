@@ -100,6 +100,7 @@ Continue labels:
 - Word choices are the main interactive focus after hearing.
 - Follow `.cursor/rules/ux-design-principles.mdc`.
 - Fit choices, Hear word, feedback, and continue controls in iPad landscape without cropping.
+- On each correct choice, play a short non-blocking fireworks burst (~1s). Celebration must not hide feedback or block Next. Respect `prefers-reduced-motion`.
 
 ## Accessibility
 

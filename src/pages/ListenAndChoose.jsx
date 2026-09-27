@@ -18,6 +18,7 @@ import {
   Users,
   Volume2,
 } from 'lucide-react'
+import { SuccessFireworks } from '@/components/SuccessFireworks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
@@ -291,8 +292,9 @@ export default function ListenAndChoose({ onBack }) {
         <div className="h-12 w-12 shrink-0 md:h-14 md:w-14" aria-hidden="true" />
       </div>
 
-      <Card className="flex min-h-0 flex-1 flex-col">
-        <CardContent className="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto p-4 md:gap-6 md:p-8">
+      <Card className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+        <SuccessFireworks active={solved} />
+        <CardContent className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto p-4 md:gap-6 md:p-8">
           <div
             role="status"
             aria-live="polite"
