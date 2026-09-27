@@ -1,8 +1,8 @@
-# Animal World Product Vision
+# Camimi Learn Product Vision
 
 ## Objective
 
-Help children aged 5–8 build animal vocabulary through independent, educational play.
+Help children aged 5–8 build vocabulary through independent, educational play with animals and words.
 
 ## Audience
 

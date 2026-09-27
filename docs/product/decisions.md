@@ -1,4 +1,4 @@
-# Animal World Product Decisions
+# Camimi Learn Product Decisions
 
 Record durable product decisions here. Newer accepted decisions supersede conflicting older ones.
 
@@ -102,7 +102,7 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - The first release is category-based one-word reading practice with speech, not a quiz.
 - Rounds use 8–12 words from one category.
 - Pictures are deferred; Animals, Colours, and Food are the preferred first picture categories later.
-- Keep the Animal World brand for now; do not present the activity as an official Cambridge product.
+- Keep the Camimi Learn brand for now; do not present the activity as an official Cambridge product.
 
 ### D-014: Starters reading support loop
 
@@ -151,6 +151,45 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 ### D-019: Parent lists live on Home
 
 - **Status:** Accepted
-- Animal list and Word list are grouped as secondary parent tools on Home.
+- Animal list and Word list are grouped as quiet parent links on Home, not a third play section.
 - Child play entries remain Discover, Explorer, and Starters Words.
 - Parent list entry points are not nested inside individual activity screens.
+
+### D-020: Home worlds structure
+
+- **Status:** Accepted
+- Home uses Concept A sections: Animals, Words, and For parents.
+- Animals contains Discover and Explorer.
+- Words contains Starters Words, Missing Letter, Build the Word, and Listen and Choose as live games.
+- Supporting Home copy may mention both animals and words under the Camimi Learn brand.
+
+### D-021: Missing Letter mode
+
+- **Status:** Accepted
+- Missing Letter is a separate Home Words game, not nested inside Starters Words practice.
+- It uses the Starters word list and blanks any one letter.
+- Answers are tappable letter choices with educational feedback.
+- Incorrect answers reveal the correct letter and require the child to tap it before continuing.
+
+### D-022: Product brand name
+
+- **Status:** Accepted
+- The product brand shown on Home and in app chrome is **Camimi Learn**.
+- Supporting Home copy remains: Play with animals and words!
+- Animals and Words remain section labels within Camimi Learn.
+
+### D-023: Build the Word
+
+- **Status:** Accepted
+- Build the Word is a live Home Words game using Starters categories.
+- Children assemble the exact spelling from scrambled letter tiles.
+- Spaces and hyphens stay as fixed structure.
+- Incorrect builds are taught and require a successful rebuild before continuing.
+
+### D-024: Listen and Choose
+
+- **Status:** Accepted
+- Listen and Choose is a live Home Words game using Starters categories.
+- The target word is heard, not shown as the prompt.
+- Children choose from written options in the same category.
+- Incorrect choices are taught and require tapping the correct word before continuing.

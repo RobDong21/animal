@@ -16,9 +16,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'favicon.png', 'apple-touch-icon.png', 'icon.svg'],
       manifest: {
-        name: 'Animal World',
-        short_name: 'Animals',
-        description: 'Learn where animals live!',
+        name: 'Camimi Learn',
+        short_name: 'Camimi',
+        description: 'Play with animals and words!',
         theme_color: '#2fa84f',
         background_color: '#f7fbf8',
         display: 'standalone',

@@ -1,89 +1,122 @@
-import { BookOpen, PawPrint, Sparkles, Sprout } from 'lucide-react'
+import { BookOpen, Ear, Puzzle, Sparkles, Sprout, WholeWord } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { DISCOVER_ROUND_SIZE, EXPLORER_ROUND_SIZE } from '@/data/animals'
-import { assetUrl } from '@/lib/assets'
 
-export default function Home({ onPlay, onOpenStarters, onOpenAnimalList, onOpenWordList }) {
+function SectionHeading({ id, children }) {
+  return (
+    <h2 id={id} className="text-component-title text-left text-muted-foreground">
+      {children}
+    </h2>
+  )
+}
+
+function PlayButton({ icon: Icon, title, description, onClick, ariaLabel }) {
+  return (
+    <Button
+      size="xl"
+      variant="outline"
+      className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
+      onClick={onClick}
+      aria-label={ariaLabel ?? title}
+    >
+      <Icon className="text-primary" aria-hidden="true" />
+      <span className="flex flex-col">
+        <span>{title}</span>
+        <span className="text-sm font-medium text-muted-foreground md:text-base">{description}</span>
+      </span>
+    </Button>
+  )
+}
+
+export default function Home({
+  onPlay,
+  onOpenStarters,
+  onOpenMissingLetter,
+  onOpenBuildTheWord,
+  onOpenListenAndChoose,
+  onOpenAnimalList,
+  onOpenWordList,
+}) {
   return (
     <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
       <Card className="w-full max-w-2xl text-center">
-        <CardHeader className="space-y-4 pb-4">
-          <img
-            src={assetUrl('/camimi.webp')}
-            alt="Camimi with farm animals"
-            className="radius-large mx-auto h-48 w-full object-cover object-[center_35%] md:h-56 lg:h-72"
-          />
-          <h1 className="text-display">Animal World</h1>
-          <p className="text-supporting">
-            Learn what animals are and where they live!
-          </p>
+        <CardHeader className="space-y-2 pb-4">
+          <h1 className="text-display">Camimi Learn</h1>
+          <p className="text-supporting">Play with animals and words!</p>
         </CardHeader>
-        <CardContent className="space-y-4 pb-8">
-          <Button
-            size="xl"
-            variant="outline"
-            className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
-            onClick={() => onPlay({ mode: 'discover', roundSize: DISCOVER_ROUND_SIZE })}
+        <CardContent className="space-y-6 pb-8 text-left">
+          <section aria-labelledby="home-animals-heading" className="space-y-3">
+            <SectionHeading id="home-animals-heading">Animals</SectionHeading>
+            <div className="space-y-3">
+              <PlayButton
+                icon={Sprout}
+                title="Discover"
+                description="Familiar animals with fewer choices."
+                onClick={() => onPlay({ mode: 'discover', roundSize: DISCOVER_ROUND_SIZE })}
+              />
+              <PlayButton
+                icon={Sparkles}
+                title="Explorer"
+                description="More animals, types, and habitats."
+                onClick={() => onPlay({ mode: 'explorer', roundSize: EXPLORER_ROUND_SIZE })}
+              />
+            </div>
+          </section>
+
+          <section aria-labelledby="home-words-heading" className="space-y-3">
+            <SectionHeading id="home-words-heading">Words</SectionHeading>
+            <div className="space-y-3">
+              <PlayButton
+                icon={BookOpen}
+                title="Starters Words"
+                description="Practice Cambridge Pre A1 words."
+                onClick={onOpenStarters}
+              />
+              <PlayButton
+                icon={WholeWord}
+                title="Missing Letter"
+                description="Find the missing letter in a word."
+                onClick={onOpenMissingLetter}
+              />
+              <PlayButton
+                icon={Puzzle}
+                title="Build the Word"
+                description="Build the word from letters."
+                onClick={onOpenBuildTheWord}
+              />
+              <PlayButton
+                icon={Ear}
+                title="Listen and Choose"
+                description="Hear a word and choose it."
+                onClick={onOpenListenAndChoose}
+              />
+            </div>
+          </section>
+
+          <nav
+            aria-label="For parents"
+            className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-1"
           >
-            <Sprout className="text-primary" aria-hidden="true" />
-            <span className="flex flex-col">
-              <span>Discover</span>
-              <span className="text-sm font-medium text-muted-foreground md:text-base">
-                Familiar animals with fewer choices.
-              </span>
-            </span>
-          </Button>
-          <Button
-            size="xl"
-            variant="outline"
-            className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
-            onClick={() => onPlay({ mode: 'explorer', roundSize: EXPLORER_ROUND_SIZE })}
-          >
-            <Sparkles className="text-primary" aria-hidden="true" />
-            <span className="flex flex-col">
-              <span>Explorer</span>
-              <span className="text-sm font-medium text-muted-foreground md:text-base">
-                More animals, types, and habitats.
-              </span>
-            </span>
-          </Button>
-          <Button
-            size="xl"
-            variant="outline"
-            className="cta-secondary justify-start gap-4 text-left [&_svg]:!h-8 [&_svg]:!w-8"
-            onClick={onOpenStarters}
-          >
-            <BookOpen className="text-primary" aria-hidden="true" />
-            <span className="flex flex-col">
-              <span>Starters Words</span>
-              <span className="text-sm font-medium text-muted-foreground md:text-base">
-                Practice Cambridge Pre A1 words.
-              </span>
-            </span>
-          </Button>
-          <div className="flex flex-col items-center gap-2 pt-1 sm:flex-row sm:justify-center">
+            <p className="text-sm font-medium text-muted-foreground/80">Parents</p>
             <Button
-              size="lg"
-              variant="ghost"
-              className="min-h-11 gap-2 px-4 text-base font-semibold text-muted-foreground"
+              variant="link"
+              className="h-auto min-h-11 px-1 text-sm font-medium text-muted-foreground"
               onClick={onOpenAnimalList}
-              aria-label="Open animal list for parents"
             >
-              <PawPrint className="h-5 w-5" aria-hidden="true" />
               Animal list
             </Button>
+            <span className="text-muted-foreground/50" aria-hidden="true">
+              ·
+            </span>
             <Button
-              size="lg"
-              variant="ghost"
-              className="min-h-11 gap-2 px-4 text-base font-semibold text-muted-foreground"
+              variant="link"
+              className="h-auto min-h-11 px-1 text-sm font-medium text-muted-foreground"
               onClick={onOpenWordList}
-              aria-label="Open word list for parents"
             >
-              <BookOpen className="h-5 w-5" aria-hidden="true" />
               Word list
             </Button>
-          </div>
+          </nav>
         </CardContent>
       </Card>
     </div>

@@ -2,6 +2,9 @@ import { useState } from 'react'
 import Home from '@/pages/Home'
 import Game from '@/pages/Game'
 import AnimalList from '@/pages/AnimalList'
+import BuildTheWord from '@/pages/BuildTheWord'
+import ListenAndChoose from '@/pages/ListenAndChoose'
+import MissingLetter from '@/pages/MissingLetter'
 import StartersWordList from '@/pages/StartersWordList'
 import StartersWords from '@/pages/StartersWords'
 import packageJson from '../package.json'
@@ -17,6 +20,9 @@ export default function App() {
         setView('game')
       }}
       onOpenStarters={() => setView('starters')}
+      onOpenMissingLetter={() => setView('missing-letter')}
+      onOpenBuildTheWord={() => setView('build-the-word')}
+      onOpenListenAndChoose={() => setView('listen-and-choose')}
       onOpenAnimalList={() => setView('animal-list')}
       onOpenWordList={() => setView('word-list')}
     />
@@ -35,6 +41,12 @@ export default function App() {
     )
   } else if (view === 'starters') {
     content = <StartersWords onBack={() => setView('home')} />
+  } else if (view === 'missing-letter') {
+    content = <MissingLetter onBack={() => setView('home')} />
+  } else if (view === 'build-the-word') {
+    content = <BuildTheWord onBack={() => setView('home')} />
+  } else if (view === 'listen-and-choose') {
+    content = <ListenAndChoose onBack={() => setView('home')} />
   } else if (view === 'animal-list') {
     content = <AnimalList onBack={() => setView('home')} />
   } else if (view === 'word-list') {

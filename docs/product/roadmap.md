@@ -1,8 +1,38 @@
-# Animal World Product Roadmap
+# Camimi Learn Product Roadmap
 
 This document is the prioritized product backlog. Keep only one initiative in **Now** whenever possible.
 
 ## Now
+
+### P-014 → P-015: Build the Word and Listen and Choose
+
+Deliver in order:
+
+1. **P-014: Build the Word**
+   - **Status:** Approved for engineering
+   - **Specification:** [`../specs/P-014-build-the-word.md`](../specs/P-014-build-the-word.md)
+2. **P-015: Listen and Choose**
+   - **Status:** Approved for engineering
+   - **Specification:** [`../specs/P-015-listen-and-choose.md`](../specs/P-015-listen-and-choose.md)
+
+- **Priority:** High
+- **Outcome:** Both former Coming soon Words games ship as live play modes and leave the Home placeholder state.
+
+## Next
+
+### P-012 → P-013: Home worlds and Missing Letter
+
+Deliver in order if not already shipped:
+
+1. **P-012: Home worlds restructure and Coming soon placeholders**
+   - **Status:** Approved for engineering
+   - **Specification:** [`../specs/P-012-home-worlds-restructure.md`](../specs/P-012-home-worlds-restructure.md)
+2. **P-013: Missing Letter spelling mode**
+   - **Status:** Approved for engineering
+   - **Specification:** [`../specs/P-013-missing-letter.md`](../specs/P-013-missing-letter.md)
+
+- **Priority:** High
+- **Outcome:** Home is organized into Animals, Words, and For parents; Missing Letter ships as a live Words game.
 
 ### P-009: Starters word size and Previous control
 
@@ -10,8 +40,6 @@ This document is the prioritized product backlog. Keep only one initiative in **
 - **Priority:** High
 - **Outcome:** The practice word is large enough to read comfortably, and Previous stays available but much smaller than Next.
 - **Specification:** [`../specs/P-009-starters-word-size-previous.md`](../specs/P-009-starters-word-size-previous.md)
-
-## Next
 
 ### P-010: Parent word list browser
 
@@ -57,8 +85,9 @@ Deliver in order if not already shipped:
 
 ## Later
 
+- First Letter spelling game
 - Starters Words pictures by category
-- Optional spoken vocabulary and instructions for Animal World
+- Optional spoken vocabulary and instructions for Camimi Learn
 - Description-based questions
 - “Who lives here?” habitat mode
 - Wildlife Expert difficulty level
