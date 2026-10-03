@@ -31,6 +31,7 @@ import {
 import { buildListenChoices } from '@/lib/listenAndChoose'
 import { isSpeechSynthesisAvailable, speakText } from '@/lib/sounds'
 import { cn } from '@/lib/utils'
+import { useGameKeydown } from '@/hooks/useGameKeydown'
 
 const CATEGORY_ICONS = {
   Animals: PawPrint,
@@ -174,6 +175,22 @@ export default function ListenAndChoose({ onBack }) {
     setWrongWords((previous) => [...previous, word])
     setFeedback({ tone: 'error', text: `Not quite. It is ${currentWord}.` })
   }
+
+  useGameKeydown(phase === 'practice', (event) => {
+    if (event.key === 'Enter') {
+      if (solved) {
+        event.preventDefault()
+        handleNext()
+      }
+      return
+    }
+
+    const indexKey = Number.parseInt(event.key, 10)
+    if (indexKey >= 1 && indexKey <= choices.length) {
+      event.preventDefault()
+      handleChoice(choices[indexKey - 1])
+    }
+  })
 
   if (phase === 'categories') {
     return (

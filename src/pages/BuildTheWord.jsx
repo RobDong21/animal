@@ -43,6 +43,7 @@ import {
 } from '@/lib/buildTheWord'
 import { speakText } from '@/lib/sounds'
 import { cn } from '@/lib/utils'
+import { useGameKeydown } from '@/hooks/useGameKeydown'
 
 const CATEGORY_ICONS = {
   Animals: PawPrint,
@@ -303,6 +304,31 @@ export default function BuildTheWord({ onBack }) {
     const expected = getNextExpectedLetter(structure, slotIndex)
     return character === expected ? 'correct' : 'incorrect'
   }
+
+  useGameKeydown(phase === 'practice', (event) => {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      event.preventDefault()
+      handleUndo()
+      return
+    }
+
+    if (event.key === 'Enter') {
+      if (solved) {
+        event.preventDefault()
+        handleNext()
+      }
+      return
+    }
+
+    if (event.key.length !== 1 || !/[a-zA-Z]/.test(event.key)) return
+
+    const wanted = event.key.toLowerCase()
+    const tile = bankTiles.find((item) => item.character.toLowerCase() === wanted)
+    if (!tile) return
+
+    event.preventDefault()
+    handlePlaceTile(tile.id)
+  })
 
   if (phase === 'categories') {
     return (

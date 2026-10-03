@@ -30,6 +30,7 @@ import {
 import { buildMissingLetterPuzzle, formatMissingLetterDisplay } from '@/lib/missingLetter'
 import { speakText } from '@/lib/sounds'
 import { cn } from '@/lib/utils'
+import { useGameKeydown } from '@/hooks/useGameKeydown'
 
 const CATEGORY_ICONS = {
   Animals: PawPrint,
@@ -147,6 +148,26 @@ export default function MissingLetter({ onBack }) {
       text: `Not quite. The missing letter is ${puzzle.displayLetter}. ${puzzle.word}.`,
     })
   }
+
+  useGameKeydown(phase === 'practice', (event) => {
+    if (event.key === 'Enter') {
+      if (solved) {
+        event.preventDefault()
+        handleNext()
+      }
+      return
+    }
+
+    if (event.key.length !== 1 || !/[a-zA-Z]/.test(event.key)) return
+    if (!puzzle) return
+
+    const wanted = event.key.toLowerCase()
+    const match = puzzle.choices.find((letter) => letter.toLowerCase() === wanted)
+    if (!match) return
+
+    event.preventDefault()
+    handleLetterChoice(match)
+  })
 
   if (phase === 'categories') {
     return (
