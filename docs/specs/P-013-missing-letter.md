@@ -32,9 +32,9 @@ Add a separate Home Words game where the child finds one missing letter in a Sta
 
 1. From Home Words, open **Missing Letter**.
 2. Show the same Starters category chooser pattern used by Starters Words.
-3. After a category is selected, start a round of **8–12 words** from that category.
-4. If the category has fewer than 8 words, use all available words.
-5. If the category has more than 12 words, randomly select 8–12 for that round.
+3. After a category is selected, start a round of **10 words** from that category.
+4. If the category has fewer than 10 words, use all available words.
+5. If the category has more than 10 words, randomly select 10 for that round.
 6. Multi-word phrases and hyphenated forms from the Starters list are allowed.
 
 ## Puzzle rules
@@ -122,7 +122,7 @@ Add a separate Home Words game where the child finds one missing letter in a Sta
 
 - [ ] Missing Letter is launchable from the Home Words section.
 - [ ] The child chooses a Starters category before the round.
-- [ ] Rounds use 8–12 words, or all words when fewer than 8 exist.
+- [ ] Rounds use 10 words, or all words when fewer than 10 exist.
 - [ ] Each puzzle blanks exactly one letter from the source word.
 - [ ] Any letter position may be blanked, including the first letter.
 - [ ] The blank remains stable while the card is visible.

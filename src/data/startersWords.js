@@ -1,6 +1,5 @@
 /** Cambridge Pre A1 Starters wordlist imported from the approved CSV. */
-export const STARTERS_MIN_ROUND = 8
-export const STARTERS_MAX_ROUND = 12
+export const STARTERS_ROUND_SIZE = 10
 
 export const startersCategories = [
   {
@@ -327,10 +326,6 @@ function shuffleList(list) {
 
 export function prepareStartersRound(category) {
   const pool = shuffleList(category.words)
-  if (pool.length <= STARTERS_MAX_ROUND) return pool
-
-  const roundSize =
-    STARTERS_MIN_ROUND +
-    Math.floor(Math.random() * (STARTERS_MAX_ROUND - STARTERS_MIN_ROUND + 1))
-  return pool.slice(0, roundSize)
+  if (pool.length <= STARTERS_ROUND_SIZE) return pool
+  return pool.slice(0, STARTERS_ROUND_SIZE)
 }

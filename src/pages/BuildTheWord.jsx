@@ -19,6 +19,8 @@ import {
   Users,
   X,
 } from 'lucide-react'
+import { EasyTryDrawing, EASY_TRY_LIMIT } from '@/components/EasyTryDrawing'
+import { HappyWinDrawing } from '@/components/HappyWinDrawing'
 import { SuccessFireworks } from '@/components/SuccessFireworks'
 import {
   WordsFeedbackBanner,
@@ -61,7 +63,7 @@ const MODES = [
     id: 'easy',
     title: 'Easy',
     name: 'Build with Help',
-    description: 'Check each letter as you go.',
+    description: 'Check each letter. Four misses ends the round.',
     icon: HandHelping,
   },
   {
@@ -84,8 +86,8 @@ export default function BuildTheWord({ onBack }) {
   const [solved, setSolved] = useState(false)
   const [locked, setLocked] = useState(false)
   const [feedback, setFeedback] = useState(null)
+  const [easyMisses, setEasyMisses] = useState(0)
   const resetTimerRef = useRef(null)
-  const helpErrorTimerRef = useRef(null)
 
   const category = categoryId ? getStartersCategory(categoryId) : null
   const currentWord = round[index] ?? null
@@ -112,7 +114,6 @@ export default function BuildTheWord({ onBack }) {
   useEffect(() => {
     return () => {
       if (resetTimerRef.current) window.clearTimeout(resetTimerRef.current)
-      if (helpErrorTimerRef.current) window.clearTimeout(helpErrorTimerRef.current)
       if (window.speechSynthesis) window.speechSynthesis.cancel()
     }
   }, [])
@@ -124,21 +125,14 @@ export default function BuildTheWord({ onBack }) {
     }
   }
 
-  function clearHelpErrorTimer() {
-    if (helpErrorTimerRef.current) {
-      window.clearTimeout(helpErrorTimerRef.current)
-      helpErrorTimerRef.current = null
-    }
-  }
-
   function resetCardState() {
     clearResetTimer()
-    clearHelpErrorTimer()
     setPlacedIds([])
     setAttempt(0)
     setSolved(false)
     setLocked(false)
     setFeedback(null)
+    setEasyMisses(0)
   }
 
   function handleSelectCategory(nextCategoryId) {
@@ -238,19 +232,22 @@ export default function BuildTheWord({ onBack }) {
     clearResetTimer()
     resetTimerRef.current = window.setTimeout(() => {
       resetTimerRef.current = null
-      setPlacedIds([])
-      setAttempt((value) => value + 1)
-      setLocked(false)
-    }, 1000)
+      setPhase('lost')
+    }, 900)
   }
 
   function showHelpError() {
-    clearHelpErrorTimer()
     setFeedback({ tone: 'error', text: 'Not quite. Try the next letter.' })
-    helpErrorTimerRef.current = window.setTimeout(() => {
-      helpErrorTimerRef.current = null
-      setFeedback((current) => (current?.tone === 'error' ? null : current))
-    }, 1200)
+  }
+
+  function loseEasyWord() {
+    setLocked(true)
+    setFeedback({ tone: 'error', text: 'The picture is complete.' })
+    clearResetTimer()
+    resetTimerRef.current = window.setTimeout(() => {
+      resetTimerRef.current = null
+      setPhase('lost')
+    }, 900)
   }
 
   function handlePlaceTile(tileId) {
@@ -267,11 +264,16 @@ export default function BuildTheWord({ onBack }) {
       setPlacedIds(nextPlacedIds)
 
       if (tile.character !== expected) {
+        const nextMisses = easyMisses + 1
+        setEasyMisses(nextMisses)
+        if (nextMisses >= EASY_TRY_LIMIT) {
+          loseEasyWord()
+          return
+        }
         showHelpError()
         return
       }
 
-      clearHelpErrorTimer()
       setFeedback(null)
 
       if (nextPlacedIds.length === letterSlotCount) {
@@ -290,10 +292,8 @@ export default function BuildTheWord({ onBack }) {
   }
 
   function handleUndo() {
-    if (solved || placedIds.length === 0) return
-    if (mode === 'normal' && locked) return
+    if (solved || locked || placedIds.length === 0) return
 
-    clearHelpErrorTimer()
     setFeedback((current) => (current?.tone === 'error' ? null : current))
     setPlacedIds((previous) => previous.slice(0, -1))
   }
@@ -391,7 +391,7 @@ export default function BuildTheWord({ onBack }) {
                   >
                     <Icon className="shrink-0 text-primary" aria-hidden="true" />
                     <span className="flex min-w-0 flex-col gap-0.5">
-                      <span>{item.title}</span>
+                      <span className="text-sm font-bold md:text-base">{item.title}</span>
                       <span className="text-sm font-medium text-muted-foreground md:text-base">
                         {item.name}
                       </span>
@@ -417,7 +417,7 @@ export default function BuildTheWord({ onBack }) {
     )
   }
 
-  if (phase === 'done' && category) {
+  if (phase === 'lost' && category) {
     return (
       <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
         <Card className="w-full max-w-xl text-center">
@@ -425,9 +425,51 @@ export default function BuildTheWord({ onBack }) {
             role="status"
             aria-live="polite"
             aria-atomic="true"
-            className="space-y-2 p-4 pb-2 md:p-6 md:pb-3"
+            className="space-y-4 p-4 pb-2 md:p-6 md:pb-3"
           >
-            <h1 className="text-title">Great building!</h1>
+            {mode === 'easy' ? (
+              <EasyTryDrawing
+                misses={EASY_TRY_LIMIT}
+                className="mx-auto [&_svg]:h-24 [&_svg]:w-20 md:[&_svg]:h-28 md:[&_svg]:w-24"
+              />
+            ) : null}
+            <h1 className="text-display">You lost</h1>
+            <p className="text-supporting">This round is over. Try again!</p>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3 p-4 pt-2 pb-8 md:p-6 md:pt-3">
+            <Button size="xl" className="cta-primary" onClick={handlePlayAgain}>
+              Restart
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="cta-secondary"
+              onClick={handleChooseCategory}
+            >
+              Choose Category
+            </Button>
+            <Button size="lg" variant="outline" className="cta-secondary" onClick={onBack}>
+              Home
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (phase === 'done' && category) {
+    return (
+      <div className="relative flex h-full min-h-0 flex-col items-center justify-center overflow-hidden px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
+        <SuccessFireworks active intense loop />
+        <Card className="relative z-20 w-full max-w-xl text-center">
+          <CardHeader
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="space-y-4 p-4 pb-2 md:p-6 md:pb-3"
+          >
+            <HappyWinDrawing className="mx-auto h-28 w-28 md:h-32 md:w-32" />
+            <h1 className="text-display">You win!</h1>
             <p className="text-supporting">
               You built {total} words about {category.name}.
             </p>
@@ -471,6 +513,11 @@ export default function BuildTheWord({ onBack }) {
     .join(', ')
 
   const bankDisabled = solved || locked || easyHasWrong
+  const undoDisabled =
+    solved ||
+    placedIds.length === 0 ||
+    locked ||
+    (mode === 'normal' && locked)
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-4 overflow-hidden px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">
@@ -484,6 +531,7 @@ export default function BuildTheWord({ onBack }) {
       <Card className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
         <SuccessFireworks active={solved} />
         <CardContent className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto p-4 md:gap-6 md:p-8">
+          {mode === 'easy' && <EasyTryDrawing misses={easyMisses} />}
           <div
             role="status"
             aria-live="polite"
@@ -521,6 +569,7 @@ export default function BuildTheWord({ onBack }) {
                       mark === 'incorrect' && 'border-error-border bg-error-muted'
                     )}
                     onClick={() => {
+                      if (locked) return
                       if (slotIndex === placedIds.length - 1) handleUndo()
                     }}
                     aria-label={
@@ -581,11 +630,7 @@ export default function BuildTheWord({ onBack }) {
               variant="ghost"
               className="min-h-11 gap-2 text-base font-semibold text-muted-foreground"
               onClick={handleUndo}
-              disabled={
-                solved ||
-                placedIds.length === 0 ||
-                (mode === 'normal' && locked)
-              }
+              disabled={undoDisabled}
               aria-label="Undo last letter"
             >
               <Undo2 className="h-5 w-5" aria-hidden="true" />

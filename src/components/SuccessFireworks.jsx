@@ -7,8 +7,18 @@ const BURSTS = [
   { count: 12, top: '40%', left: '68%', delay: 280, distance: '6.5rem' },
 ]
 
+const INTENSE_BURSTS = [
+  ...BURSTS,
+  { count: 16, top: '22%', left: '22%', delay: 90, distance: '9rem' },
+  { count: 16, top: '24%', left: '78%', delay: 140, distance: '9rem' },
+  { count: 14, top: '58%', left: '50%', delay: 320, distance: '8rem' },
+  { count: 12, top: '18%', left: '50%', delay: 400, distance: '7rem' },
+]
+
 const SPARKLE_COUNT = 10
+const INTENSE_SPARKLE_COUNT = 18
 const BURST_MS = 1800
+const INTENSE_BURST_MS = 2400
 
 const COLORS = [
   'var(--color-primary)',
@@ -25,9 +35,10 @@ const COLORS = [
  * Brief multi-burst fireworks for correct answers.
  * Decorative only — does not block interaction.
  */
-export function SuccessFireworks({ active, className }) {
+export function SuccessFireworks({ active, className, intense = false, loop = false }) {
   const [burstKey, setBurstKey] = useState(0)
   const [visible, setVisible] = useState(false)
+  const duration = intense ? INTENSE_BURST_MS : BURST_MS
 
   useEffect(() => {
     if (!active) {
@@ -38,14 +49,24 @@ export function SuccessFireworks({ active, className }) {
     setBurstKey((value) => value + 1)
     setVisible(true)
 
+    if (loop) {
+      const timer = window.setInterval(() => {
+        setBurstKey((value) => value + 1)
+      }, duration)
+      return () => window.clearInterval(timer)
+    }
+
     const timer = window.setTimeout(() => {
       setVisible(false)
-    }, BURST_MS)
+    }, duration)
 
     return () => window.clearTimeout(timer)
-  }, [active])
+  }, [active, duration, loop])
 
   if (!visible) return null
+
+  const bursts = intense ? INTENSE_BURSTS : BURSTS
+  const sparkleCount = intense ? INTENSE_SPARKLE_COUNT : SPARKLE_COUNT
 
   return (
     <div
@@ -53,7 +74,7 @@ export function SuccessFireworks({ active, className }) {
       className={cn('success-fireworks', className)}
       aria-hidden="true"
     >
-      {BURSTS.map((burst, burstIndex) => (
+      {bursts.map((burst, burstIndex) => (
         <div
           key={burstIndex}
           className="success-fireworks__burst"
@@ -91,10 +112,10 @@ export function SuccessFireworks({ active, className }) {
         </div>
       ))}
 
-      {Array.from({ length: SPARKLE_COUNT }, (_, index) => {
-        const angle = (360 / SPARKLE_COUNT) * index + 12
+      {Array.from({ length: sparkleCount }, (_, index) => {
+        const angle = (360 / sparkleCount) * index + 12
         const color = COLORS[index % COLORS.length]
-        const delay = 120 + index * 55
+        const delay = 120 + index * 40
 
         return (
           <span

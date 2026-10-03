@@ -495,40 +495,47 @@ export default function Game({ onBack, roundSize, mode = 'explorer' }) {
               </div>
               )}
 
-              {feedback && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  aria-atomic="true"
-                  className={cn(
-                    'game-feedback radius-normal border-normal flex items-start gap-3 px-3 py-2.5 text-base font-medium leading-snug',
-                    feedback.tone === 'error'
-                      ? 'border-error-border bg-error-muted text-error-content'
-                      : 'border-success-border bg-success-muted text-success-content'
-                  )}
-                >
-                  {feedback.tone === 'error' ? (
-                    <CircleX className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-                  ) : (
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-                  )}
-                  <p>{feedback.text}</p>
-                </div>
-              )}
+              <div
+                className="flex min-h-[4.5rem] w-full items-center"
+                aria-hidden={!feedback}
+              >
+                {feedback ? (
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
+                    className={cn(
+                      'game-feedback radius-normal border-normal flex min-h-[4.5rem] w-full items-center gap-3 px-3 py-2.5 text-base font-medium leading-snug',
+                      feedback.tone === 'error'
+                        ? 'border-error-border bg-error-muted text-error-content'
+                        : 'border-success-border bg-success-muted text-success-content'
+                    )}
+                  >
+                    {feedback.tone === 'error' ? (
+                      <CircleX className="h-5 w-5 shrink-0" aria-hidden="true" />
+                    ) : (
+                      <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" />
+                    )}
+                    <p>{feedback.text}</p>
+                  </div>
+                ) : null}
+              </div>
 
-              {animalComplete && (
-                <Button
-                  size="lg"
-                  className="min-h-14 w-full text-lg font-bold md:text-xl"
-                  onClick={isReview ? handleNextReview : handleNextAnimal}
-                >
-                  {isReview
-                    ? reviewIndex + 1 < reviewQueue.length
-                      ? 'Next Review'
-                      : 'See Results'
-                    : 'Next Animal'}
-                </Button>
-              )}
+              <div className="min-h-14 w-full">
+                {animalComplete ? (
+                  <Button
+                    size="lg"
+                    className="min-h-14 w-full text-lg font-bold md:text-xl"
+                    onClick={isReview ? handleNextReview : handleNextAnimal}
+                  >
+                    {isReview
+                      ? reviewIndex + 1 < reviewQueue.length
+                        ? 'Next Review'
+                        : 'See Results'
+                      : 'Next Animal'}
+                  </Button>
+                ) : null}
+              </div>
             </CardContent>
           </Card>
         </div>

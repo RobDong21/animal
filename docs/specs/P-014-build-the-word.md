@@ -30,9 +30,9 @@ Add a live Home Words game where the child builds a Starters word by tapping scr
 
 1. From Home Words, open **Build the Word**.
 2. Use the same Starters category chooser pattern as Starters Words / Missing Letter.
-3. Start a round of **8–12 words** from that category.
-4. If fewer than 8 words exist, use all of them.
-5. If more than 12 exist, randomly select 8–12.
+3. Start a round of **10 words** from that category.
+4. If fewer than 10 words exist, use all of them.
+5. If more than 10 exist, randomly select 10.
 6. Multi-word phrases and hyphenated forms are allowed.
 
 ## Puzzle rules
@@ -113,7 +113,7 @@ Add a live Home Words game where the child builds a Starters word by tapping scr
 ## Acceptance criteria
 
 - [ ] Build the Word launches from Home Words as a live game.
-- [ ] Category chooser and 8–12 word rounds match the Starters pattern.
+- [ ] Category chooser and 10-word rounds match the Starters pattern.
 - [ ] Each puzzle provides scrambled tiles for exactly the needed letters.
 - [ ] Spaces and hyphens remain visible fixed structure.
 - [ ] Tapping tiles fills slots; Undo or equivalent can remove placed letters.

@@ -36,6 +36,12 @@ _No active initiative._
 
 ## Done
 
+### P-019: Build the Word Easy try drawing
+
+- **Status:** Completed and product-approved
+- **Outcome:** Easy mode uses a 4-part drawing; a complete picture or a Normal miss ends the round. Finishing all words is a win celebration.
+- **Specification:** [`../specs/P-019-build-easy-try-drawing.md`](../specs/P-019-build-easy-try-drawing.md)
+
 ### P-018: Sequential animal questions
 
 - **Status:** Completed and product-approved

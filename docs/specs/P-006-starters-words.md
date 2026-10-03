@@ -57,9 +57,9 @@ Add a second activity where a child, often with an adult nearby, can practise St
 
 1. From Home, the child opens **Starters Words**.
 2. Show a category chooser with all 11 categories.
-3. After a category is selected, start a practice round of **8–12 words** from that category.
-4. If the category has fewer than 8 words, use all available words.
-5. If the category has more than 12 words, randomly select 8–12 for that round.
+3. After a category is selected, start a practice round of **10 words** from that category.
+4. If the category has fewer than 10 words, use all of them.
+5. If the category has more than 10 words, randomly select 10 for that round.
 6. Present one word per card.
 7. After the final word, show a short encouraging end screen.
 8. From the end screen, allow:
@@ -116,7 +116,7 @@ Behavior:
 - [ ] Home shows Discover, Explorer, and Starters Words as separate entries.
 - [ ] Starters Words does not alter Discover or Explorer gameplay.
 - [ ] All 11 CSV categories are available.
-- [ ] Selecting a category starts an 8–12 word round from that category, or all words when fewer than 8 exist.
+- [ ] Selecting a category starts a 10-word round from that category, or all words when fewer than 10 exist.
 - [ ] Words appear one at a time with large text and progress.
 - [ ] Speaker control speaks the current word using device speech synthesis.
 - [ ] Previous and Next navigate the round correctly.

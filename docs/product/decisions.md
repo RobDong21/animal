@@ -100,7 +100,7 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - **Status:** Accepted
 - Cambridge Pre A1 Starters practice is a second home activity, not part of Discover or Explorer.
 - The first release is category-based one-word reading practice with speech, not a quiz.
-- Rounds use 8–12 words from one category.
+- Rounds use **10 words** from one category, or all words if the category has fewer than 10.
 - Pictures are deferred; Animals, Colours, and Food are the preferred first picture categories later.
 - Keep the Camimi Learn brand for now; do not present the activity as an official Cambridge product.
 
@@ -222,3 +222,14 @@ Record durable product decisions here. Newer accepted decisions supersede confli
 - Normal Discover / Explorer play asks **What is it?** first, then **Where does it live?** on the same animal.
 - Type and habitat remain one learning story; they are not split into separate Home games.
 - Quick Review stays one concept at a time.
+
+### D-028: Build Easy limited tries
+
+- **Status:** Accepted
+- Easy mode only drawing: four wrong placements per word.
+- A friendly 4-part drawing fills in on each miss (not a hangman gallows).
+- Completing the picture **ends the whole round** with **You lost** and Restart.
+- Finishing every word shows **You win!** with a happy drawing and extra fireworks.
+- Undo does not remove drawing parts.
+- Normal: a wrong full-word check also loses the session (no Easy drawing).
+- No stored win/loss score.

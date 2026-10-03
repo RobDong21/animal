@@ -30,9 +30,9 @@ Add a live Home Words game where the child hears a Starters word and chooses the
 
 1. From Home Words, open **Listen and Choose**.
 2. Use the same Starters category chooser pattern as the other Words games.
-3. Start a round of **8–12 words** from that category.
-4. If fewer than 8 words exist, use all of them.
-5. If more than 12 exist, randomly select 8–12.
+3. Start a round of **10 words** from that category.
+4. If fewer than 10 words exist, use all of them.
+5. If more than 10 exist, randomly select 10.
 6. Multi-word phrases and hyphenated forms are allowed as targets and distractors.
 
 ## Puzzle rules
@@ -113,7 +113,7 @@ Continue labels:
 ## Acceptance criteria
 
 - [ ] Listen and Choose launches from Home Words as a live game.
-- [ ] Category chooser and 8–12 word rounds match the Starters pattern.
+- [ ] Category chooser and 10-word rounds match the Starters pattern.
 - [ ] Each card has a hidden target word and up to 4 written choices including the target.
 - [ ] Distractors come from the same category when possible.
 - [ ] The target word auto-speaks once on card appearance.

@@ -16,7 +16,7 @@ function PlayButton({ icon: Icon, title, description, onClick, ariaLabel }) {
     <Button
       size="xl"
       variant="outline"
-      className="cta-secondary h-auto min-h-14 justify-start gap-4 whitespace-normal py-3 text-left md:min-h-16 md:py-4 [&_svg]:!h-8 [&_svg]:!w-8"
+      className="cta-secondary h-full min-h-14 w-full justify-start gap-3 whitespace-normal px-4 py-3 text-left md:min-h-16 md:px-5 md:py-4 [&_svg]:!h-7 [&_svg]:!w-7 md:[&_svg]:!h-8 md:[&_svg]:!w-8"
       onClick={onClick}
       aria-label={ariaLabel ?? title}
     >
@@ -40,7 +40,7 @@ export default function Home({
 }) {
   return (
     <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto px-4 py-4 pt-[max(0.5rem,env(safe-area-inset-top))] md:px-6">
-      <Card className="w-full max-w-2xl text-center">
+      <Card className="w-full max-w-4xl text-center">
         <CardHeader className="space-y-2 pb-4">
           <h1 className="text-display">Camimi Learn</h1>
           <p className="text-supporting">Play with animals and words!</p>
@@ -48,7 +48,7 @@ export default function Home({
         <CardContent className="space-y-6 pb-8 text-left">
           <section aria-labelledby="home-animals-heading" className="space-y-3">
             <SectionHeading id="home-animals-heading">Animals</SectionHeading>
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
               <PlayButton
                 icon={Sprout}
                 title="Discover"
@@ -66,7 +66,7 @@ export default function Home({
 
           <section aria-labelledby="home-words-heading" className="space-y-3">
             <SectionHeading id="home-words-heading">Words</SectionHeading>
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
               <PlayButton
                 icon={BookOpen}
                 title="Starters Words"
@@ -80,16 +80,16 @@ export default function Home({
                 onClick={onOpenMissingLetter}
               />
               <PlayButton
-                icon={Puzzle}
-                title="Build the Word"
-                description="Build the word from letters."
-                onClick={onOpenBuildTheWord}
-              />
-              <PlayButton
                 icon={Ear}
                 title="Listen and Choose"
                 description="Hear a word and choose it."
                 onClick={onOpenListenAndChoose}
+              />
+              <PlayButton
+                icon={Puzzle}
+                title="Build the Word"
+                description="Build the word from letters."
+                onClick={onOpenBuildTheWord}
               />
             </div>
           </section>

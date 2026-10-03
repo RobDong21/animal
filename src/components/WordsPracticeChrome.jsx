@@ -59,28 +59,33 @@ export function WordsHearWordButton({ onClick, ariaLabel, className }) {
 }
 
 export function WordsFeedbackBanner({ feedback }) {
-  if (!feedback) return null
-
-  const isError = feedback.tone === 'error'
+  const isError = feedback?.tone === 'error'
 
   return (
     <div
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-      className={cn(
-        'radius-normal border-normal flex w-full max-w-md items-start gap-3 px-3 py-2.5 text-base font-medium leading-snug',
-        isError
-          ? 'border-error-border bg-error-muted text-error-content'
-          : 'border-success-border bg-success-muted text-success-content'
-      )}
+      className="flex min-h-14 w-full max-w-md items-center"
+      aria-hidden={!feedback}
     >
-      {isError ? (
-        <CircleX className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-      ) : (
-        <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-      )}
-      <p>{feedback.text}</p>
+      {feedback ? (
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className={cn(
+            'radius-normal border-normal flex min-h-14 w-full items-center gap-3 px-3 py-2.5 text-base font-medium leading-snug',
+            isError
+              ? 'border-error-border bg-error-muted text-error-content'
+              : 'border-success-border bg-success-muted text-success-content'
+          )}
+        >
+          {isError ? (
+            <CircleX className="h-5 w-5 shrink-0" aria-hidden="true" />
+          ) : (
+            <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" />
+          )}
+          <p>{feedback.text}</p>
+        </div>
+      ) : null}
     </div>
   )
 }
